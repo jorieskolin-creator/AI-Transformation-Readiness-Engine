@@ -30,17 +30,9 @@ The engine assesses five readiness domains:
 
 The scanner keeps the proven evidence-gated architecture: dual-stream scoring, independent evidence verification, deterministic metrics, confidence-gated synthesis, fact-checking, sanitation, quality gate, and GO/WARN/BLOCK-style output.
 
-## Golden Fixtures
+## Knowledge Base
 
-Synthetic AI transformation documents are bundled for drift checks:
-
-| Fixture | Profile | Expected stage |
-| --- | --- | --- |
-| `golden-emerging.txt` | AI tool adoption without readiness | Emerging |
-| `golden-structured.txt` | Structured but fragmented AI transformation | Structured |
-| `golden-adaptive.txt` | Adaptive AI value-creation capability | Adaptive / Value-creating |
-
-The file names intentionally remain stable for compatibility with the inherited drift tooling.
+The remote Vercel Blob knowledge base is a simple set of PDF documents under `Knowledge Base/`. The PDFs do not need canonical criterion filenames or JSON front matter. If a PDF includes structured metadata, the loader will use it; otherwise the document is indexed as a general AI Transformation reference and made available as rubric/context material only.
 
 ## Deployment
 

@@ -46,11 +46,11 @@ export const svgGaugeCard = (g: GaugeSpec): string => {
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  A: 'Visibility',
-  B: 'Optimization',
+  A: 'Operating Model',
+  B: 'AI Platform',
   C: 'Governance',
-  D: 'Architecture',
-  E: 'Culture'
+  D: 'Data',
+  E: 'Service Architecture'
 };
 
 const computeCategoryScores = (logs: Record<string, AuditItem>): Record<string, number> => {

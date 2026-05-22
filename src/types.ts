@@ -453,7 +453,7 @@ export interface KnowledgeTaxonomyRegistry {
 
 export interface StrategicTactic {
   id: string;
-  category: 'Visibility' | 'Optimization' | 'Governance' | 'Architecture' | 'Culture';
+  category: string;
   // Short, stable human-readable name. Used to anchor model output: "Implement
   // the {canonical_name} [{id}] modeled on {company}". Distinct from the
   // longer solution_mechanism prose. Required for all DB entries.

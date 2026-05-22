@@ -256,7 +256,7 @@ const formatRemoteKbContext = (
   const batchId = options.batchId;
   const maxDocChars = options.maxDocChars ?? (batchId ? 1400 : 650);
   const documents = (index.documents || [])
-    .filter(doc => !batchId || doc.domain_id === batchId)
+    .filter(doc => !batchId || doc.domain_id === batchId || doc.domain_id === 'GENERAL')
     .sort((a, b) => `${a.stream}.${a.criterion_id}`.localeCompare(`${b.stream}.${b.criterion_id}`));
 
   if (documents.length === 0) {
@@ -271,7 +271,7 @@ Remote PDF Knowledge Base unavailable or empty (${reason}). Use built-in criteri
 Remote PDF Knowledge Base loaded: ${index.status.document_count} document(s), ${index.status.failure_count} parse/validation issue(s).
 
 BOUNDARIES:
-- Use this KB only for rubric interpretation, evidence requirements, false-positive checks, validation questions, and roadmap/remediation patterns.
+- Use this KB only for rubric interpretation, domain context, evidence requirements, false-positive checks, validation questions, and roadmap/remediation patterns.
 - Never cite this KB as proof of the assessed customer's current state.
 - Never copy KB text into source_evidence_quote.
 - Evidence summaries and diagnosis must remain grounded in uploaded source material, Phase 1 evidence quotes, and Phase 2 metrics.

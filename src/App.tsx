@@ -9,7 +9,6 @@ import { forensicSanitizeImport } from './services/securityService';
 import { extractDiagnosticResultFromHtmlReport, isDiagnosticResultPayload, parseDiagnosticResultJson, serializeDiagnosticResultForHtml } from './services/reportImportService';
 import { findGeneratedReportPrivacyFindings, scrubDiagnosticResultForPrivacy } from './services/privacyService';
 import { PerformanceMonitor } from './services/debugService';
-import { runFullDriftSuite } from './services/driftDetectionService';
 import { DiagnosticResult, ScanResult, PersonaId, PERSONA_IDS, PERSONA_LABELS, ImageInput } from './types';
 import { METRIC_DESCRIPTIONS } from './constants';
 import { GaugeCard, AuditGrid, StrategicRoadmap, ComparisonChart, ReferenceLibrary, QualityGateBanner, BenchmarkingChart, TransferProtocol, MarkdownRenderer, NeuralLoadingGrid } from './components/DashboardComponents';
@@ -17,9 +16,6 @@ import { ReportView } from './components/ReportView';
 import { LoginModal } from './components/LoginModal';
 import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { checkSession, logout } from './services/authService';
-import goldenEmerging from '../test/golden-emerging.txt?raw';
-import goldenStructured from '../test/golden-structured.txt?raw';
-import goldenAdaptive from '../test/golden-adaptive.txt?raw';
 import tier1GovernancePolicy from '../test/tier1-governance-policy.txt?raw';
 import tier1DataOwnershipStandard from '../test/tier1-data-ownership-standard.txt?raw';
 import tier1CoeCharter from '../test/tier1-coe-charter.txt?raw';
@@ -28,12 +24,6 @@ import tier1PlatformLifecycleStandard from '../test/tier1-platform-lifecycle-sta
 import tier1ValueRealizationReview from '../test/tier1-value-realization-review.txt?raw';
 import demoSimulation from '../test/demo-simulation.txt?raw';
 
-const DRIFT_FIXTURES = [
-  { name: 'golden-emerging.txt', text: goldenEmerging },
-  { name: 'golden-structured.txt', text: goldenStructured },
-  { name: 'golden-adaptive.txt', text: goldenAdaptive },
-];
-const DRIFT_LABEL = 'Drift Test — Combined Golden Fixtures';
 const DEMO_SIMULATION_LABEL = 'Engine Simulation — Northstar Retail Demo Pack';
 const SAVED_ASSESSMENT_KEY = 'ai-transformation:last-assessment:v1';
 const SAVED_ASSESSMENT_META_KEY = 'ai-transformation:last-assessment-meta:v1';
@@ -145,13 +135,6 @@ const TIER1_FIXTURES: Array<{ pack_id: string; name: string; label: string; text
   { pack_id: 'tier1-value-realization-review', name: 'tier1-value-realization-review.txt', label: 'AI Value Realization Review', text: tier1ValueRealizationReview }
 ];
 
-const PER_PACK_FIXTURES: Array<{ pack_id: string; name: string; label: string; text: string }> = [
-  { pack_id: 'golden-emerging', name: 'golden-emerging.txt', label: 'Golden — Emerging-stage org', text: goldenEmerging },
-  { pack_id: 'golden-structured', name: 'golden-structured.txt', label: 'Golden — Structured-stage org', text: goldenStructured },
-  { pack_id: 'golden-adaptive', name: 'golden-adaptive.txt', label: 'Golden — Adaptive-stage org', text: goldenAdaptive },
-  ...TIER1_FIXTURES
-];
-
 interface UploadedFile {
   id: string;
   name: string;
@@ -190,7 +173,7 @@ const PrivacyProtocolCard = () => (
         { icon: 'M13 10V3L4 14h7v7l9-11h-7z', title: "Ephemeral", desc: "RAM Only" },
         { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', title: "Local-First", desc: "Client Parsing" },
         { icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', title: "No Retention", desc: "Stateless API" },
-        { icon: 'M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88', title: "Financial Safety", desc: "DLP Scanning" }
+        { icon: 'M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88', title: "Sensitive Data", desc: "DLP Scanning" }
       ].map((item, idx) => (
         <div key={idx} className="bg-slate-900/70 backdrop-blur-sm p-4 rounded-2xl border border-white/10 flex items-center gap-4 shadow-sm hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all hover:bg-slate-800/70">
           <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400 border border-white/5">
@@ -489,11 +472,6 @@ const App: React.FC = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [activePersona, setActivePersona] = useState<PersonaId>('transformation_lead');
   const [deepMode, setDeepMode] = useState(false);
-  const [perPackRunning, setPerPackRunning] = useState(false);
-  const [perPackCurrent, setPerPackCurrent] = useState<number>(0);
-  const [perPackCurrentLabel, setPerPackCurrentLabel] = useState<string>('');
-  const [perPackReport, setPerPackReport] = useState<ReturnType<typeof runFullDriftSuite> | null>(null);
-  const [perPackError, setPerPackError] = useState<string | null>(null);
   const [recoveryNotice, setRecoveryNotice] = useState<string | null>(null);
   const [hasSavedAssessment, setHasSavedAssessment] = useState(false);
   const [safeRecoveryResult, setSafeRecoveryResult] = useState<DiagnosticResult | null>(null);
@@ -505,8 +483,7 @@ const App: React.FC = () => {
   const [privacyNotice, setPrivacyNotice] = useState<string | null>(null);
   const [organizationRedactionTerm, setOrganizationRedactionTerm] = useState('');
   const pendingAnalyzeRef = useRef(false);
-  const pendingDriftRef = useRef(false);
-  const pendingPerPackRef = useRef(false);
+  const pendingTier1FixtureRef = useRef<string | null>(null);
   const pendingSimulationRef = useRef(false);
   const nextRecoverySourceRef = useRef<SavedAssessmentMeta['source']>('completed_assessment');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -777,18 +754,6 @@ const App: React.FC = () => {
       return;
     }
 
-    // Reject composite drift fixtures. These describe three DIFFERENT
-    // archetype organizations (Emerging / Structured / Adaptive) and were never meant to
-    // be assessed together — doing so produces a "consolidated audit across
-    // the corpus" that mixes the three orgs' evidence into one fictional
-    // composite. Route them to the Drift Test panel instead.
-    const driftFixturePattern = /^golden-(emerging|structured|adaptive)\.txt$/i;
-    const driftFiles = [...files, ...newFiles].filter(f => driftFixturePattern.test(('name' in f ? f.name : '')));
-    if (driftFiles.length >= 2) {
-      setError(`Multiple drift fixtures detected (${driftFiles.map(f => f.name).join(', ')}). These describe DIFFERENT archetype organizations and must not be combined into one assessment. Use the Drift Test panel for comparison runs.`);
-      return;
-    }
-
     // Cap on JPEG/PNG screenshot files (independent of PDF-derived images,
     // which scale with the source document). Counted across existing +
     // incoming images so a second upload can't sneak past the limit.
@@ -905,84 +870,21 @@ const App: React.FC = () => {
     }
   };
 
-  const startDriftTest = () => {
-    const combined = DRIFT_FIXTURES
-      .map(f => `\n<DOCUMENT name="${f.name}">\n${f.text}\n</DOCUMENT>\n`)
-      .join('\n');
-    runAnalyze({ textOverride: sanitizeInput(combined), imagesOverride: [], label: DRIFT_LABEL });
-  };
-
   const startTier1Fixture = (packId: string) => {
     if (loading) return;
     const fixture = TIER1_FIXTURES.find(f => f.pack_id === packId);
     if (!fixture) return;
     if (!authenticated) {
-      pendingDriftRef.current = true;
+      pendingTier1FixtureRef.current = packId;
       setShowLogin(true);
       return;
     }
+    startTier1FixtureAnalysis(fixture);
+  };
+
+  const startTier1FixtureAnalysis = (fixture: typeof TIER1_FIXTURES[number]) => {
     const wrapped = `\n<DOCUMENT name="${fixture.name}">\n${fixture.text}\n</DOCUMENT>\n`;
     runAnalyze({ textOverride: sanitizeInput(wrapped), imagesOverride: [], label: `Tier 1 Fixture — ${fixture.label}` });
-  };
-
-  const startPerPackDrift = async () => {
-    setPerPackRunning(true);
-    setPerPackReport(null);
-    setPerPackError(null);
-    setPerPackCurrent(0);
-    setPerPackCurrentLabel('');
-    PerformanceMonitor.start('PerPackDriftSuite');
-
-    const accumulated: Array<{
-      packId: string;
-      phase1Logs: { maturity: Record<string, any>; antipattern: Record<string, any> };
-      classification: string;
-      readiness: number;
-    }> = [];
-
-    try {
-      for (let i = 0; i < PER_PACK_FIXTURES.length; i++) {
-        const fixture = PER_PACK_FIXTURES[i];
-        setPerPackCurrent(i + 1);
-        setPerPackCurrentLabel(fixture.label);
-        console.log(`[PerPackDrift] (${i + 1}/${PER_PACK_FIXTURES.length}) ${fixture.pack_id}`);
-        const safeText = sanitizeInput(`\n<DOCUMENT name="${fixture.name}">\n${fixture.text}\n</DOCUMENT>\n`);
-        const data = await analyzeDocument(safeText, [], () => {});
-        if (!data.phase_2_validation?.metrics) {
-          throw new Error(`Analysis for ${fixture.pack_id} returned incomplete data.`);
-        }
-        accumulated.push({
-          packId: fixture.pack_id,
-          phase1Logs: data.phase_1_audit_logs,
-          classification: data.phase_2_validation.readiness_stage,
-          readiness: data.phase_2_validation.metrics.ai_readiness
-        });
-      }
-      const report = runFullDriftSuite(accumulated);
-      console.log(report.report);
-      setPerPackReport(report);
-    } catch (err: any) {
-      setPerPackError(err?.message || 'Per-Pack Drift Suite failed.');
-      console.error('[PerPackDrift] Failed:', err);
-    } finally {
-      setPerPackRunning(false);
-      setPerPackCurrent(0);
-      setPerPackCurrentLabel('');
-      PerformanceMonitor.end('PerPackDriftSuite');
-    }
-  };
-
-  const handlePerPackDrift = () => {
-    if (loading || perPackRunning) return;
-    if (!authenticated) {
-      pendingPerPackRef.current = true;
-      setShowLogin(true);
-      return;
-    }
-    const confirmMsg = `Per-Pack Drift will run ${PER_PACK_FIXTURES.length} sequential analyses (3 maturity-stratified + 6 Tier 1 fixtures). ` +
-      `Each analysis is a full Phase 1+2+3 pass. Expect ~10–15 minutes and meaningful API cost. Proceed?`;
-    if (!window.confirm(confirmMsg)) return;
-    startPerPackDrift();
   };
 
   const handleAnalyze = async () => {
@@ -993,16 +895,6 @@ const App: React.FC = () => {
       return;
     }
     await runAnalyze();
-  };
-
-  const handleDriftTest = () => {
-    if (loading) return;
-    if (!authenticated) {
-      pendingDriftRef.current = true;
-      setShowLogin(true);
-      return;
-    }
-    startDriftTest();
   };
 
   const startEngineSimulation = () => {
@@ -1295,16 +1187,6 @@ const App: React.FC = () => {
             )}
 
             {authenticated && !loading && !result && (
-              <button
-                onClick={handleDriftTest}
-                className="text-xs font-bold uppercase tracking-widest text-amber-300 hover:text-white bg-amber-950/30 hover:bg-amber-700/40 border border-amber-700/40 hover:border-amber-400 transition-colors px-4 py-2 rounded-lg"
-                title="Run the assessment against the bundled golden fixtures (emerging + structured + adaptive combined)"
-              >
-                Drift Test
-              </button>
-            )}
-
-            {authenticated && !loading && !result && (
               <select
                 onChange={(e) => { if (e.target.value) { startTier1Fixture(e.target.value); e.target.value = ''; } }}
                 defaultValue=""
@@ -1316,17 +1198,6 @@ const App: React.FC = () => {
                   <option key={f.pack_id} value={f.pack_id}>{f.label}</option>
                 ))}
               </select>
-            )}
-
-            {authenticated && !loading && !result && (
-              <button
-                onClick={handlePerPackDrift}
-                disabled={perPackRunning}
-                className="text-xs font-bold uppercase tracking-widest text-fuchsia-300 hover:text-white bg-fuchsia-950/30 hover:bg-fuchsia-700/40 border border-fuchsia-700/40 hover:border-fuchsia-400 transition-colors px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Run each golden fixture (3 maturity + 6 Tier 1) sequentially through the full pipeline, then compare scores against per-criterion expected ranges in golden_baselines.json. ~10–15 minutes."
-              >
-                {perPackRunning ? `Drift ${perPackCurrent}/${PER_PACK_FIXTURES.length}…` : 'Per-Pack Drift'}
-              </button>
             )}
 
             {(result || files.length > 0) && (
@@ -1461,7 +1332,7 @@ const App: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-display font-bold text-slate-200 mb-2 z-10 group-hover/drop:text-white transition-colors">Drop AI Transformation Artifacts</h3>
                         <p className="text-sm font-medium text-slate-400 z-10 group-hover/drop:text-emerald-200/70 transition-colors text-center max-w-md">
-                          Upload Cloud Cost Reports, AI Transformation Policies, Optimization Plans, Governance Docs, Architecture Reviews.
+                          Upload AI strategies, governance policies, service blueprints, data standards, platform architecture, value reviews, and operating model artifacts.
                         </p>
                         <div className="z-10 mt-4 flex flex-wrap justify-center gap-1.5 max-w-md">
                           {['PDF', 'HTML', 'CSV', 'TSV', 'JSON', 'PNG', 'JPG'].map(fmt => (
@@ -1531,7 +1402,7 @@ const App: React.FC = () => {
                 {[
                   { id: 'overview', label: 'Summary & Diagnosis' },
                   { id: 'audit', label: 'Forensic Audit' },
-                  { id: 'strategy', label: 'Optimization Roadmap' }
+                  { id: 'strategy', label: 'Readiness Roadmap' }
                 ].map(tab => (
                   <button key={tab.id} onClick={() => setActiveTab(tab.id as any)} className={`px-8 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === tab.id ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>{tab.label}</button>
                 ))}
@@ -1794,7 +1665,7 @@ const App: React.FC = () => {
                   <div className="glass-panel p-10 md:p-16 rounded-[3rem] bg-slate-900/40">
                     <div className="text-center mb-16 max-w-2xl mx-auto">
                       <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3 block">Phase 3</span>
-                      <h2 className="text-4xl font-display font-bold text-white mb-4">Optimization Roadmap</h2>
+                      <h2 className="text-4xl font-display font-bold text-white mb-4">Readiness Roadmap</h2>
                       <p className="text-slate-400">A structured Ready-and-Adapt path to AI Transformation excellence.</p>
                     </div>
                     <StrategicRoadmap steps={result.phase_3_strategy.remediation_roadmap} />
@@ -1845,101 +1716,12 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {perPackRunning && (
-        <div className="fixed inset-0 z-[60] bg-slate-950/85 backdrop-blur-md flex items-center justify-center px-6">
-          <div className="max-w-xl w-full glass-panel rounded-3xl p-10 border border-fuchsia-500/30 bg-slate-900/70 text-center">
-            <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-fuchsia-300 mb-3">Per-Pack Drift Suite</div>
-            <h3 className="text-2xl font-display font-bold text-white mb-2">Running {perPackCurrent} of {PER_PACK_FIXTURES.length}</h3>
-            <p className="text-sm text-slate-300 mb-6">{perPackCurrentLabel}</p>
-            <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden mb-6">
-              <div
-                className="h-full bg-gradient-to-r from-fuchsia-500 to-violet-500 transition-all duration-500"
-                style={{ width: `${(perPackCurrent / PER_PACK_FIXTURES.length) * 100}%` }}
-              />
-            </div>
-            <p className="text-xs text-slate-400">
-              Each fixture runs through the full Phase 1 + 2 + 3 pipeline. Scores are accumulated and compared against per-criterion baselines once all fixtures complete.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {perPackReport && !perPackRunning && (
-        <div className="fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-md flex items-start justify-center px-6 py-10 overflow-y-auto">
-          <div className="max-w-5xl w-full glass-panel rounded-3xl p-10 border border-fuchsia-500/30 bg-slate-900/80">
-            <div className="flex items-center justify-between gap-4 mb-6">
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-fuchsia-300 mb-2">Per-Pack Drift Report</div>
-                <h3 className="text-2xl font-display font-bold text-white">
-                  Overall Status: <span className={
-                    perPackReport.overall_status === 'CLEAN' ? 'text-emerald-400' :
-                    perPackReport.overall_status === 'MINOR_VARIANCE' ? 'text-amber-300' :
-                    'text-rose-400'
-                  }>{perPackReport.overall_status.replace('_', ' ')}</span>
-                </h3>
-              </div>
-              <button
-                onClick={() => setPerPackReport(null)}
-                className="text-xs font-bold uppercase tracking-widest text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors px-4 py-2 rounded-lg"
-              >
-                Close
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-              {perPackReport.results.map(r => {
-                const status = r.threshold_exceeded || !r.classification_match ? 'DRIFT' : r.criterion_violations.length > 0 ? 'VARIANCE' : 'CLEAN';
-                const color = status === 'CLEAN' ? 'border-emerald-500/30 text-emerald-300 bg-emerald-500/5' : status === 'VARIANCE' ? 'border-amber-500/30 text-amber-300 bg-amber-500/5' : 'border-rose-500/30 text-rose-300 bg-rose-500/5';
-                return (
-                  <div key={r.pack_id} className={`p-4 rounded-xl border ${color}`}>
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <p className="font-mono text-[11px] text-slate-300 break-all">{r.pack_id}</p>
-                      <span className="text-[10px] font-bold uppercase tracking-wider shrink-0">{status}</span>
-                    </div>
-                    <p className="text-xs text-slate-400 mb-1">
-                      Classification: <span className="text-slate-200">{r.actual_classification}</span> (expected {r.expected_classification}) {r.classification_match ? '✓' : '✗'}
-                    </p>
-                    <p className="text-xs text-slate-400 mb-1">
-                      Readiness: <span className="text-slate-200">{Math.round(r.actual_readiness)}%</span> (expected {r.expected_readiness_range[0]}–{r.expected_readiness_range[1]}%) {r.readiness_in_range ? '✓' : '✗'}
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      Violations: <span className="text-slate-200">{r.criterion_violations.length}</span> · Total deviation: <span className="text-slate-200">{r.total_deviation}</span>
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Full Report (console-format)</p>
-              <pre className="text-xs text-slate-300 bg-slate-950/60 border border-white/5 rounded-xl p-4 overflow-x-auto whitespace-pre-wrap max-h-[500px] overflow-y-auto leading-relaxed">{perPackReport.report}</pre>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {perPackError && !perPackRunning && (
-        <div className="fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-md flex items-center justify-center px-6">
-          <div className="max-w-lg w-full glass-panel rounded-3xl p-10 border border-rose-500/30 bg-slate-900/80 text-center">
-            <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-300 mb-3">Per-Pack Drift Failed</div>
-            <p className="text-sm text-slate-200 mb-6">{perPackError}</p>
-            <button
-              onClick={() => setPerPackError(null)}
-              className="text-xs font-bold uppercase tracking-widest text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors px-4 py-2 rounded-lg"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
-
       <LoginModal
         open={showLogin}
         onClose={() => {
           setShowLogin(false);
           pendingAnalyzeRef.current = false;
-          pendingDriftRef.current = false;
-          pendingPerPackRef.current = false;
+          pendingTier1FixtureRef.current = null;
           pendingSimulationRef.current = false;
         }}
         onSuccess={() => {
@@ -1948,12 +1730,11 @@ const App: React.FC = () => {
           if (pendingAnalyzeRef.current) {
             pendingAnalyzeRef.current = false;
             runAnalyze();
-          } else if (pendingDriftRef.current) {
-            pendingDriftRef.current = false;
-            startDriftTest();
-          } else if (pendingPerPackRef.current) {
-            pendingPerPackRef.current = false;
-            startPerPackDrift();
+          } else if (pendingTier1FixtureRef.current) {
+            const packId = pendingTier1FixtureRef.current;
+            pendingTier1FixtureRef.current = null;
+            const fixture = TIER1_FIXTURES.find(f => f.pack_id === packId);
+            if (fixture) startTier1FixtureAnalysis(fixture);
           } else if (pendingSimulationRef.current) {
             pendingSimulationRef.current = false;
             startEngineSimulation();

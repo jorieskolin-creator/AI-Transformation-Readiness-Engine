@@ -123,11 +123,11 @@ const useAuditMetadata = (isAntipattern: boolean) => {
 
 export const NeuralLoadingGrid: React.FC<{ progress: number; stage: string }> = ({ progress, stage }) => {
   const steps = [
-    { id: 'A', label: 'VISIBILITY', sub: 'Allocation' },
-    { id: 'B', label: 'OPTIMIZE', sub: 'Rate & Usage' },
-    { id: 'C', label: 'GOVERN', sub: 'Policy' },
-    { id: 'D', label: 'ARCHITECT', sub: 'Engineering' },
-    { id: 'E', label: 'CULTURE', sub: 'Organization' },
+    { id: 'A', label: 'OPERATE', sub: 'Decision Rights' },
+    { id: 'B', label: 'PLATFORM', sub: 'AI Architecture' },
+    { id: 'C', label: 'GOVERN', sub: 'Value & Risk' },
+    { id: 'D', label: 'DATA', sub: 'Context Fuel' },
+    { id: 'E', label: 'SERVICE', sub: 'Value Streams' },
   ];
 
   const activeIndex = stage === 'audit'
@@ -671,11 +671,11 @@ export const StrategicRoadmap: React.FC<RoadmapProps> = ({ steps }) => (
 export const ComparisonChart: React.FC<RadarProps> = ({ maturity, antipattern }) => {
   const data = useMemo(() => {
     const categories = [
-      { id: 'A', label: 'Visibility' },
-      { id: 'B', label: 'Optimization' },
+      { id: 'A', label: 'Operating Model' },
+      { id: 'B', label: 'AI Platform' },
       { id: 'C', label: 'Governance' },
-      { id: 'D', label: 'Architecture' },
-      { id: 'E', label: 'Culture' }
+      { id: 'D', label: 'Data' },
+      { id: 'E', label: 'Service Architecture' }
     ];
     return categories.map(cat => {
       let mScore = 0; let aScore = 0;

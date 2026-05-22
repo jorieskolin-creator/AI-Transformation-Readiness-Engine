@@ -92,4 +92,20 @@ const antiDoc = sanitizeKbDocument({
 assert.equal(antiDoc.criterion_id, 'AP-A1');
 assert.equal(antiDoc.capability_id, 'A1');
 
+const simpleDoc = sanitizeKbDocument({
+  pathname: 'Knowledge Base/Ready and Adapt Overview.pdf',
+  url: 'https://example.test/simple.pdf',
+  downloadUrl: 'https://example.test/simple.pdf?download=1',
+  size: 456,
+  uploadedAt: '2026-05-22T00:00:00.000Z',
+  text: 'Ready and Adapt Overview\n\nAI readiness is an operating, data, governance, and service architecture capability.',
+});
+assert.equal(simpleDoc.domain_id, 'GENERAL');
+assert.equal(simpleDoc.domain_name, 'AI Transformation Knowledge Base');
+assert.equal(simpleDoc.criterion_id, 'GENERAL');
+assert.equal(simpleDoc.title, 'Ready and Adapt Overview');
+assert(simpleDoc.allowed_uses.includes('rubric_context'));
+assert(simpleDoc.forbidden_uses.includes('source_evidence_quote'));
+assert(simpleDoc.body_excerpt.includes('AI readiness is an operating'));
+
 console.log('KB index tests passed');
