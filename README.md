@@ -48,8 +48,12 @@ Set environment variables in the hosting platform:
 
 - `GEMINI_API_KEY`
 - `ANTHROPIC_API_KEY`
-- `OPENAI_API_KEY`
+- `GPT_API_KEY` (or `OPENAI_API_KEY` as a fallback alias)
 - `SECRET_KEY`
-- `VITE_AI_TACTICS_URL` optional public tactics URL
+- `BLOB_READ_WRITE_TOKEN` for the AI Transformation Vercel Blob store
+- `AI_KB_BLOB_PREFIX=Knowledge Base/` optional; this is the default prefix
+- `VITE_AI_TACTICS_URL` optional public tactics JSON URL
+
+`BLOB_READ_WRITE_TOKEN` selects the Blob store, so the AI Transformation Engine can safely use the same folder name as another app if the token points to a different store. The PDF knowledge base is loaded by `/api/kb-index`; when it cannot be reached, the app falls back to the built-in JSON knowledge base.
 
 Build command: `npm run build`. Output: `dist/`.
