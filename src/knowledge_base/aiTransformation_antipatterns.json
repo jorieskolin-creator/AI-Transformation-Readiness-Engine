@@ -33,11 +33,11 @@
       "batch": "A",
       "domain": "Adaptive Operating Model",
       "title": "Pilot Purgatory",
-      "description": "AI pilots remain disconnected from production, business ownership, reusable platform capabilities, and measurable business outcomes.",
+      "description": "AI pilots remain disconnected from production, service-area ownership, safety evidence, reusable platform capabilities, and measurable business outcomes.",
       "sub_criteria": [
-        "Do AI pilots remain disconnected from production, business ownership, or P&L outcomes?",
-        "Are pilots considered successful without proving integration, safety, adoption, or measurable business value?",
-        "Does every new AI use case start from scratch instead of reusing learnings, patterns, and platform capabilities?"
+        "Do AI pilots remain disconnected from production, service-area ownership, or value outcomes?",
+        "Are pilots considered successful without proving integration, safety, adoption, learning, or measurable business value?",
+        "Does every new AI use case start from scratch instead of reusing learnings, pilot playbooks, patterns, and platform capabilities?"
       ]
     },
     {
@@ -69,10 +69,10 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "Legacy Labyrinth & Brittle AI Connectivity",
-      "description": "AI use cases depend on manual exports, screen scraping, point integrations, unclear service boundaries, and fragile dependencies.",
+      "description": "AI use cases depend on manual exports, screen scraping, brittle brownfield point integrations, unclear service boundaries, and fragile dependencies.",
       "sub_criteria": [
         "Do AI use cases depend on manual exports, screen scraping, copied files, or fragile custom connectors?",
-        "Does touching one system break another because service boundaries are unclear?",
+        "Does touching one legacy or brownfield system break another because service boundaries are unclear?",
         "Are AI integrations created project-by-project with no reusable architecture?"
       ]
     },
@@ -93,11 +93,11 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "Black-Box AI Operations",
-      "description": "AI failures, drift, hallucinations, retrieval degradation, and unsafe outputs are found through complaints rather than monitoring.",
+      "description": "AI failures, static-model drift, hallucinations, retrieval degradation, value erosion, and unsafe outputs are found through complaints rather than Sense & Respond monitoring.",
       "sub_criteria": [
         "Are AI failures discovered mainly through user complaints or business damage?",
         "Are there no baseline metrics for accuracy, first-time-right, value, safety, or operational reliability?",
-        "Are model drift, retrieval degradation, hallucinations, or unsafe outputs not systematically detected?"
+        "Are model drift, retrieval degradation, hallucinations, unsafe outputs, or value degradation not systematically detected?"
       ]
     },
     {
@@ -105,11 +105,11 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "Safety Theater & Unbounded Autonomy",
-      "description": "Guardrails are trusted without evidence, agents have unclear behavioral limits, and safety reviews happen too late.",
+      "description": "Guardrails are trusted without red-team evidence, agents have unclear behavioral limits, and safety reviews happen too late.",
       "sub_criteria": [
         "Are AI systems trusted because guardrails exist without evidence of testing?",
-        "Can agents access tools, systems, or data without clear behavioral boundaries?",
-        "Are safety reviews performed as late-stage gates instead of being built into service design?"
+        "Can agents access tools, systems, or data without clear behavioral boundaries or Human-in-the-Loop escalation paths?",
+        "Are safety reviews performed as late-stage gates instead of Secure-by-Design controls built into service design?"
       ]
     },
     {
@@ -141,10 +141,10 @@
       "batch": "C",
       "domain": "AI Strategy, Governance & Value Realization",
       "title": "Use-Case Chasing & Vanity Benefits",
-      "description": "AI initiatives are selected for visibility or fashion, with benefits claimed without baselines, measurement, or enterprise impact.",
+      "description": "AI initiatives are selected for visibility, fashion, tool adoption, or cost/TCO claims, with benefits asserted without baselines, measurement, or enterprise impact.",
       "sub_criteria": [
         "Are AI initiatives selected because they are fashionable, visible, or technically interesting?",
-        "Are savings, productivity, or ROI claims made without baseline and post-measurement?",
+        "Are savings, productivity, ROI, TCO, or efficiency claims made without baseline and post-measurement?",
         "Are successful pilots celebrated without enterprise-level impact?"
       ]
     },
@@ -201,11 +201,11 @@
       "batch": "D",
       "domain": "Data Foundations, Ownership & Accessibility",
       "title": "Raw Data Without Meaning",
-      "description": "AI systems receive available raw data without semantic, process, operational, or decision context.",
+      "description": "AI systems receive available raw data without semantic richness, service context, process linkage, operational conditions, or decision relevance.",
       "sub_criteria": [
         "Is data collected because it is available rather than because it drives decisions?",
         "Do AI models receive raw signals without business, process, or operational context?",
-        "Are outputs unreliable because the model lacks the why-this-data-matters layer?"
+        "Are outputs unreliable because the model lacks the why-this-data-matters layer and service-domain meaning?"
       ]
     },
     {
@@ -249,11 +249,11 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "AI Ideas Detached from Business Architecture",
-      "description": "AI use cases are listed without linkage to service catalog, capability map, value stream, ownership, or dependency structure.",
+      "description": "AI use cases are listed without linkage to service catalog, capability map, value stream, service-area ownership, data domain, or dependency structure.",
       "sub_criteria": [
         "Are AI use cases listed without connection to service catalog or capability map?",
         "Is it unclear which service area owns the AI-enabled change?",
-        "Are dependencies discovered only during implementation?"
+        "Are service, platform, data, and brownfield dependencies discovered only during implementation?"
       ]
     },
     {
@@ -297,10 +297,10 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "Big-Bang AI Transformation",
-      "description": "AI is scaled broadly before service readiness, architecture, data ownership, and operating model patterns are proven.",
+      "description": "AI is scaled broadly before Kickstart learning proves service readiness, architecture, data ownership, safety, and operating model patterns.",
       "sub_criteria": [
         "Is AI rollout scaled broadly before business architecture, data ownership, and operating model are ready?",
-        "Are pilot learnings not converted into reusable patterns?",
+        "Are pilot learnings not converted into reusable patterns, playbooks, guardrails, or absorption-readiness evidence?",
         "Does every service area repeat the same mistakes independently?"
       ]
     }

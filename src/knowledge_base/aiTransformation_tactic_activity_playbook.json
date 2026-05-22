@@ -12,7 +12,7 @@
         "AP-A1",
         "AP-C3"
       ],
-      "activity_goal": "Establish an AI operating rhythm with decision-rights matrix, intake cadence, risk triage, decision log, and escalation boundaries.",
+      "activity_goal": "Establish an AI operating rhythm with decision-rights matrix, demand capture, intake cadence, risk triage, service-area accountability, decision log, and escalation boundaries.",
       "when_to_use": [
         "Evidence shows decision fog and fragmented governance",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -28,7 +28,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define operating artifact, demand-capture path, and minimum evidence standard",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -66,7 +66,7 @@
         "AP-A2",
         "AP-C5"
       ],
-      "activity_goal": "Classify AI demand by predictability, uncertainty, risk, and value. Route predictable automation through standard delivery and uncertain work through Launch-and-Learn slices.",
+      "activity_goal": "Classify AI demand by predictability, uncertainty, risk, value, data readiness, and service ownership. Route standardized work through repeatable delivery and iterative work through Launch-and-Learn slices.",
       "when_to_use": [
         "Evidence shows one-size-fits-all ai delivery",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -82,7 +82,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define standardized and iterative routing rules with minimum evidence standards",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -120,7 +120,7 @@
         "AP-A3",
         "AP-E5"
       ],
-      "activity_goal": "Run bounded vertical slices with explicit learning goals, production-readiness criteria, safety evidence, and a conversion path into reusable patterns.",
+      "activity_goal": "Run a Kickstart diagnostic and bounded vertical slice with impact statement, learning goals, production-readiness criteria, safety evidence, and a conversion path into Building-the-System patterns.",
       "when_to_use": [
         "Evidence shows pilot purgatory",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -136,7 +136,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define impact statement, pilot scope, safety evidence, and production-readiness standard",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -148,7 +148,8 @@
         "Risk or governance partner"
       ],
       "expected_artifacts": [
-        "Launch-and-Learn Vertical Slice",
+        "Kickstart Launch-and-Learn Vertical Slice",
+        "Pilot AI playbook",
         "Decision log",
         "Readiness evidence pack",
         "Measurement dashboard"
@@ -172,7 +173,7 @@
       "antipattern_criteria": [
         "AP-A4"
       ],
-      "activity_goal": "Create communities, chapters, incident reviews, failure libraries, reusable playbooks, and cross-functional learning rituals.",
+      "activity_goal": "Create communities of knowledge, incident reviews, failure libraries, reusable playbooks, and cross-functional learning rituals that convert pilots into shared capability.",
       "when_to_use": [
         "Evidence shows hero culture and repeated mistakes",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -191,7 +192,7 @@
         "Define operating artifact and minimum evidence standard",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
-        "Convert lessons into reusable practice"
+        "Convert pilot, red-team, data, and incident lessons into reusable practice"
       ],
       "owner_roles": [
         "transformation lead",
@@ -226,7 +227,7 @@
         "AP-A5",
         "AP-E2"
       ],
-      "activity_goal": "Redesign roles, handoffs, review points, human-in-the-loop responsibilities, and experience metrics before scaling AI into work.",
+      "activity_goal": "Redesign roles, handoffs, review points, human-in-the-loop responsibilities, exception paths, and experience metrics before scaling AI into work.",
       "when_to_use": [
         "Evidence shows digital taylorism and workslop",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -280,7 +281,7 @@
         "AP-B1",
         "AP-E1"
       ],
-      "activity_goal": "Expose legacy systems through governed APIs, events, service boundaries, connector standards, versioning, ownership, and failure-mode documentation.",
+      "activity_goal": "Expose brownfield and legacy systems through governed APIs, events, service boundaries, connector standards, versioning, ownership, and failure-mode documentation.",
       "when_to_use": [
         "Evidence shows brittle ai connectivity",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -296,7 +297,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define brownfield viability, connector, versioning, and failure-mode evidence standards",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -386,7 +387,7 @@
       "antipattern_criteria": [
         "AP-B3"
       ],
-      "activity_goal": "Define offline and online evaluation, drift checks, groundedness tests, safety thresholds, business-impact metrics, and alert workflows.",
+      "activity_goal": "Define offline and online evaluation, drift checks, groundedness tests, safety thresholds, value metrics, retraining triggers, and service-owner alert workflows.",
       "when_to_use": [
         "Evidence shows black-box ai operations",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -404,7 +405,7 @@
         "Confirm accountable owner and decision forum",
         "Define operating artifact and minimum evidence standard",
         "Pilot in one service area or bounded slice",
-        "Measure adoption, quality, risk, and value signals",
+        "Measure adoption, quality, risk, value, drift, and intervention signals",
         "Convert lessons into reusable practice"
       ],
       "owner_roles": [
@@ -417,7 +418,7 @@
         "AI Evaluation and Drift System",
         "Decision log",
         "Readiness evidence pack",
-        "Measurement dashboard"
+        "Sense & Respond dashboard"
       ],
       "acceptance_criteria": [
         "Evidence artifact exists and has an accountable owner",
@@ -440,7 +441,7 @@
         "AP-B4",
         "AP-C4"
       ],
-      "activity_goal": "Define forbidden actions, data boundaries, tool permissions, escalation paths, adversarial tests, and human override for agents and AI workflows.",
+      "activity_goal": "Define forbidden actions, data boundaries, tool permissions, Human-in-the-Loop escalation matrix, adversarial red-team tests, and human override for agents and AI workflows.",
       "when_to_use": [
         "Evidence shows safety theater and unbounded autonomy",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -456,7 +457,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define Agent Behavioral Contract, escalation matrix, red-team cases, and minimum safety evidence standard",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -492,7 +493,7 @@
       "antipattern_criteria": [
         "AP-B5"
       ],
-      "activity_goal": "Offer model gateways, reusable data-access patterns, deployment templates, evaluation services, observability, and developer experience as internal products.",
+      "activity_goal": "Offer model gateways, reusable data-access patterns, deployment templates, evaluation services, observability, and developer experience as internal products for service-area teams.",
       "when_to_use": [
         "Evidence shows tool fragmentation and hidden factory",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -600,7 +601,7 @@
         "AP-C2",
         "AP-C5"
       ],
-      "activity_goal": "Require impact statements, baselines, value hypotheses, and post-release measurement for AI initiatives before scale decisions.",
+      "activity_goal": "Require impact statements, evidence-based business cases, baselines, value hypotheses, and post-release measurement for AI initiatives before scale decisions.",
       "when_to_use": [
         "Evidence shows use-case chasing and vanity benefits",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -618,7 +619,7 @@
         "Confirm accountable owner and decision forum",
         "Define operating artifact and minimum evidence standard",
         "Pilot in one service area or bounded slice",
-        "Measure adoption, quality, risk, and value signals",
+        "Measure adoption, quality, risk, ROCE/TVO, first-time-right, and value signals",
         "Convert lessons into reusable practice"
       ],
       "owner_roles": [
@@ -654,7 +655,7 @@
         "AP-D1",
         "AP-D2"
       ],
-      "activity_goal": "Assign service/domain owners for AI-critical datasets with quality accountability, definitions, access rules, lifecycle, and usage expectations.",
+      "activity_goal": "Assign service/domain owners for AI-critical data products with quality accountability, definitions, semantic context, access rules, lifecycle, and usage expectations.",
       "when_to_use": [
         "Evidence shows ownerless data and context loss",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -670,7 +671,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define semantic context, service meaning, data product contract, and minimum usability evidence standard",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -708,7 +709,7 @@
         "AP-D3",
         "AP-D4"
       ],
-      "activity_goal": "Catalog and version AI-critical data, monitor freshness and completeness, and trace training, retrieval, inference, and decision data.",
+      "activity_goal": "Catalog and version AI-critical data, assess data readiness levels, monitor freshness and completeness, and trace training, retrieval, inference, and decision data.",
       "when_to_use": [
         "Evidence shows data swamp and broken lineage",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -724,7 +725,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define data readiness levels, lineage controls, quality checks, and freshness thresholds",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -762,7 +763,7 @@
         "AP-D5",
         "AP-B5"
       ],
-      "activity_goal": "Define governed RAG, embedding, search, feature, event-stream, source coverage, freshness, and grounding patterns for reuse.",
+      "activity_goal": "Define governed RAG, embedding, search, feature, event-stream, source coverage, freshness, contextual grounding, and retrieval-quality patterns for reuse.",
       "when_to_use": [
         "Evidence shows ad hoc retrieval and duplicate knowledge stores",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -818,7 +819,7 @@
         "AP-E2",
         "AP-E4"
       ],
-      "activity_goal": "Map customer journey, backstage work, systems, data, decisions, bottlenecks, and ownership before placing AI interventions.",
+      "activity_goal": "Map customer journey, frontstage work, backstage work, systems, data, decisions, air gaps, failure modes, bottlenecks, and ownership before placing AI interventions.",
       "when_to_use": [
         "Evidence shows detached ai ideas",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -834,7 +835,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define AI service blueprint, value-stream bottleneck, failure-mode, and ownership evidence standards",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -846,7 +847,7 @@
         "Risk or governance partner"
       ],
       "expected_artifacts": [
-        "Service Blueprint AI Opportunity Mapping",
+        "AI Service Blueprinting",
         "Decision log",
         "Readiness evidence pack",
         "Measurement dashboard"
@@ -872,7 +873,7 @@
         "AP-E4",
         "AP-E5"
       ],
-      "activity_goal": "Sequence scaling by service readiness, data ownership, architecture clarity, risk level, reusable patterns, and readiness reassessment.",
+      "activity_goal": "Sequence Building-the-System scaling by service readiness, data ownership, architecture clarity, risk level, integrated team model, reusable patterns, and readiness reassessment.",
       "when_to_use": [
         "Evidence shows big-bang ai transformation",
         "The matching readiness capability is absent, aspirational, or weakly operational"
@@ -888,7 +889,7 @@
       ],
       "implementation_activities": [
         "Confirm accountable owner and decision forum",
-        "Define operating artifact and minimum evidence standard",
+        "Define service-area scaling gate, integrated team model, absorption-readiness evidence, and reassessment cadence",
         "Pilot in one service area or bounded slice",
         "Measure adoption, quality, risk, and value signals",
         "Convert lessons into reusable practice"
@@ -900,7 +901,8 @@
         "Risk or governance partner"
       ],
       "expected_artifacts": [
-        "Service-Area Scaling Playbook",
+        "Service Area Team Model and Scaling Playbook",
+        "Absorption-readiness map",
         "Decision log",
         "Readiness evidence pack",
         "Measurement dashboard"

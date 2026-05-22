@@ -28,23 +28,23 @@ interface UnsupportedActionRule {
 }
 
 const TACTIC_RULES: Record<string, TacticSemanticRule> = {
-  'TAC-OPS-001': { requiredFindingKeywords: ['decision', 'operating rhythm', 'governance fat', 'decision rights', 'cadence'] },
-  'TAC-OPS-002': { requiredFindingKeywords: ['demand routing', 'one-size', 'delivery model', 'uncertainty', 'intake'] },
-  'TAC-OPS-003': { requiredFindingKeywords: ['pilot', 'launch-and-learn', 'vertical slice', 'pilot purgatory', 'experiment'] },
-  'TAC-OPS-004': { requiredFindingKeywords: ['learning', 'hero culture', 'community', 'playbook', 'repeated mistakes'] },
+  'TAC-OPS-001': { requiredFindingKeywords: ['decision', 'operating rhythm', 'governance fat', 'decision rights', 'cadence', 'demand capture'] },
+  'TAC-OPS-002': { requiredFindingKeywords: ['demand routing', 'one-size', 'delivery model', 'uncertainty', 'intake', 'standardized', 'iterative'] },
+  'TAC-OPS-003': { requiredFindingKeywords: ['pilot', 'launch-and-learn', 'vertical slice', 'pilot purgatory', 'experiment', 'kickstart', 'playbook'] },
+  'TAC-OPS-004': { requiredFindingKeywords: ['learning', 'hero culture', 'community', 'communities of knowledge', 'playbook', 'repeated mistakes'] },
   'TAC-WORK-001': { requiredFindingKeywords: ['work redesign', 'workslop', 'digital taylorism', 'human-in-the-loop', 'cognitive load'] },
-  'TAC-ARCH-001': { requiredFindingKeywords: ['integration', 'service boundary', 'legacy', 'connector', 'brittle'] },
+  'TAC-ARCH-001': { requiredFindingKeywords: ['integration', 'service boundary', 'legacy', 'brownfield', 'connector', 'brittle'] },
   'TAC-ARCH-002': { requiredFindingKeywords: ['lifecycle', 'version', 'prompt', 'model', 'release', 'rollback', 'trace'] },
-  'TAC-ARCH-003': { requiredFindingKeywords: ['observability', 'evaluation', 'drift', 'groundedness', 'black-box'] },
-  'TAC-RISK-001': { requiredFindingKeywords: ['safety', 'guardrail', 'risk', 'agent', 'human oversight', 'behavioral contract'] },
+  'TAC-ARCH-003': { requiredFindingKeywords: ['observability', 'evaluation', 'drift', 'groundedness', 'black-box', 'sense & respond', 'retraining'] },
+  'TAC-RISK-001': { requiredFindingKeywords: ['safety', 'guardrail', 'risk', 'agent', 'human oversight', 'behavioral contract', 'red team', 'escalation'] },
   'TAC-PLAT-001': { requiredFindingKeywords: ['platform', 'fragmentation', 'hidden factory', 'model gateway', 'reusable'] },
   'TAC-STRAT-001': { requiredFindingKeywords: ['strategy', 'thesis', 'slogan', 'where not to use', 'purpose'] },
-  'TAC-VALUE-001': { requiredFindingKeywords: ['impact statement', 'value hypothesis', 'vanity', 'use-case chasing', 'portfolio'] },
-  'TAC-DATA-001': { requiredFindingKeywords: ['data owner', 'domain-owned', 'context', 'semantic', 'meaning'] },
-  'TAC-DATA-002': { requiredFindingKeywords: ['lineage', 'quality', 'freshness', 'trace', 'data swamp'] },
+  'TAC-VALUE-001': { requiredFindingKeywords: ['impact statement', 'value hypothesis', 'vanity', 'use-case chasing', 'portfolio', 'business case', 'tco'] },
+  'TAC-DATA-001': { requiredFindingKeywords: ['data owner', 'domain-owned', 'context', 'semantic', 'meaning', 'data as fuel'] },
+  'TAC-DATA-002': { requiredFindingKeywords: ['lineage', 'quality', 'freshness', 'trace', 'data swamp', 'readiness level'] },
   'TAC-DATA-003': { requiredFindingKeywords: ['retrieval', 'rag', 'embedding', 'feature', 'knowledge store'] },
-  'TAC-SVC-001': { requiredFindingKeywords: ['service blueprint', 'capability', 'value stream', 'service area', 'customer journey'] },
-  'TAC-SVC-002': { requiredFindingKeywords: ['scaling', 'big-bang', 'rollout', 'service readiness', 'safe scaling'] }
+  'TAC-SVC-001': { requiredFindingKeywords: ['service blueprint', 'capability', 'value stream', 'service area', 'customer journey', 'air gap'] },
+  'TAC-SVC-002': { requiredFindingKeywords: ['scaling', 'big-bang', 'rollout', 'service readiness', 'safe scaling', 'building the system', 'absorption'] }
 };
 
 const TACTIC_RX = /\[(TAC-[A-Z]+-\d+(?:-[A-Z]+)?)\]/g;

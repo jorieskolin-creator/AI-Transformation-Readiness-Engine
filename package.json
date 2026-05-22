@@ -22,6 +22,7 @@
     "test:tactic-grounding": "node scripts/test-tactic-grounding.mjs",
     "test:tactic-activity-playbook": "node scripts/test-tactic-activity-playbook.mjs",
     "test:kb-index": "node scripts/test-kb-index.mjs",
+    "test:ai-value-creation-refinement": "node scripts/test-ai-value-creation-refinement.mjs",
     "preview": "vite preview",
     "start": "node server.js"
   },

@@ -1,0 +1,13 @@
+Synthetic AI Value Creation Refinement Snippets
+
+<DOCUMENT name="tool-adoption-without-readiness.txt">
+The organization has purchased several AI tools and created an executive AI slogan. There is no documented operating rhythm, no service-area owner, no impact statement, no value baseline, and no evidence that pilots move into production. This snippet should not prove AI readiness.
+</DOCUMENT>
+
+<DOCUMENT name="kickstart-with-operating-proof.txt">
+A service-area team selected one bounded AI value-stream pilot through a Kickstart diagnostic. The pilot has an impact statement, data forensics checklist, service blueprint, red-team evidence, Agent Behavioral Contract, Human-in-the-Loop escalation matrix, and a pilot AI playbook for Building-the-System decisions.
+</DOCUMENT>
+
+<DOCUMENT name="data-as-fuel-service-context.txt">
+The Customer Service domain owns its AI-critical data product. The published contract defines semantic context, service meaning, freshness thresholds, lineage, access rules, source coverage, retrieval grounding, and the decisions and triggers each data element supports.
+</DOCUMENT>

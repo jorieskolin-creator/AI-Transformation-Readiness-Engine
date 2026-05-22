@@ -22,33 +22,52 @@ export const METRIC_DESCRIPTIONS: Record<string, string> = {
     'Did the source actually cover the criterion? Share of 50 criteria with verified source coverage, including positive evidence, quote-backed gaps, anti-pattern findings, and verified anti-pattern absences.'
 };
 
-export const AI_METHODOLOGY_CONTEXT = `
-<methodology_phases>
-The AI Transformation maturity journey is guided by the Ready-and-Adapt framework:
+export const AI_DOMAIN_AXIOMS = `
+<domain_axioms>
+1. AI readiness is organizational and architectural readiness, not tool readiness.
+2. Data becomes useful fuel only when it carries semantic meaning, service context, decision relevance, ownership, quality, and freshness evidence.
+3. AI must be anchored in service architecture, value streams, Service Area ownership, and accountable operating rhythm.
+4. Tool adoption, platform build-out, strategy slogans, and pilots are not readiness evidence by themselves.
+5. Roadmaps must start from Impact Statements, risk reduction, and evidence-backed business cases before scale decisions.
+6. Autonomous or agentic AI requires Secure-by-Design controls, red teaming, Agent Behavioral Contracts, tool boundaries, and Human-in-the-Loop escalation.
+7. Predictable AI work and uncertain AI value creation must be routed differently: standardized work through repeatable delivery, iterative work through Launch-and-Learn.
+8. The engine must distinguish efficiency-only narratives from AI-driven value creation: customer value, quality, first-time-right, ROCE/TVO, learning, adaptability, and safe scale.
+</domain_axioms>
+`;
 
-1. **EMERGING (Foundation — 0-3 Months)**:
-   - *Goal:* Establish a clear AI thesis, accountable owners, risk boundaries, and first evidence-producing service-area slice.
+export const AI_METHODOLOGY_CONTEXT = `
+${AI_DOMAIN_AXIOMS}
+
+<methodology_phases>
+The AI Transformation maturity journey is guided by the Ready-and-Adapt framework and the AI-Driven Value Creation Engine service model.
+
+Two-phase narrative:
+- **Kickstart:** Diagnostic and architectural alignment, service-domain selection, data forensics, AI value-stream pilot, red teaming, evidence-based business case, pilot AI playbook, and absorption-readiness map.
+- **Building the System:** Future-state business architecture, AI solution and platform architecture, integrated Service Area team model, data ownership, operating rhythm, governance, communities of learning, phased rollout, and Sense & Respond improvement.
+
+1. **EMERGING (Foundation — 0-3 Months / Kickstart begins)**:
+   - *Goal:* Establish a clear AI thesis, accountable owners, risk boundaries, demand routing, and first evidence-producing service-area slice.
    - *Key Action:* Route AI demand by uncertainty, value, data readiness, and risk.
-   - *Key Action:* Define minimum governance, data, and safety evidence before production use.
+   - *Key Action:* Define Impact Statement, minimum governance, data, service-architecture, and safety evidence before production use.
    - *Outcome:* The organization can distinguish tool adoption from readiness evidence.
 
-2. **STRUCTURED (Integration — 3-6 Months)**:
+2. **STRUCTURED (Integration — 3-6 Months / Kickstart proves value)**:
    - *Goal:* Connect AI work to service ownership, architecture, data products, lifecycle controls, and measurable impact.
-   - *Key Action:* Use Launch-and-Learn to validate bounded vertical slices.
-   - *Key Action:* Embed evaluation, observability, prompt/model/tool versioning, and human oversight.
-   - *Outcome:* AI-enabled services can be delivered and operated with traceable value and risk controls.
+   - *Key Action:* Use Launch-and-Learn to validate bounded vertical slices, red-team safety, and generate a pilot AI playbook.
+   - *Key Action:* Embed evaluation, observability, prompt/model/tool versioning, human escalation, and value measurement.
+   - *Outcome:* AI-enabled services can be delivered and operated with traceable value, risk controls, and learning evidence.
 
-3. **SCALING (Embedding — 6-12 Months)**:
+3. **SCALING (Embedding — 6-12 Months / Building the System)**:
    - *Goal:* Convert validated patterns into reusable platform products, playbooks, service-area practices, and portfolio logic.
    - *Key Action:* Sequence rollout by service readiness, data quality, architecture clarity, and risk level.
-   - *Key Action:* Institutionalize learning through communities, incident reviews, and reusable design patterns.
-   - *Outcome:* Service areas scale AI value creation without repeating pilot mistakes.
+   - *Key Action:* Establish Service Area team ownership, platform-as-product enablers, data product accountability, and operating rhythm.
+   - *Outcome:* Service areas scale AI value creation without repeating pilot mistakes or creating hidden factories.
 
-4. **ADAPTIVE (Continuous — 12+ Months)**:
+4. **ADAPTIVE (Continuous — 12+ Months / Systemic value creation)**:
    - *Goal:* Make AI a governed, observable, continuously improving component of business architecture.
-   - *Key Action:* Reassess readiness, value, safety, and operating model fit continuously.
+   - *Key Action:* Reassess readiness, value, safety, model behavior, data freshness, and operating model fit continuously.
    - *Key Action:* Use evidence to kill, continue, pivot, or scale AI investments.
-   - *Outcome:* The organization safely senses, decides, designs, delivers, learns, and scales AI-enabled value.
+   - *Outcome:* The organization safely senses, decides, designs, delivers, learns, and scales AI-enabled value through a living Sense & Respond loop.
 </methodology_phases>
 `;
 
@@ -117,7 +136,7 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **DO NOT** use Markdown links (e.g., [Title](URL)).
    - **DO NOT** use command phrases like "Download", "Read", or "Click here".
    - **DO NOT** output URLs in the narrative.
-4. **METHODOLOGY:** You MUST structure the "Remediation Roadmap" according to the Ready-and-Adapt methodology.
+4. **METHODOLOGY:** You MUST structure the "Remediation Roadmap" according to the Ready-and-Adapt methodology and the Kickstart → Building-the-System narrative.
 5. **SEPARATION OF THINKING:**
    - executive_summaries = fact-only evidence summary. No prescriptions, no tactic IDs, no case studies.
    - diagnosis = interpretation of why the current state exists. No implementation roadmap.
@@ -139,6 +158,8 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **Step 2 (Contextualizing):** Look at the **ORIGINAL DOCUMENT** only for source-grounded context. Use neutral functional labels instead of personal names or legal-entity names unless a tool or team/function label is needed for clarity. Do not change the diagnosis.
    - **Step 3 (Prescribing):** Look at the **VERIFIED TACTICS DATABASE** and **METHODOLOGY**.
      - Use the Ready-and-Adapt framework to structure the roadmap.
+     - Treat phases 1-2 as Kickstart unless locked findings already prove mature operating capability.
+     - Treat phases 3-4 as Building the System, focused on service-area scaling, platform/data/architecture integration, operating rhythm, and Sense & Respond learning.
      - Use case studies from the DATABASE to prescribe specific mechanisms.
 
 2. **Draft Evidence Summaries (One per Persona — Three Total):**
@@ -157,10 +178,10 @@ ${STRATEGY_PERSONAS_BLOCK}
 5. **Planning Decision Object:** Populate planning_decision with GO / CONDITIONAL_GO / NO_GO based on evidence strength and Quality Gate risk. This is the bridge from diagnosis to plan.
 6. **Visual Scorecard:** Create short, punchy headlines for the scorecard.
 7. **Remediation Roadmap:** Create a 4-phase roadmap:
-   - **Phase 1: Emerging — Foundation (0-3 Months):** thesis, ownership, demand routing, and first evidence-producing slice.
-   - **Phase 2: Structured — Integration (3-6 Months):** lifecycle, governance, data, architecture, and value controls.
-   - **Phase 3: Scaling — Embedding (6-12 Months):** reusable patterns, service ownership, platform enablement, and learning.
-   - **Phase 4: Adaptive — Continuous (12+ Months):** reassessment, portfolio learning, safe scaling, and value realization.
+   - **Phase 1: Emerging — Foundation (0-3 Months / Kickstart):** thesis, ownership, demand routing, Impact Statement, and first evidence-producing slice.
+   - **Phase 2: Structured — Integration (3-6 Months / Kickstart):** value-stream pilot, data forensics, service blueprint, safety validation, lifecycle, governance, and pilot playbook.
+   - **Phase 3: Scaling — Embedding (6-12 Months / Building the System):** reusable patterns, Service Area ownership, platform enablement, data products, operating rhythm, and shared learning.
+   - **Phase 4: Adaptive — Continuous (12+ Months / Building the System):** Sense & Respond reassessment, portfolio learning, safe scaling, and value realization.
    - **CRITICAL:** Use the case studies to suggest specific *mechanisms*.
    - **TONE:** Use active verbs ("Implement", "Automate", "Eliminate"). No passive voice.
    - **GROUNDING:** Every action must answer a confirmed gap, confirmed anti-pattern, missing-evidence need, or diagnosis statement. Do not add broad value, operating-model, service-scaling, or baseline actions unless those exact problems appear in the locked findings.
@@ -331,7 +352,7 @@ ${AI_METHODOLOGY_CONTEXT}
    - NO_GO when the evidence supports validation only.
 6. **NO NEW CURRENT-STATE CLAIMS:** Roadmap and planning_decision may not introduce new assertions about the audited organization that are absent from LOCKED FINDINGS.
 7. **NO BASELINE OVERREACH:** Do not prescribe establishing a baseline for a value that is already quantified in the locked findings. Use the existing baseline as evidence and prescribe only the next grounded control.
-8. **NO CULTURE/GOVERNANCE OVERREACH:** Do not use culture or governance tactic IDs for generic improvement language. Culture tactics require a matching culture anti-pattern in LOCKED FINDINGS, and governance tactics require a matching governance gap in LOCKED FINDINGS.
+8. **NO CULTURE/GOVERNANCE OVERREACH:** Do not use culture or governance tactic IDs for generic improvement language. Learning or governance tactics require matching learning, operating rhythm, governance, or ownership gaps in LOCKED FINDINGS.
 9. **NO VAGUE MATURITY ACTIONS:** Do not prescribe shifting from activity tracking to outcome tracking, product-level cadence embedding, growth/scale operating model work, or access-pattern baselines unless that exact gap appears in LOCKED FINDINGS.
 10. **WHY / WHAT GROUNDING:** Each roadmap phase must include "why" and "what" paragraphs. They are roadmap claims and must be grounded exactly like actions. Do not introduce new current-state facts, unsupported financial impact, or "closes the gap" language unless the locked findings include explicit acceptance criteria proving closure.
 11. **ACTIVITY PLAYBOOK BOUNDARY:** Use activity playbook content to make HOW actions concrete only after the tactic's KB coverage and use-when rules match locked findings. Do not force a tactic ID merely because the playbook contains useful generic activities.
@@ -342,10 +363,10 @@ ${AI_METHODOLOGY_CONTEXT}
 <task>
 1. Populate planning_decision from the locked findings and confidence signals.
 2. Create a 4-phase remediation_roadmap using Ready-and-Adapt sequencing. Keep all four phase headings, but actions arrays may be empty where the evidence does not support a grounded action:
-   - 1. Emerging — Foundation (0-3 Months)
-   - 2. Structured — Integration (3-6 Months)
-   - 3. Scaling — Embedding (6-12 Months)
-   - 4. Adaptive — Continuous (12+ Months)
+   - 1. Emerging — Foundation (0-3 Months) = Kickstart setup: thesis, owners, demand routing, impact statement, validation evidence.
+   - 2. Structured — Integration (3-6 Months) = Kickstart proof: value-stream pilot, service blueprint, data forensics, lifecycle, safety, pilot playbook.
+   - 3. Scaling — Embedding (6-12 Months) = Building the System: service-area team ownership, platform-as-product, data products, operating rhythm, shared learning.
+   - 4. Adaptive — Continuous (12+ Months) = Building the System: Sense & Respond, portfolio learning, safe scaling, value realization, readiness reassessment.
 3. For every phase:
    - "why": 75-125 words explaining why this phase exists, referencing only locked findings, confirmed gaps, confirmed anti-patterns, missing-evidence needs, diagnosis statements, and matching KB mechanisms.
    - "what": 75-125 words describing the intended change/outcome without inventing unproven benefits or claiming a gap is fully closed unless the locked findings prove the acceptance criteria.
