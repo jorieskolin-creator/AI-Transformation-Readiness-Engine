@@ -22,9 +22,7 @@ import tier1CoeCharter from '../test/tier1-coe-charter.txt?raw';
 import tier1AiTransformationStrategy from '../test/tier1-ai-transformation-strategy.txt?raw';
 import tier1PlatformLifecycleStandard from '../test/tier1-platform-lifecycle-standard.txt?raw';
 import tier1ValueRealizationReview from '../test/tier1-value-realization-review.txt?raw';
-import demoSimulation from '../test/demo-simulation.txt?raw';
 
-const DEMO_SIMULATION_LABEL = 'Engine Simulation — Northstar Retail Demo Pack';
 const SAVED_ASSESSMENT_KEY = 'ai-transformation:last-assessment:v1';
 const SAVED_ASSESSMENT_META_KEY = 'ai-transformation:last-assessment-meta:v1';
 const LAST_CRASH_KEY = 'ai-transformation:last-crash:v1';
@@ -484,7 +482,6 @@ const App: React.FC = () => {
   const [organizationRedactionTerm, setOrganizationRedactionTerm] = useState('');
   const pendingAnalyzeRef = useRef(false);
   const pendingTier1FixtureRef = useRef<string | null>(null);
-  const pendingSimulationRef = useRef(false);
   const nextRecoverySourceRef = useRef<SavedAssessmentMeta['source']>('completed_assessment');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const clearFileInput = () => {
@@ -897,24 +894,6 @@ const App: React.FC = () => {
     await runAnalyze();
   };
 
-  const startEngineSimulation = () => {
-    runAnalyze({
-      textOverride: sanitizeInput(demoSimulation),
-      imagesOverride: [],
-      label: DEMO_SIMULATION_LABEL
-    });
-  };
-
-  const handleEngineSimulation = () => {
-    if (loading) return;
-    if (!authenticated) {
-      pendingSimulationRef.current = true;
-      setShowLogin(true);
-      return;
-    }
-    startEngineSimulation();
-  };
-
   const reset = () => {
     setResult(null);
     setFiles([]);
@@ -1249,31 +1228,6 @@ const App: React.FC = () => {
                   <p className="text-lg md:text-xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
                     Your AI investment is either a strategic asset or a hidden liability. This <strong>forensic assessment tool</strong> interrogates your AI Transformation documentation against <strong>25 maturity vectors and 25 anti-pattern indicators</strong> to determine your Ready-and-Adapt classification.
                   </p>
-                  <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-3">
-                      <a
-                        href="https://honourable-peacock.static2.website/ai-transformation-engine-structure-thinking-14052026"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-300 hover:text-white bg-emerald-950/30 hover:bg-emerald-700/40 border border-emerald-700/40 hover:border-emerald-400 transition-colors px-5 py-2.5 rounded-full"
-                      >
-                        <span>How the AI Transformation Assessment Engine thinks</span>
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </a>
-                      <button
-                        type="button"
-                        onClick={handleEngineSimulation}
-                        disabled={loading}
-                        className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-cyan-300 hover:text-white bg-cyan-950/30 hover:bg-cyan-700/40 border border-cyan-700/40 hover:border-cyan-400 transition-colors px-5 py-2.5 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Run the real engine against a bundled synthetic AI Transformation demo pack"
-                      >
-                        <span>Engine - Simulation</span>
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      </button>
-                    </div>
                 </div>
 
                 <div className={`glass-panel rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border relative overflow-hidden group transition-all duration-500 ${files.length >= MIN_FILES ? 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)]' : 'border-white/10'}`}>
@@ -1722,7 +1676,6 @@ const App: React.FC = () => {
           setShowLogin(false);
           pendingAnalyzeRef.current = false;
           pendingTier1FixtureRef.current = null;
-          pendingSimulationRef.current = false;
         }}
         onSuccess={() => {
           setShowLogin(false);
@@ -1735,9 +1688,6 @@ const App: React.FC = () => {
             pendingTier1FixtureRef.current = null;
             const fixture = TIER1_FIXTURES.find(f => f.pack_id === packId);
             if (fixture) startTier1FixtureAnalysis(fixture);
-          } else if (pendingSimulationRef.current) {
-            pendingSimulationRef.current = false;
-            startEngineSimulation();
           }
         }}
       />
