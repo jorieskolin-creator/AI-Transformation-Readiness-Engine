@@ -572,7 +572,7 @@
           <div class="stage-meta">gemini-3.1-pro-preview · independent verifier · targeted rescan budget</div>
         </div>
         <div class="stage-body">
-          Each completed A-E batch is checked against the raw source material before Phase 2 calculates metrics. The verifier classifies every item as supported, weak, unsupported, or missing. Anti-pattern absence is separately labeled as confirmed present, partial finding, tested absent, or not assessed. Weak or over-scored criteria can trigger targeted rescans; the engine now budgets those rescans toward the highest-value evidence gaps instead of chasing every weak signal.
+          Each completed A-E batch is checked against the raw source material before Phase 2 calculates metrics. The verifier classifies every item as supported, weak, unsupported, or missing. Anti-pattern absence is separately labeled as confirmed present, partial finding, tested absent, or not assessed. When evidence is weak, unclear, unsupported, or over-scored, the engine can independently trigger a targeted rescan and budget that second look toward the highest-value evidence gaps instead of chasing every weak signal.
         </div>
       </div>
 
@@ -592,7 +592,7 @@
           <div class="stage-meta">sonnet summary · opus roadmap · LOW-confidence fast path</div>
         </div>
         <div class="stage-body">
-          Outputs depend on confidence. Summary and diagnosis are separated from roadmap planning. HIGH and MEDIUM confidence can produce planning and a four-phase roadmap. LOW confidence deliberately returns findings mode only: evidence-backed findings, missing evidence, validation plan, NO_GO, and an empty directive roadmap. This avoids spending time and trust on advice the evidence cannot support.
+          Outputs depend on confidence. Summary and diagnosis are separated from roadmap planning. HIGH and MEDIUM confidence can produce planning and a four-phase roadmap. LOW confidence is an autonomous stop condition: the engine deliberately returns findings mode only, with evidence-backed findings, missing evidence, validation plan, NO_GO, and an empty directive roadmap. This avoids spending time and trust on advice the evidence cannot support.
         </div>
       </div>
 
@@ -635,7 +635,56 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">02</span> Roles and Guardrails</div>
+    <div class="section-tag"><span class="num">02</span> Agentic Control</div>
+    <h2>Agentic Verification: The Engine Decides What the Evidence Allows</h2>
+    <p>
+      The engine is agentic within guardrails. It does not simply pass text from one model call to the next. It evaluates intermediate results, compares them against the source, and makes bounded process decisions about what should happen next. Those decisions are not open-ended autonomy; they are evidence-gated controls inside the assessment workflow.
+    </p>
+
+    <div class="metrics-list" style="margin-top: 32px;">
+      <div class="metric-item">
+        <div class="metric-name">Targeted Rescan<span>second look</span></div>
+        <div class="metric-interp">When a criterion is weak, unclear, unsupported, missing, or likely over-scored, the engine can ask for a narrower second pass focused on the disputed evidence instead of rerunning the whole assessment blindly.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Rescan Budget<span>prioritized thinking</span></div>
+        <div class="metric-interp">If many items are weak, the engine prioritizes the most consequential gaps. It spends deeper model effort where the verification delta is highest and records what was skipped by budget.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Deterministic Downgrade<span>proof before score</span></div>
+        <div class="metric-interp">If the rescan still fails to support a forwarded finding, the score is lowered before the mathematical validation layer calculates maturity, burden, confidence, or readiness.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Anti-Pattern Semantics<span>absence is tested</span></div>
+        <div class="metric-interp">The engine distinguishes confirmed anti-patterns, partial findings, tested absence, and not-assessed silence. It does not turn missing evidence into a green result.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">No-Roadmap Decision<span>confidence gate</span></div>
+        <div class="metric-interp">When confidence is LOW, the engine refuses to produce a directive roadmap. It returns findings mode, missing evidence, and a validation plan instead of polished but unsafe advice.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Execution Fast Path<span>stop unnecessary loops</span></div>
+        <div class="metric-interp">When the evidence is too thin for planning, the engine skips expensive roadmap and fact-check loops that would only decorate uncertainty. Heavy thinking is reserved for evidence that can carry it.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Strategy Sanitation<span>claim hygiene</span></div>
+        <div class="metric-interp">Unsupported strategy fragments are removed, rewritten, quarantined, or surfaced before display. The engine can preserve a report while refusing unsafe claims inside it.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Quality Gate<span>GO / WARN / BLOCK</span></div>
+        <div class="metric-interp">The final decision is based on evidence density, delivery integrity, grounding, fact-check status, and sanitation results. The engine can block its own output when the assessment is not safe to act on.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      The engine thinks by testing its own intermediate conclusions. It can ask for a narrower second look, refuse to plan, and surface uncertainty instead of producing polished but unsafe advice.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">03</span> Roles and Guardrails</div>
     <h2>Three Personas. One Evidence Contract.</h2>
     <p>
       The report has three executive lenses, but the facts must agree. The Transformation Lead needs operating-model truth. The CIO/CTO or CDAO needs architecture, platform, data, and governance implications. The Business / Service Area Owner needs impact, adoption, ownership, and value-stream consequences.
@@ -672,7 +721,7 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">03</span> Dual Streams</div>
+    <div class="section-tag"><span class="num">04</span> Dual Streams</div>
     <h2>Two Streams. One Diagnosis.</h2>
     <p>
       Every domain has two opposing streams. Stream A measures maturity: evidence of capability, ownership, operating proof, architecture, governance, data quality, learning, and value realization. Stream B measures anti-patterns: evidence of friction, fragility, decision fog, brittle integration, context-poor data, unsafe autonomy, or tool adoption without value proof.
@@ -705,7 +754,7 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">04</span> The Domain Pack</div>
+    <div class="section-tag"><span class="num">05</span> The Domain Pack</div>
     <h2>The 50-Criteria AI Transformation Knowledge Base</h2>
     <p>
       Five domains. Each domain holds 5 maturity indicators paired against 5 anti-patterns. Each criterion carries 3 evidence questions. The result is a 50-criterion, 150-question scanner for whether AI can become safe, measurable, service-owned value creation.
@@ -840,7 +889,7 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">05</span> Evidence and Scoring</div>
+    <div class="section-tag"><span class="num">06</span> Evidence and Scoring</div>
     <h2>0-3 Evidence Scale and AI Maturity Ladder</h2>
     <p>
       The scanner asks what the submitted material proves. A statement that “AI is strategic” is not enough. A pilot is not enough. A platform purchase is not enough. Higher scores require operating proof, measured feedback loops, tested controls, ownership records, or traceable production behavior.
@@ -905,7 +954,7 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">06</span> Submission Guidance</div>
+    <div class="section-tag"><span class="num">07</span> Submission Guidance</div>
     <h2>What to Submit</h2>
     <p>
       The assessment accepts any combination of documents. More document types provide richer signal across all five domains. Absence of entire document categories is itself a maturity signal. Do not manufacture missing documents for the assessment; the absence is part of the diagnosis.
@@ -956,7 +1005,7 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">07</span> Deterministic Metrics</div>
+    <div class="section-tag"><span class="num">08</span> Deterministic Metrics</div>
     <h2>The Firewall Between AI and Roadmap</h2>
     <p>
       Phase 2 contains no generative AI. It applies deterministic arithmetic to evidence-checked audit logs. Unsupported scanner output has already been rescanned or downgraded before this layer runs.
@@ -1019,7 +1068,7 @@ then capped by evidence density and delivery integrity</div>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">08</span> Strategy and Roadmap</div>
+    <div class="section-tag"><span class="num">09</span> Strategy and Roadmap</div>
     <h2>Strategy Synthesis Output</h2>
     <p>
       Phase 3 produces structured JSON consumed by the dashboard. It cannot fabricate optimism because the visual scorecard, classification, evidence density, domain scores, anti-pattern findings, and source gaps are locked by deterministic validation.
@@ -1055,7 +1104,7 @@ then capped by evidence density and delivery integrity</div>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">09</span> Model Routing</div>
+    <div class="section-tag"><span class="num">10</span> Model Routing</div>
     <h2>Model Roles and Fallback Chains</h2>
     <p>
       Model routing is centralized in <code>src/models.ts</code>. Each stage has a primary model and an ordered fallback chain. The design avoids lightweight fallbacks for this engine and prefers GPT-5.5, Claude Sonnet/Opus, and Gemini Pro-class models when fallback is needed.
@@ -1092,7 +1141,7 @@ then capped by evidence density and delivery integrity</div>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">10</span> Why It Matters</div>
+    <div class="section-tag"><span class="num">11</span> Why It Matters</div>
     <h2>The Difference Between Tool Adoption and Value Creation</h2>
     <p>
       A generic AI-readiness survey asks whether the organization has a strategy, tools, pilots, data, and governance. The AI Transformation Engine asks whether the documents prove that those things operate together as a value-creation system.
