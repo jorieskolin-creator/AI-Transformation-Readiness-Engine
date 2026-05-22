@@ -339,18 +339,25 @@ export const analyzeDocument = async (
       delivery_integrity: Math.round(validationData.metrics.delivery_integrity),
       silent_areas: validationData.silent_areas.length,
     });
+    const lowConfidenceFastPath = confidenceBracket === 'LOW';
 
     // Synthesis escalation decision (rules + user override).
     // Rules are conservative: only escalate to Opus 4.7 when the org is messy
-    // enough that a deeper roadmap is worth the cost premium.
+    // enough that a deeper roadmap is worth the cost premium. LOW-confidence
+    // runs deliberately stay in findings-only mode to avoid expensive roadmap
+    // and regeneration loops on material the Quality Gate will block anyway.
     const autoEscalate =
-      (validationData.readiness_stage === 'Emerging' && validationData.antipattern_findings.length >= 5)
-      || validationData.metrics.ai_readiness < 30
-      || validationData.maturity_gaps.length >= 15
-      || validationData.metrics.antipattern_burden > 70;
-    const useEscalation = options.deepMode || autoEscalate;
+      !lowConfidenceFastPath && (
+        (validationData.readiness_stage === 'Emerging' && validationData.antipattern_findings.length >= 5)
+        || validationData.metrics.ai_readiness < 30
+        || validationData.maturity_gaps.length >= 15
+        || validationData.metrics.antipattern_burden > 70
+      );
+    const useEscalation = !lowConfidenceFastPath && (options.deepMode || autoEscalate);
     const synthesisStage = useEscalation ? 'synthesis_escalation' : 'synthesis';
-    const escalationReason = options.deepMode
+    const escalationReason = lowConfidenceFastPath
+      ? `low_confidence_fast_path:bracket=${confidenceBracket},evidence_density=${Math.round(validationData.metrics.evidence_density)}`
+      : options.deepMode
       ? 'user_deep_mode'
       : autoEscalate
         ? `auto:readiness=${Math.round(validationData.metrics.ai_readiness)},burden=${Math.round(validationData.metrics.antipattern_burden)},antipatterns=${validationData.antipattern_findings.length},gaps=${validationData.maturity_gaps.length},class=${validationData.readiness_stage}`
@@ -612,6 +619,16 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
         });
         const summaryCheck = parseFactCheckResponse(summaryResp.text, attemptNumber);
 
+        if (lowConfidenceFastPath || roadmap.length === 0) {
+          serverLog(runId, 'info', 'fact_check_fast_path', {
+            stage,
+            attempt: attemptNumber,
+            reason: lowConfidenceFastPath ? 'low_confidence' : 'no_roadmap',
+            skipped_substage: 'roadmap',
+          });
+          return summaryCheck;
+        }
+
         const roadmapPrompt = buildRoadmapFactCheckPrompt({
           contentToCheck: buildRoadmapCheckText(strategy),
           remediationRoadmapText: roadmapText,
@@ -761,9 +778,10 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
       let data = normalizeStrategy(await callPhase3(correctionAppendix));
       let invalid = findInvalidTacticIds(data, validIds);
       let regen = 0;
-      while (invalid.length > 0 && regen < ID_VALIDATION_MAX_REGENS) {
+      const maxIdRegens = lowConfidenceFastPath ? 0 : ID_VALIDATION_MAX_REGENS;
+      while (invalid.length > 0 && regen < maxIdRegens) {
         regen++;
-        console.warn(`[AI Transformation] [${runId}] Strategy cites ${invalid.length} invalid tactic IDs (${invalid.join(', ')}); regen ${regen}/${ID_VALIDATION_MAX_REGENS}`);
+        console.warn(`[AI Transformation] [${runId}] Strategy cites ${invalid.length} invalid tactic IDs (${invalid.join(', ')}); regen ${regen}/${maxIdRegens}`);
         serverLog(runId, 'warn', 'invalid_tactic_ids', {
           invalid_ids: invalid.join(','),
           regen,
@@ -774,9 +792,12 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
         invalid = findInvalidTacticIds(data, validIds);
       }
       if (invalid.length > 0) {
-        console.error(`[AI Transformation] [${runId}] Strategy STILL contains invalid tactic IDs after ${ID_VALIDATION_MAX_REGENS} regens: ${invalid.join(', ')}`);
-        serverLog(runId, 'error', 'invalid_tactic_ids_persisted', {
+        const level = lowConfidenceFastPath ? 'warn' : 'error';
+        console.warn(`[AI Transformation] [${runId}] Strategy contains invalid tactic IDs after ${maxIdRegens} regen(s): ${invalid.join(', ')}`);
+        serverLog(runId, level, 'invalid_tactic_ids_persisted', {
           invalid_ids: invalid.join(','),
+          regen_budget: maxIdRegens,
+          fast_path: lowConfidenceFastPath,
         });
       }
       const grounding = sanitizeRoadmapTacticGrounding(data, validationData);
@@ -807,10 +828,11 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
     if (!factCheck.failed) trajectory.push(snapshot(factCheck));
 
     let attempt = 1;
+    const maxFactCheckRetries = lowConfidenceFastPath ? 0 : FACT_CHECK_MAX_RETRIES;
     while (
       !factCheck.failed &&
       lastUnsupported.length > 0 &&
-      attempt <= FACT_CHECK_MAX_RETRIES
+      attempt <= maxFactCheckRetries
     ) {
       console.log(`[AI Transformation] Fact-check pass ${attempt}: ${lastUnsupported.length} unsupported claims, regenerating...`);
       strategyData = await callPhase3Validated(buildRegenerateAppendix(lastUnsupported));
@@ -870,7 +892,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
     const factCheckOnlyBlock = qualityGate.decision === 'BLOCK'
       && qualityGate.blocking_reasons.length > 0
       && qualityGate.blocking_reasons.every(reason => reason.startsWith('Fact-check:'));
-    if (factCheckOnlyBlock && !factCheck.failed) {
+    if (!lowConfidenceFastPath && factCheckOnlyBlock && !factCheck.failed) {
       serverLog(runId, 'warn', 'fact_check_escalated', {
         from_stage: 'fact_check',
         to_stage: 'fact_check_high',

@@ -24,6 +24,14 @@ export interface RunContext {
 
 const REQUEST_TIMEOUT_MS = 595_000;
 const INTERNAL_RESULT_POLL_MS = 120_000;
+const INTERNAL_RESULT_POLL_BY_STAGE_MS: Partial<Record<StageId, number>> = {
+  synthesis: 240_000,
+  roadmap_synthesis: 240_000,
+  synthesis_escalation: 300_000,
+  fact_check: 180_000,
+  fact_check_high: 180_000,
+  quality_gate: 180_000,
+};
 const INTERNAL_RESULT_POLL_INTERVAL_MS = 2_000;
 const INTERNAL_RESULT_MISSING_GRACE_MS = 10_000;
 
@@ -146,9 +154,10 @@ async function pollInternalResult(body: any, cause: unknown): Promise<{ text: st
   const started = Date.now();
   const stage = body.stage || 'unknown';
   const model = body.model || 'unknown';
+  const pollBudgetMs = INTERNAL_RESULT_POLL_BY_STAGE_MS[stage as StageId] ?? INTERNAL_RESULT_POLL_MS;
   const causeMessage = cause instanceof Error ? cause.message : String(cause || 'unknown');
   let firstMissingAt: number | null = null;
-  while (Date.now() - started < INTERNAL_RESULT_POLL_MS) {
+  while (Date.now() - started < pollBudgetMs) {
     try {
       const res = await fetch('/api/model-result', {
         method: 'POST',
@@ -204,6 +213,7 @@ async function pollInternalResult(body: any, cause: unknown): Promise<{ text: st
     model,
     internal_call_id: internalCallId,
     duration_ms: Date.now() - started,
+    poll_budget_ms: pollBudgetMs,
     cause: causeMessage,
   });
   return null;

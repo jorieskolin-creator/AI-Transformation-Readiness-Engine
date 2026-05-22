@@ -13,6 +13,8 @@ import {
   summarizeEvidenceCheck
 } from './services/evidenceCheckService';
 
+const TARGETED_RESCAN_MAX_ITEMS_PER_BATCH = 3;
+
 const parseAiResponse = (text: string): any => {
   if (!text) return {};
   let cleaned = text.trim();
@@ -84,6 +86,28 @@ const feedbackForRescan = (items: EvidenceCheckItem[]): string => {
     .join('\n');
 };
 
+const rescanStatusPriority = (status: EvidenceCheckItem['status']): number => {
+  if (status === 'weak') return 3;
+  if (status === 'unsupported') return 2;
+  if (status === 'missing') return 1;
+  return 0;
+};
+
+const selectRescanItems = (items: EvidenceCheckItem[]): EvidenceCheckItem[] => {
+  return [...items]
+    .sort((a, b) => {
+      const severityDelta = (b.original_count - b.verified_count) - (a.original_count - a.verified_count);
+      if (severityDelta !== 0) return severityDelta;
+      const statusDelta = rescanStatusPriority(b.status) - rescanStatusPriority(a.status);
+      if (statusDelta !== 0) return statusDelta;
+      if (a.stream !== b.stream) return a.stream === 'maturity' ? -1 : 1;
+      const originalDelta = b.original_count - a.original_count;
+      if (originalDelta !== 0) return originalDelta;
+      return a.id.localeCompare(b.id);
+    })
+    .slice(0, TARGETED_RESCAN_MAX_ITEMS_PER_BATCH);
+};
+
 const runTargetedRescan = async (
   batchId: string,
   text: string,
@@ -145,25 +169,37 @@ export const runPhase1Audit = async (
         if (evidenceCheck.model_used) evidenceModelsSeen.add(evidenceCheck.model_used);
         if (evidenceCheck.adjudication_model_used) evidenceAdjudicationModelsSeen.add(evidenceCheck.adjudication_model_used);
         const needsRescan = evidenceItemsNeedingRescan(evidenceCheck);
+        const rescanItems = selectRescanItems(needsRescan);
+        const skippedRescanItems = needsRescan.filter(item => !rescanItems.includes(item));
         const rescannedKeys = new Set<string>();
         const preRescanCounts = new Map<string, number>();
 
-        if (!evidenceCheck.failed && needsRescan.length > 0) {
+        if (!evidenceCheck.failed && skippedRescanItems.length > 0) {
+          serverLog(ctx.runId, 'info', 'targeted_rescan_budget_applied', {
+            batch: batchId,
+            selected: rescanItems.map(i => `${i.stream}.${i.id}`).join(',') || 'none',
+            skipped: skippedRescanItems.map(i => `${i.stream}.${i.id}`).join(','),
+            max_items: TARGETED_RESCAN_MAX_ITEMS_PER_BATCH,
+          });
+        }
+
+        if (!evidenceCheck.failed && rescanItems.length > 0) {
           serverLog(ctx.runId, 'warn', 'evidence_check_targeted_rescan', {
             batch: batchId,
-            criteria: needsRescan.map(i => `${i.stream}.${i.id}`).join(','),
+            criteria: rescanItems.map(i => `${i.stream}.${i.id}`).join(','),
+            skipped_by_budget: skippedRescanItems.length,
           });
-          const rescanResult = await runTargetedRescan(batchId, text, images, ctx, needsRescan);
+          const rescanResult = await runTargetedRescan(batchId, text, images, ctx, rescanItems);
           if (rescanResult.model_used) {
             targetedRescanModelsSeen.add(rescanResult.model_used);
             serverLog(ctx.runId, 'info', 'targeted_rescan_model_used', {
               batch: batchId,
               model: rescanResult.model_used,
-              criteria: needsRescan.map(i => `${i.stream}.${i.id}`).join(','),
+              criteria: rescanItems.map(i => `${i.stream}.${i.id}`).join(','),
             });
           }
           batchResult = mergeBatchResult(batchResult, rescanResult) as BatchAuditResult & { model_used?: string };
-          needsRescan.forEach(i => {
+          rescanItems.forEach(i => {
             const key = `${i.stream}.${i.id}`;
             rescannedKeys.add(key);
             preRescanCounts.set(key, i.original_count);
