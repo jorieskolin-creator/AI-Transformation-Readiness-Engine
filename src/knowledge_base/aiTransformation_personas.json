@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "description": "Persona definitions for Phase 3 AI transformation synthesis. Each persona gets a tailored lens on the same diagnostic data.",
+  "personas": {
+    "transformation_lead": {
+      "id": "transformation_lead",
+      "title": "AI Transformation Lead",
+      "priority": 1,
+      "description": "The operating owner of AI transformation readiness. Needs evidence-backed maturity gaps, operating model actions, learning loops, and scaling priorities.",
+      "focus_areas": [
+        "operating_model",
+        "portfolio_learning",
+        "change_capacity",
+        "service_area_enablement"
+      ],
+      "language_style": "Operational, direct, and transformation-oriented. Use readiness, service-area, learning, and value-realization language.",
+      "key_questions": [
+        "Where is the transformation operating model weakest?",
+        "Which readiness gaps block safe scaling?",
+        "What should be validated before broader rollout?",
+        "How do we turn pilot learning into reusable capability?"
+      ]
+    },
+    "technology_lead": {
+      "id": "technology_lead",
+      "title": "CIO / CTO / CDAO",
+      "priority": 2,
+      "description": "The technology and data executive. Needs architecture, platform, data, governance, security, and lifecycle implications.",
+      "focus_areas": [
+        "ai_platform",
+        "enterprise_architecture",
+        "data_foundations",
+        "security_and_governance",
+        "operational_reliability"
+      ],
+      "language_style": "Technical and architectural. Use platform, data, lifecycle, integration, evaluation, and risk-control language.",
+      "key_questions": [
+        "Can AI systems be integrated and operated reliably?",
+        "Where are platform and data foundations not ready?",
+        "Which AI lifecycle controls are missing?",
+        "What architecture changes reduce scaling risk?"
+      ]
+    },
+    "service_owner": {
+      "id": "service_owner",
+      "title": "Business / Service Area Owner",
+      "priority": 3,
+      "description": "The business owner of AI-enabled value creation. Needs service ownership, customer impact, value hypotheses, adoption, and work redesign implications.",
+      "focus_areas": [
+        "customer_value",
+        "service_blueprints",
+        "value_streams",
+        "human_ai_work_design",
+        "business_outcomes"
+      ],
+      "language_style": "Business-service language. Focus on customer journeys, outcomes, ownership, adoption, and measurable impact.",
+      "key_questions": [
+        "Which AI opportunities are tied to real customer or service outcomes?",
+        "Where does work need redesign rather than task acceleration?",
+        "What evidence is needed before scaling in my service area?",
+        "How will value and quality be measured after launch?"
+      ]
+    }
+  },
+  "poc_personas": [
+    "transformation_lead",
+    "technology_lead",
+    "service_owner"
+  ],
+  "future_personas": {
+    "risk_owner": {
+      "id": "risk_owner",
+      "title": "Risk / Security / Responsible AI Owner",
+      "description": "Focus on responsible AI, control evidence, safety testing, and auditability."
+    },
+    "data_product_owner": {
+      "id": "data_product_owner",
+      "title": "Data Product Owner",
+      "description": "Focus on domain ownership, semantic quality, lineage, retrieval, and access patterns."
+    },
+    "platform_product_owner": {
+      "id": "platform_product_owner",
+      "title": "AI Platform Product Owner",
+      "description": "Focus on internal platform adoption, developer experience, model access, evaluation, and observability."
+    }
+  }
+}

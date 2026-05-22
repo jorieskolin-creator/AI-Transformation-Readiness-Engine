@@ -1,0 +1,5 @@
+AI Platform Lifecycle Control Standard
+
+Production AI services must register model, prompt, tool, dataset, configuration, and evaluation versions before release. Release records must include owner, rollback path, risk class, evaluation result, and monitoring thresholds.
+
+Prompt changes for production assistants require pull request review. Agents with tool access require explicit tool permissions and an Agent Behavioral Contract. Production behavior must be traceable to the release package.

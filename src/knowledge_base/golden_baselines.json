@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "description": "AI transformation golden baseline fixture descriptions. These ranges guide manual drift review; Phase 2 metrics remain deterministic.",
+  "fixtures": {
+    "golden-emerging": {
+      "profile": "AI tool adoption without readiness",
+      "expected_classification": "Emerging",
+      "description": "Tool-first organization with pilots, weak ownership, no lifecycle controls, weak governance, and many anti-patterns."
+    },
+    "golden-structured": {
+      "profile": "Structured but fragmented AI transformation",
+      "expected_classification": "Structured",
+      "description": "Council, demand routing, pilots, platform basics, and governance exist, but scaling, data ownership, lifecycle, and retrieval remain partial."
+    },
+    "golden-adaptive": {
+      "profile": "Adaptive AI value-creation capability",
+      "expected_classification": "Adaptive / Value-creating",
+      "description": "Operating rhythm, service ownership, platform, data, risk, learning, and portfolio evidence are embedded."
+    }
+  }
+}

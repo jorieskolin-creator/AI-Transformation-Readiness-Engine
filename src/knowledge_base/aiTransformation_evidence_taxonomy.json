@@ -1,0 +1,86 @@
+{
+  "version": "1.0.0",
+  "description": "Evidence classification taxonomy for AI transformation readiness audit. Defines what constitutes valid evidence for each score level.",
+  "score_definitions": {
+    "0": {
+      "label": "Absent",
+      "description": "No evidence found in the document. Document is silent on this topic.",
+      "maturity_interpretation": "Missing capability. Gap identified.",
+      "antipattern_interpretation": "Anti-pattern not detected. Clean area only when meaningfully tested.",
+      "evidence_requirements": "None required. Silence is valid data but may indicate unknown coverage."
+    },
+    "1": {
+      "label": "Aspirational",
+      "description": "Vague intent, buzzwords, or planned initiatives only. No evidence of operational practice.",
+      "maturity_interpretation": "Intent without implementation. Plans = Score 1 max.",
+      "antipattern_interpretation": "Minor indicators or emerging risk signals.",
+      "evidence_examples": [
+        "We plan to define an AI governance model",
+        "AI is a strategic priority",
+        "A pilot is being explored",
+        "Teams are interested in generative AI"
+      ]
+    },
+    "2": {
+      "label": "Operational",
+      "description": "Behavior or process is described and functioning. Evidence of actual practice, not just policy.",
+      "maturity_interpretation": "Capability exists and is practiced. Not yet embedded.",
+      "antipattern_interpretation": "Pattern is present and causing friction.",
+      "evidence_examples": [
+        "The AI review forum meets monthly with product, security, and data owners",
+        "Pilot learnings are recorded and reused",
+        "Data owners publish definitions and access rules",
+        "AI quality is evaluated before release"
+      ]
+    },
+    "3": {
+      "label": "Embedded",
+      "description": "Explicit mechanisms, enforcement, automation, measurement, or cultural norms. Evidence of mature systematic practice.",
+      "maturity_interpretation": "Mature capability with enforcement, measurement, and learning loops.",
+      "antipattern_interpretation": "Pattern is deeply embedded and structural.",
+      "evidence_examples": [
+        "Production AI releases can be traced to model, prompt, data, and evaluation versions",
+        "Guardrails and escalation paths are tested before deployment",
+        "Service areas own AI value metrics after launch",
+        "Portfolio decisions kill, continue, or scale AI initiatives based on evidence"
+      ]
+    }
+  },
+  "evidence_quality_rules": [
+    "Direct quotes from the document are the strongest evidence",
+    "References to tools, processes, metrics, owners, decisions, or artifacts are evidence only when usage is described",
+    "Future tense caps maturity score at 1",
+    "Policy without operating proof scores lower than measured practice",
+    "Specific learning loops, release controls, evaluation results, and ownership records strengthen evidence quality",
+    "Generic AI jargon without context is weak evidence"
+  ],
+  "evidence_categories": {
+    "description": "Orthogonal to score. Every evidence_quote captured in Phase 1 must be tagged with exactly one category.",
+    "categories": {
+      "Policy": "Written rules, standards, or formal documents that declare intent.",
+      "Process": "Recurring human practices or workflows that are described as actually happening.",
+      "Operational": "Day-to-day AI delivery, review, support, or service ownership activities.",
+      "Automation": "Code, platform features, pipelines, tests, monitoring, or controls that enforce without manual effort.",
+      "Accountability": "Mechanisms that assign ownership, decision rights, obligations, or consequences.",
+      "Architecture": "Service, platform, integration, data, or business architecture evidence.",
+      "Data": "Data ownership, quality, lineage, semantic context, retrieval, privacy, or access evidence.",
+      "Governance": "Risk, approval, auditability, responsible AI, security, legal, or compliance evidence.",
+      "Learning": "Pilot feedback, retrospectives, communities, playbooks, reuse, or competence flow evidence.",
+      "Value": "Impact statements, baselines, outcome measures, portfolio logic, or value realization evidence."
+    },
+    "tagging_rules": [
+      "Every evidence_quote MUST carry exactly one allowed category.",
+      "If a quote could fit multiple categories, pick the dominant one.",
+      "Automation supersedes Policy when the quote describes enforcement.",
+      "Learning supersedes Process when the quote describes reusable lessons or competence flow."
+    ]
+  },
+  "false_positive_guards": [
+    "Mentioning an AI tool does not prove AI readiness",
+    "A pilot does not prove scalable capability",
+    "A policy does not prove governance is embedded",
+    "A model registry does not prove release control",
+    "A data catalog does not prove business meaning or retrieval quality",
+    "Guardrail claims require testing or operating evidence"
+  ]
+}

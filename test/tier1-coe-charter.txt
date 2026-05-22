@@ -1,0 +1,5 @@
+AI Transformation Council Charter
+
+The AI Transformation Council is established as a permanent cross-functional decision forum. Members include transformation leadership, service-area owners, enterprise architecture, AI platform, data governance, security, legal, and risk.
+
+The council owns the AI operating rhythm, demand routing policy, risk escalation path, portfolio evidence standards, and learning review cadence. The council meets monthly and maintains a decision log, exception register, and AI readiness backlog.

@@ -1,0 +1,7 @@
+AI Value Realization Review
+
+The quarterly AI value review compares impact statements, baselines, adoption, quality, first-time-right, exception rates, and customer feedback for production AI-enabled services.
+
+The customer-service summarization assistant improved first-time-right review quality and reduced rework after human review points were redesigned. The finance insight pilot was stopped because adoption remained low and source data meaning was disputed by domain owners.
+
+The review reprioritized the AI portfolio toward service areas with named owners, data products, and measurable customer or operational outcomes.

@@ -1,0 +1,7 @@
+Responsible AI Governance Policy
+
+This policy defines risk-based AI governance for the assessed organization. AI use cases must be classified by autonomy, data sensitivity, user impact, regulatory exposure, and reversibility before production use.
+
+Low-risk internal assistants may be approved by service-area owners and security reviewers. High-risk or autonomous scenarios require legal, security, data protection, and responsible AI review. Exceptions are time-bound, auditable, and linked to a named accountable owner.
+
+Human oversight, disclosure, logging, escalation, fallback, and appeal requirements are tied to the risk class. Production release is blocked unless minimum controls are proven for the selected risk tier.

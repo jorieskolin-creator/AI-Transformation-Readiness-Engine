@@ -1,0 +1,308 @@
+{
+  "version": "1.0.0",
+  "domain": "AI Transformation Readiness Assessment",
+  "stream": "antipattern",
+  "description": "25 AI transformation anti-patterns organized into 5 domains. High scores indicate presence of harmful patterns.",
+  "criteria": [
+    {
+      "id": "A1",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "AI Decision Fog & Governance Fat",
+      "description": "AI decisions stall or repeat across forums because ownership, decision rights, and escalation boundaries are unclear.",
+      "sub_criteria": [
+        "Are AI initiatives delayed because nobody clearly owns decisions?",
+        "Do separate governance forums create repeated approvals instead of enabling flow?",
+        "Are teams forced to escalate ordinary AI design decisions to senior leaders because decision boundaries are unclear?"
+      ]
+    },
+    {
+      "id": "A2",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "One-Size-Fits-All AI Delivery",
+      "description": "All AI initiatives are forced through the same delivery model regardless of uncertainty, risk, demand type, or learning need.",
+      "sub_criteria": [
+        "Are all AI initiatives forced through the same project model regardless of uncertainty?",
+        "Are exploratory AI cases managed with rigid delivery plans that assume known requirements?",
+        "Are predictable automation cases mixed with uncertain GenAI or agentic work in the same backlog without routing logic?"
+      ]
+    },
+    {
+      "id": "A3",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Pilot Purgatory",
+      "description": "AI pilots remain disconnected from production, business ownership, reusable platform capabilities, and measurable business outcomes.",
+      "sub_criteria": [
+        "Do AI pilots remain disconnected from production, business ownership, or P&L outcomes?",
+        "Are pilots considered successful without proving integration, safety, adoption, or measurable business value?",
+        "Does every new AI use case start from scratch instead of reusing learnings, patterns, and platform capabilities?"
+      ]
+    },
+    {
+      "id": "A4",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Fragmented AI Knowledge & Hero Culture",
+      "description": "AI knowledge is concentrated in isolated experts, repeated mistakes, and heroics instead of reusable institutional learning.",
+      "sub_criteria": [
+        "Is AI knowledge concentrated in a few experts or isolated data science teams?",
+        "Are mistakes repeated because learning is not institutionalized?",
+        "Do teams depend on individual heroes instead of shared practices, reusable playbooks, and operating structures?"
+      ]
+    },
+    {
+      "id": "A5",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Digital Taylorism & Workslop",
+      "description": "AI accelerates fragmented tasks but increases rework, checking, coordination, cognitive load, or low-quality output.",
+      "sub_criteria": [
+        "Is AI used mainly to make fragmented tasks faster without improving the whole system?",
+        "Does AI create extra checking, rework, hidden coordination, or low-quality workslop?",
+        "Are people measured on activity and utilization rather than impact, learning, quality, and customer value?"
+      ]
+    },
+    {
+      "id": "B1",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Legacy Labyrinth & Brittle AI Connectivity",
+      "description": "AI use cases depend on manual exports, screen scraping, point integrations, unclear service boundaries, and fragile dependencies.",
+      "sub_criteria": [
+        "Do AI use cases depend on manual exports, screen scraping, copied files, or fragile custom connectors?",
+        "Does touching one system break another because service boundaries are unclear?",
+        "Are AI integrations created project-by-project with no reusable architecture?"
+      ]
+    },
+    {
+      "id": "B2",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Notebook-to-Production / Prompt-to-Production Chaos",
+      "description": "Models, prompts, and agents move into production without versioning, review, reproducibility, or rollback.",
+      "sub_criteria": [
+        "Are models, prompts, or agents moved into production without repeatable release controls?",
+        "Are prompt changes made manually without versioning, review, or rollback?",
+        "Is it impossible to reproduce why an AI system behaved a certain way?"
+      ]
+    },
+    {
+      "id": "B3",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Black-Box AI Operations",
+      "description": "AI failures, drift, hallucinations, retrieval degradation, and unsafe outputs are found through complaints rather than monitoring.",
+      "sub_criteria": [
+        "Are AI failures discovered mainly through user complaints or business damage?",
+        "Are there no baseline metrics for accuracy, first-time-right, value, safety, or operational reliability?",
+        "Are model drift, retrieval degradation, hallucinations, or unsafe outputs not systematically detected?"
+      ]
+    },
+    {
+      "id": "B4",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Safety Theater & Unbounded Autonomy",
+      "description": "Guardrails are trusted without evidence, agents have unclear behavioral limits, and safety reviews happen too late.",
+      "sub_criteria": [
+        "Are AI systems trusted because guardrails exist without evidence of testing?",
+        "Can agents access tools, systems, or data without clear behavioral boundaries?",
+        "Are safety reviews performed as late-stage gates instead of being built into service design?"
+      ]
+    },
+    {
+      "id": "B5",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Tool Fragmentation & Hidden Factory",
+      "description": "Every AI project assembles its own stack, tools, governance, monitoring, and maintenance burden without shared standards.",
+      "sub_criteria": [
+        "Does every AI project build its own ingestion, governance, hosting, evaluation, and monitoring stack?",
+        "Are teams buying disconnected tools without common standards, cost controls, or observability?",
+        "Does platform fragmentation create maintenance debt and reduce innovation capacity?"
+      ]
+    },
+    {
+      "id": "C1",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "AI Slogan Strategy",
+      "description": "AI is treated as a generic transformation slogan without strategic choices, value boundaries, or prioritization logic.",
+      "sub_criteria": [
+        "Is AI described as a generic transformation theme without clear strategic choices?",
+        "Is everything labeled as an AI priority without prioritization logic?",
+        "Are AI tools adopted before the organization knows what value it wants to create?"
+      ]
+    },
+    {
+      "id": "C2",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Use-Case Chasing & Vanity Benefits",
+      "description": "AI initiatives are selected for visibility or fashion, with benefits claimed without baselines, measurement, or enterprise impact.",
+      "sub_criteria": [
+        "Are AI initiatives selected because they are fashionable, visible, or technically interesting?",
+        "Are savings, productivity, or ROI claims made without baseline and post-measurement?",
+        "Are successful pilots celebrated without enterprise-level impact?"
+      ]
+    },
+    {
+      "id": "C3",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Rigid Gatekeeping Governance",
+      "description": "AI governance slows flow without improving safety, leaving teams unclear how to proceed or incentivizing shadow AI.",
+      "sub_criteria": [
+        "Does governance act as a separate hurdle that slows flow without improving safety?",
+        "Are teams unclear how to proceed safely, so they bypass governance or create shadow AI?",
+        "Are governance decisions disconnected from business impact, architecture, and operational reality?"
+      ]
+    },
+    {
+      "id": "C4",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Unclassified Risk & Ambiguous Accountability",
+      "description": "AI use cases launch without risk classification, accountable owners, human override, escalation, or appeal mechanisms.",
+      "sub_criteria": [
+        "Are AI use cases launched without risk classification?",
+        "Is it unclear who is accountable when an AI-assisted decision causes harm or failure?",
+        "Are human override, appeal, fallback, or escalation mechanisms missing?"
+      ]
+    },
+    {
+      "id": "C5",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "AI Investment Drift",
+      "description": "The AI portfolio grows without capacity, readiness, value proof, learning logic, or willingness to stop weak initiatives.",
+      "sub_criteria": [
+        "Does the AI backlog grow without capacity, architectural readiness, or value proof?",
+        "Are weak initiatives kept alive because of sunk cost, politics, or executive enthusiasm?",
+        "Are investments focused on platform build-out without near-term capability validation?"
+      ]
+    },
+    {
+      "id": "D1",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Ownerless Data & Context Loss",
+      "description": "Data ownership is centralized, undefined, or detached from business meaning, leaving AI teams to guess context.",
+      "sub_criteria": [
+        "Is data ownership centralized in IT or undefined, causing business context to disappear?",
+        "Are AI teams forced to interpret datasets without domain meaning?",
+        "Do data issues stall AI use cases because nobody owns correction or interpretation?"
+      ]
+    },
+    {
+      "id": "D2",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Raw Data Without Meaning",
+      "description": "AI systems receive available raw data without semantic, process, operational, or decision context.",
+      "sub_criteria": [
+        "Is data collected because it is available rather than because it drives decisions?",
+        "Do AI models receive raw signals without business, process, or operational context?",
+        "Are outputs unreliable because the model lacks the why-this-data-matters layer?"
+      ]
+    },
+    {
+      "id": "D3",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Data Swamp & Broken Lineage",
+      "description": "AI outputs rely on stale copies, undocumented transformations, unknown origins, and unprovable data quality.",
+      "sub_criteria": [
+        "Are AI outputs based on data whose origin, version, or quality cannot be proven?",
+        "Are stale copies, manual files, or undocumented transformations used in AI workflows?",
+        "Are data quality failures discovered only after model failure or business escalation?"
+      ]
+    },
+    {
+      "id": "D4",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Data Leakage & Over-Broad Access",
+      "description": "AI tools access sensitive data with unclear purpose, logging, approval, retention, or boundary controls.",
+      "sub_criteria": [
+        "Can AI tools access sensitive data without clear purpose, logging, or approval?",
+        "Are copies of data moved into experimentation environments without lifecycle control?",
+        "Are privacy and security controls added late instead of being designed into the data flow?"
+      ]
+    },
+    {
+      "id": "D5",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Ad Hoc Retrieval & Duplicate Knowledge Stores",
+      "description": "Teams create stale, incomplete, duplicate, or unowned RAG, embedding, feature, and knowledge stores.",
+      "sub_criteria": [
+        "Does each AI team create its own embeddings, indexes, or knowledge base without ownership?",
+        "Are RAG systems using stale, incomplete, or unverified source material?",
+        "Are retrieval failures treated as model failures instead of data-access architecture failures?"
+      ]
+    },
+    {
+      "id": "E1",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "AI Ideas Detached from Business Architecture",
+      "description": "AI use cases are listed without linkage to service catalog, capability map, value stream, ownership, or dependency structure.",
+      "sub_criteria": [
+        "Are AI use cases listed without connection to service catalog or capability map?",
+        "Is it unclear which service area owns the AI-enabled change?",
+        "Are dependencies discovered only during implementation?"
+      ]
+    },
+    {
+      "id": "E2",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Spot Optimization & Silo Automation",
+      "description": "AI speeds isolated tasks while increasing downstream rework, coordination, or poor customer/service flow.",
+      "sub_criteria": [
+        "Is AI applied to isolated tasks without understanding the surrounding flow?",
+        "Does automation speed up one step while increasing downstream rework or coordination?",
+        "Are customer experience and end-to-end flow ignored in AI design?"
+      ]
+    },
+    {
+      "id": "E3",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Untraceable AI Build Logic",
+      "description": "AI components are built without clear linkage to capability, customer need, data source, platform dependency, or value outcome.",
+      "sub_criteria": [
+        "Are teams building AI components without clear linkage to business capability or customer need?",
+        "Are requirements vague, unstable, or tool-led?",
+        "Is there no traceability between AI feature, data source, platform dependency, and value outcome?"
+      ]
+    },
+    {
+      "id": "E4",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Disconnected AI Project Teams",
+      "description": "AI teams are separated from service areas and ownership disappears after pilots, vendors, or temporary projects.",
+      "sub_criteria": [
+        "Are AI teams separate from the service areas that need to own the outcome?",
+        "Are business, data science, application, and platform work split into sequential handoffs?",
+        "Does ownership disappear after pilot completion or vendor delivery?"
+      ]
+    },
+    {
+      "id": "E5",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Big-Bang AI Transformation",
+      "description": "AI is scaled broadly before service readiness, architecture, data ownership, and operating model patterns are proven.",
+      "sub_criteria": [
+        "Is AI rollout scaled broadly before business architecture, data ownership, and operating model are ready?",
+        "Are pilot learnings not converted into reusable patterns?",
+        "Does every service area repeat the same mistakes independently?"
+      ]
+    }
+  ]
+}

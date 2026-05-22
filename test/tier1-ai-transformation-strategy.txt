@@ -1,0 +1,7 @@
+AI Transformation Strategy
+
+The strategy states that AI readiness is the organization ability to sense, decide, design, deliver, govern, learn, and scale AI-enabled value creation safely. AI is positioned as an integrated component of business architecture, not a standalone tool rollout.
+
+The strategy prioritizes customer-service redesign, knowledge-work quality, decision support, and service-area productivity. It states that AI should not be used where accountability, data rights, safety, or human appeal cannot be proven.
+
+The document is aspirational. It defines principles and ambition areas but does not prove operating cadence, production lifecycle controls, or measured adoption.

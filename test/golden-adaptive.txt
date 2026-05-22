@@ -1,0 +1,19 @@
+AdaptiveBank — AI-Driven Value Creation Operating Review
+
+AdaptiveBank operates AI as an integrated component of business architecture. The AI operating rhythm connects quarterly strategic themes, service-area demand intake, weekly portfolio triage, delivery reviews, risk governance, and monthly learning retrospectives. Decision rights are documented across business, IT, data, architecture, security, legal, and service areas. Every AI decision has an owner, date, rationale, and link to backlog movement or risk approval.
+
+AI demand is routed by work type, uncertainty, value hypothesis, risk level, service ownership, and capacity. Predictable automation uses standard delivery. Exploratory GenAI and agentic opportunities use Launch-and-Learn. Transformative service redesign requires a service blueprint, data readiness review, and responsible AI risk classification before funding.
+
+Launch-and-Learn is the default validation model. Each experiment defines an impact statement, baseline, safety controls, data requirements, adoption metric, and scale decision. Pilot lessons are captured in a reusable pattern library and reviewed by service-area owners, platform, data, and risk teams.
+
+The organization runs communities of practice for AI product owners, data product owners, prompt engineers, risk owners, and service designers. Incidents, failed pilots, red-team results, and operational learnings are converted into reusable playbooks and training modules.
+
+Work redesign is explicit. AI initiatives redesign roles, handoffs, exception paths, human review points, and customer feedback loops. Employee experience, cognitive load, quality, first-time-right, and customer impact are measured after release.
+
+The AI platform provides model gateway, prompt/model registry, approved tool catalog, reusable RAG patterns, deployment templates, evaluation service, observability, and audit logging. Models, prompts, agents, datasets, tools, and evaluation suites are versioned. Production behavior can be traced to release, model, prompt, data source, tool permissions, and evaluation result.
+
+Production AI systems are monitored for quality, safety, cost, latency, groundedness, data freshness, drift, adoption, and business impact. Alerts trigger review workflows when thresholds degrade. Red-team scenarios cover prompt injection, data leakage, unsafe tool use, and adversarial inputs. Agent Behavioral Contracts define forbidden actions, tool boundaries, escalation rules, and human override.
+
+Critical AI datasets are domain-owned data products with definitions, lineage, quality checks, freshness SLOs, access rules, and usage expectations. RAG indexes use governed source coverage, retrieval quality tests, and freshness monitoring.
+
+AI opportunities map to service catalogs, business capabilities, customer journeys, value streams, platforms, datasets, and owners. Integrated service-area teams own AI-enabled outcomes as living products. Scaling is sequenced by service readiness, architecture clarity, data readiness, and risk level. Portfolio decisions to kill, continue, pivot, or scale are based on evidence from value, risk, adoption, and learning.

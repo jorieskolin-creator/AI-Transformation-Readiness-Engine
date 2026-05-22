@@ -1,0 +1,51 @@
+{
+  "name": "ai-transformation-readiness-engine",
+  "version": "1.0.0",
+  "description": "AI Transformation Readiness Engine - Evidence-gated forensic scanner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test:evidence-check": "node scripts/test-evidence-check.mjs",
+    "test:antipattern-semantics": "node scripts/test-antipattern-semantics.mjs",
+    "test:metrics": "node scripts/test-metrics.mjs",
+    "test:input-parsing": "node scripts/test-input-parsing.mjs",
+    "test:report-import": "node scripts/test-report-import.mjs",
+    "test:report-rendering": "node scripts/test-report-rendering.mjs",
+    "test:report-diagnostics": "node scripts/test-report-diagnostics.mjs",
+    "test:privacy": "node scripts/test-privacy-service.mjs",
+    "test:quality-gate": "node scripts/test-quality-gate-severity.mjs",
+    "test:model-routing": "node scripts/test-model-routing.mjs",
+    "test:internal-call-protection": "node scripts/test-internal-call-protection.mjs",
+    "test:internal-result-store": "node scripts/test-internal-result-store.mjs",
+    "test:tactic-grounding": "node scripts/test-tactic-grounding.mjs",
+    "test:tactic-activity-playbook": "node scripts/test-tactic-activity-playbook.mjs",
+    "test:kb-index": "node scripts/test-kb-index.mjs",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "dompurify": "^3.1.0",
+    "express": "^4.19.0",
+    "pdfjs-dist": "^4.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "recharts": "^2.12.0"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
+  }
+}

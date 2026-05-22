@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "description": "Canonical AI Transformation Readiness Engine taxonomy. Reference KB material may guide scoring and recommendations, but must not be treated as customer source evidence.",
+  "domains": [
+    {
+      "id": "A",
+      "name": "Adaptive Operating Model",
+      "capabilities": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Enterprise AI Architecture & Platform Readiness",
+      "capabilities": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "AI Strategy, Governance & Value Realization",
+      "capabilities": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Data Foundations, Ownership & Accessibility",
+      "capabilities": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Business Capability & Service Architecture",
+      "capabilities": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    }
+  ],
+  "streams": [
+    "maturity",
+    "antipattern"
+  ],
+  "evidence_categories": [
+    "Policy",
+    "Process",
+    "Operational",
+    "Automation",
+    "Accountability",
+    "Architecture",
+    "Data",
+    "Governance",
+    "Learning",
+    "Value"
+  ],
+  "kb_document_naming": {
+    "pattern": "<Domain ID> - <Domain Name> - <Capability IDs> - <Evidence Categories> - <Short Title>",
+    "examples": [
+      "A - Adaptive Operating Model - A1 A3 - Process Learning - Launch-and-Learn Evidence",
+      "C - AI Strategy, Governance & Value Realization - C2 C5 - Value Governance - Portfolio Decisions",
+      "D - Data Foundations, Ownership & Accessibility - D1 D3 - Data Accountability - Data Product Ownership"
+    ],
+    "required_front_matter": {
+      "forbidden_uses": [
+        "customer_current_state_claim",
+        "source_evidence_quote"
+      ]
+    }
+  },
+  "usage_boundaries": {
+    "reference_kb_allowed_uses": [
+      "rubric_context",
+      "maturity_examples",
+      "antipattern_examples",
+      "evidence_requirements",
+      "validation_questions",
+      "tactic_selection",
+      "remediation_patterns",
+      "risk_notes"
+    ],
+    "reference_kb_forbidden_uses": [
+      "customer_current_state_claim",
+      "source_evidence_quote",
+      "audited_finding",
+      "phase1_evidence_quote"
+    ]
+  }
+}

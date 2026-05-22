@@ -1,0 +1,308 @@
+{
+  "version": "1.0.0",
+  "domain": "AI Transformation Readiness Assessment",
+  "stream": "maturity",
+  "description": "25 AI transformation readiness criteria organized into 5 domains. Each criterion has 3 evidence questions scored 0-3.",
+  "criteria": [
+    {
+      "id": "A1",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "AI Operating Rhythm & Decision Rights",
+      "description": "The organization connects AI strategy, demand intake, delivery, learning, and governance through a visible operating rhythm with clear decision ownership.",
+      "sub_criteria": [
+        "Is there a documented AI operating rhythm connecting strategy, demand intake, delivery, learning, and governance?",
+        "Are decision rights clearly assigned across business, IT, data, architecture, security, legal, and service areas?",
+        "Are decisions traceable through meeting cadence, approval records, backlog movement, or escalation logs?"
+      ]
+    },
+    {
+      "id": "A2",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Adaptive AI Demand Routing",
+      "description": "AI work is routed by uncertainty, risk, capacity, competence, and service ownership instead of using one delivery model for every initiative.",
+      "sub_criteria": [
+        "Are AI demands classified by nature of work: predictable, standardized, iterative, exploratory, or transformative?",
+        "Are different delivery paths used for different demand types, such as SOP/capacity planning for predictable work and Launch-and-Learn for uncertain work?",
+        "Is demand routing connected to capacity, competence, service ownership, and risk level?"
+      ]
+    },
+    {
+      "id": "A3",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Evidence-Based Launch-and-Learn Model",
+      "description": "The organization validates AI transformation through bounded slices, learns from evidence, and converts pilot learning into scaling patterns.",
+      "sub_criteria": [
+        "Does the organization start AI transformation from a bounded vertical slice or safe experiment?",
+        "Are pilot learnings captured and used to refine operating model, architecture, data, and governance?",
+        "Is there a defined transition from Kickstart validation to Building-the-System scaling?"
+      ]
+    },
+    {
+      "id": "A4",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Shared Learning Architecture",
+      "description": "AI knowledge flows through communities, chapters, guilds, and reusable practice rather than remaining isolated in experts or pilot teams.",
+      "sub_criteria": [
+        "Are communities of knowledge, chapters, guilds, or equivalent competence structures used to spread AI learning?",
+        "Are lessons from AI pilots, failures, red teaming, and operational incidents converted into reusable practices?",
+        "Are business, AI, data, platform, and service teams learning together rather than separately?"
+      ]
+    },
+    {
+      "id": "A5",
+      "batch": "A",
+      "domain": "Adaptive Operating Model",
+      "title": "Human-AI Work Redesign",
+      "description": "AI initiatives redesign work, handoffs, roles, and feedback loops so human capacity moves toward higher-value contribution.",
+      "sub_criteria": [
+        "Are AI initiatives explicitly designed to reallocate human capacity toward higher-value work, not only reduce task time?",
+        "Are roles, handoffs, review points, exception paths, and human-in-the-loop responsibilities redesigned?",
+        "Are employee experience, cognitive load, quality, and customer impact measured after AI introduction?"
+      ]
+    },
+    {
+      "id": "B1",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Service-Boundary-Based AI Integration",
+      "description": "AI systems integrate through reliable service boundaries, APIs, events, and governed connectors with documented ownership and failure modes.",
+      "sub_criteria": [
+        "Are AI systems integrated through APIs, service boundaries, events, or governed connectors rather than brittle point integrations?",
+        "Are legacy systems wrapped or exposed through stable interfaces before AI agents depend on them?",
+        "Are integration ownership, versioning, dependencies, and failure modes documented?"
+      ]
+    },
+    {
+      "id": "B2",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "AI Lifecycle & Release Control",
+      "description": "Models, prompts, agents, tools, datasets, and evaluation suites are versioned and released through controlled lifecycle practices.",
+      "sub_criteria": [
+        "Are models, prompts, agents, tools, datasets, configurations, and evaluation suites versioned?",
+        "Is there a controlled build-test-deploy-monitor-rollback lifecycle for AI-enabled services?",
+        "Can production behavior be traced back to model, prompt, data, tool, and release version?"
+      ]
+    },
+    {
+      "id": "B3",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "AI Observability & Evaluation System",
+      "description": "Production AI behavior is monitored for quality, safety, cost, latency, groundedness, drift, and business impact.",
+      "sub_criteria": [
+        "Are quality, safety, cost, latency, groundedness, drift, and business impact monitored in production?",
+        "Are offline and online evaluation methods defined for key AI use cases?",
+        "Do alerts or review workflows trigger when AI performance, data freshness, or safety thresholds degrade?"
+      ]
+    },
+    {
+      "id": "B4",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "Secure-by-Design AI Trust & Safety Layer",
+      "description": "Trust and safety controls are embedded into AI workflows, including guardrails, access controls, escalation, and adversarial testing.",
+      "sub_criteria": [
+        "Are prompt injection, data leakage, toxic content, unsafe tool use, and adversarial scenarios tested?",
+        "Are guardrails, filters, access controls, and human escalation paths embedded into AI workflows?",
+        "Is there an Agent Behavioral Contract defining what AI systems are forbidden to do?"
+      ]
+    },
+    {
+      "id": "B5",
+      "batch": "B",
+      "domain": "Enterprise AI Architecture & Platform Readiness",
+      "title": "AI Platform as Product",
+      "description": "Reusable AI platform products provide shared model access, data patterns, deployment templates, observability, evaluation, and developer experience.",
+      "sub_criteria": [
+        "Are shared AI services, model gateways, data access patterns, MLOps/LLMOps capabilities, and deployment templates offered as internal platform products?",
+        "Are platform teams accountable to service-area teams as internal customers?",
+        "Are platform capabilities measured through adoption, flow, reliability, developer experience, and value enablement?"
+      ]
+    },
+    {
+      "id": "C1",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Purpose-Driven AI Strategy",
+      "description": "AI ambition is connected to strategic purpose, customer value, business model choices, and explicit boundaries for where AI should not be used.",
+      "sub_criteria": [
+        "Does the organization clearly define why AI matters to its strategy, customers, values, and business model?",
+        "Are AI ambition areas connected to service areas, value streams, or strategic domains?",
+        "Are where-not-to-use-AI boundaries explicitly defined?"
+      ]
+    },
+    {
+      "id": "C2",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Impact-Driven AI Value Framing",
+      "description": "AI initiatives start from impact statements and value hypotheses, with baseline and post-release measurement.",
+      "sub_criteria": [
+        "Are AI initiatives started from explicit Impact Statements rather than tool ideas?",
+        "Are expected outcomes defined through customer value, profitability, ROCE/TVO, quality, first-time-right, flow, or experience metrics?",
+        "Are value hypotheses tested and updated after pilots or production releases?"
+      ]
+    },
+    {
+      "id": "C3",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Embedded AI Governance Model",
+      "description": "AI governance is embedded into ownership, architecture, security, data, service operations, and auditability as an enabling system.",
+      "sub_criteria": [
+        "Are AI governance responsibilities embedded into service areas, platform teams, security, data, and business ownership?",
+        "Does governance enable safe value creation rather than only blocking risky initiatives?",
+        "Are exceptions, approvals, risks, and controls auditable?"
+      ]
+    },
+    {
+      "id": "C4",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Risk-Based Responsible AI Control",
+      "description": "AI use cases are classified by risk and autonomy, with oversight, disclosure, logging, and accountability tied to risk level.",
+      "sub_criteria": [
+        "Are AI use cases classified by risk, autonomy, user impact, data sensitivity, and regulatory exposure?",
+        "Are human oversight, escalation, disclosure, logging, and accountability requirements tied to risk level?",
+        "Are high-risk or autonomous scenarios blocked from production unless minimum controls are proven?"
+      ]
+    },
+    {
+      "id": "C5",
+      "batch": "C",
+      "domain": "AI Strategy, Governance & Value Realization",
+      "title": "Evidence-Based AI Investment Portfolio",
+      "description": "AI investment decisions use evidence about impact, risk, readiness, cost, and learning value to kill, continue, scale, or pivot.",
+      "sub_criteria": [
+        "Are AI investments managed through portfolio logic using impact, risk, readiness, cost, and learning value?",
+        "Are kill, continue, scale, and pivot decisions based on evidence?",
+        "Does learning from pilots reprioritize the AI portfolio?"
+      ]
+    },
+    {
+      "id": "D1",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Domain-Owned AI Data Products",
+      "description": "Critical AI data is owned by service areas or domains that understand meaning, quality, lifecycle, and usage expectations.",
+      "sub_criteria": [
+        "Are critical AI datasets owned by the service area or business domain that understands the context?",
+        "Are data owners accountable for quality, meaning, lifecycle, and usability?",
+        "Are data products published with context, definitions, access rules, and usage expectations?"
+      ]
+    },
+    {
+      "id": "D2",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Context-Rich AI-Ready Data",
+      "description": "Data carries semantic context, process linkage, operational conditions, and decision relevance so AI systems can ground outputs.",
+      "sub_criteria": [
+        "Does data include semantic context, source meaning, business process linkage, and operational conditions?",
+        "Can AI systems understand not only raw values but what those values mean in the service context?",
+        "Are critical data elements mapped to decisions, triggers, workflows, or customer outcomes?"
+      ]
+    },
+    {
+      "id": "D3",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Data Quality & Lineage Control",
+      "description": "AI-critical data is cataloged, versioned, quality-checked, freshness-monitored, and traceable across training, retrieval, inference, and decisions.",
+      "sub_criteria": [
+        "Are critical AI datasets cataloged, versioned, quality-checked, and traceable?",
+        "Are freshness, completeness, correctness, and drift monitored?",
+        "Can training, retrieval, inference, and decision data be traced after the fact?"
+      ]
+    },
+    {
+      "id": "D4",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Governed AI Data Access",
+      "description": "AI data access is role-based, auditable, purpose-limited, privacy-aware, and aligned with service or domain ownership.",
+      "sub_criteria": [
+        "Are data classification, purpose limitation, access rights, and privacy controls documented?",
+        "Is access to AI data role-based, auditable, and aligned with service or domain ownership?",
+        "Are masking, anonymization, minimization, retention, and boundary controls used where required?"
+      ]
+    },
+    {
+      "id": "D5",
+      "batch": "D",
+      "domain": "Data Foundations, Ownership & Accessibility",
+      "title": "Reusable AI Data Access Patterns",
+      "description": "Structured, unstructured, real-time, batch, feature, retrieval, embedding, and event-stream patterns are governed and reusable.",
+      "sub_criteria": [
+        "Are structured, unstructured, real-time, batch, feature, and retrieval patterns defined for AI use?",
+        "Are RAG, embedding, search, feature-store, and event-stream patterns governed and reusable?",
+        "Is retrieval quality, source coverage, freshness, and grounding measured?"
+      ]
+    },
+    {
+      "id": "E1",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "AI-Anchored Service & Capability Architecture",
+      "description": "AI opportunities are mapped to services, capabilities, customer paths, value streams, dependencies, platforms, and outcomes.",
+      "sub_criteria": [
+        "Is there a current service catalog, business capability map, or equivalent model of value creation?",
+        "Are AI opportunities linked to services, capabilities, customer paths, or value streams?",
+        "Are dependencies between capabilities, platforms, data, and service outcomes visible?"
+      ]
+    },
+    {
+      "id": "E2",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "AI-Ready Service Blueprinting",
+      "description": "Target services are mapped end-to-end so AI interventions improve the whole value stream instead of a local task.",
+      "sub_criteria": [
+        "Are target services mapped end-to-end across customer journey, frontstage work, backstage work, systems, data, and handoffs?",
+        "Are bottlenecks, decision points, failure modes, and automation candidates visible?",
+        "Are AI interventions placed where they improve the whole value stream, not only a local task?"
+      ]
+    },
+    {
+      "id": "E3",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Traceable AI Solution Structure",
+      "description": "AI-enabled features are traceable from customer need and business outcome to capability, component, data, platform, risk, and work package.",
+      "sub_criteria": [
+        "Are AI-enabled features decomposed into business need, capability, component, data, platform, and work-package layers?",
+        "Can each AI use case be traced back to customer need, business outcome, and service architecture?",
+        "Are requirements, acceptance criteria, risks, and dependencies explicit before build?"
+      ]
+    },
+    {
+      "id": "E4",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Service Area Ownership of AI Value Creation",
+      "description": "Integrated service-area teams own business, application, data, AI, and operational outcomes end to end.",
+      "sub_criteria": [
+        "Are integrated service area teams accountable for business, application, data, and AI outcomes end-to-end?",
+        "Are platform teams positioned as enablers serving service-area teams?",
+        "Are AI solutions owned as living products within service areas rather than temporary projects?"
+      ]
+    },
+    {
+      "id": "E5",
+      "batch": "E",
+      "domain": "Business Capability & Service Architecture",
+      "title": "Phased AI Scaling Through Service Areas",
+      "description": "AI scales through service-area readiness, reusable patterns, platform capabilities, guardrails, feedback loops, and reassessment.",
+      "sub_criteria": [
+        "Is scaling sequenced by service-area readiness, architectural clarity, data readiness, and risk level?",
+        "Are reusable patterns from pilots converted into playbooks, templates, platform capabilities, and guardrails?",
+        "Is continuous improvement built into the rollout through feedback loops, retrospectives, and readiness reassessment?"
+      ]
+    }
+  ]
+}

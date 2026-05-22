@@ -1,0 +1,212 @@
+import { requireSession } from "../lib/auth.js";
+import {
+  completeInternalModelResult,
+  failInternalModelResult,
+  registerInternalModelResult
+} from "../lib/internalModelResults.js";
+
+// Streaming Anthropic proxy.
+//
+// Wire format to the client is NDJSON (one JSON object per line):
+//   {"type":"text","delta":"..."}        text chunks as they arrive
+//   {"type":"keepalive"}                  every 15s while idle, keeps the
+//                                         proxy connection alive
+//   {"type":"done","text":"...","usage":...}  terminal success frame
+//   {"type":"error","message":"..."}      terminal error frame
+//
+// Two infrastructure benefits over the previous buffered implementation:
+//   1. The TCP connection between browser ↔ Railway ↔ Express has data
+//      flowing every <=15s, so edge idle-timeouts can't kill it mid-call.
+//   2. If the request is aborted (browser close, network drop), we abort
+//      the upstream Anthropic call. Internal pipeline calls additionally
+//      tolerate response-close events so proxy stream churn does not cascade
+//      into upstream model aborts.
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+  if (!requireSession(req)) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  const started = Date.now();
+  const { model, messages, systemPrompt, maxTokens, thinking, stage, runId, internalPipelineCall, internalCallId } = req.body || {};
+  const isInternalPipelineCall = internalPipelineCall === true;
+  const tag = `[run=${runId || '?'}] provider=anthropic stage=${stage || '?'} model=${model || '?'}`;
+  const metadata = { runId, provider: 'anthropic', stage, model };
+  const callIdLog = internalCallId ? ` internal_call_id=${internalCallId}` : '';
+
+  if (!model || !messages) {
+    console.warn(`${tag} status=bad_request msg="missing model or messages"`);
+    return res.status(400).json({ error: 'Missing required fields: model, messages' });
+  }
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    console.error(`${tag} status=misconfigured msg="ANTHROPIC_API_KEY not set"`);
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured on server' });
+  }
+  if (isInternalPipelineCall && internalCallId) {
+    registerInternalModelResult(internalCallId, metadata);
+  }
+
+  res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  // Best-effort hint to disable proxy buffering (nginx/cloudflare convention).
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+
+  const upstreamController = new AbortController();
+  let clientGone = false;
+  let responseClosed = false;
+  const onRequestAborted = () => {
+    if (clientGone) return;
+    clientGone = true;
+    console.warn(`${tag} status=client_disconnected close_source=req_aborted internal_pipeline_call=${isInternalPipelineCall} duration_ms=${Date.now() - started}`);
+    upstreamController.abort();
+  };
+  const onResponseClosed = () => {
+    if (res.writableFinished || clientGone || responseClosed) return;
+    responseClosed = true;
+    if (isInternalPipelineCall) {
+      console.warn(`${tag} status=response_closed close_source=response_closed internal_pipeline_call=true duration_ms=${Date.now() - started}${callIdLog}`);
+      return;
+    }
+    clientGone = true;
+    console.warn(`${tag} status=client_disconnected close_source=response_closed internal_pipeline_call=false duration_ms=${Date.now() - started}`);
+    upstreamController.abort();
+  };
+  // NOTE: do NOT listen on req.on('close'). Express's body parser fully consumes
+  // the request stream before our handler runs, and req emits 'close' on the
+  // next tick — which would fire ~1ms after the handler starts and falsely
+  // abort every call. The 'aborted' event on req only fires when the client
+  // actually aborts (TCP reset / fetch abort). For marked internal pipeline
+  // calls, res.on('close') is logged but does not abort the server-to-server
+  // model request; this avoids false abort cascades from proxy response closes.
+  req.on('aborted', onRequestAborted);
+  res.on('close', onResponseClosed);
+
+  const writeFrame = (obj) => {
+    if (res.writableEnded || res.destroyed || clientGone || responseClosed) return false;
+    try {
+      res.write(JSON.stringify(obj) + '\n');
+      return true;
+    } catch {
+      responseClosed = true;
+      return false;
+    }
+  };
+
+  const keepalive = setInterval(() => writeFrame({ type: 'keepalive' }), 15000);
+
+  try {
+    console.log(`${tag} status=start streaming=true`);
+
+    const payload = {
+      model,
+      max_tokens: typeof maxTokens === 'number' && maxTokens > 0 ? maxTokens : 8192,
+      system: systemPrompt || '',
+      messages,
+      stream: true,
+    };
+    if (thinking && typeof thinking === 'object') payload.thinking = thinking;
+
+    const upstreamResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify(payload),
+      signal: upstreamController.signal,
+    });
+
+    if (!upstreamResp.ok) {
+      const errorText = await upstreamResp.text().catch(() => '');
+      const duration = Date.now() - started;
+      console.error(`${tag} status=upstream_error http=${upstreamResp.status} duration_ms=${duration} msg="${errorText.replace(/"/g, "'").substring(0, 500)}"`);
+      failInternalModelResult(internalCallId, `Anthropic API Error (${upstreamResp.status}): ${errorText.substring(0, 500)}`, metadata);
+      console.error(`${tag} event=internal_result_error message="Anthropic API Error (${upstreamResp.status})"${callIdLog}`);
+      writeFrame({ type: 'error', message: `Anthropic API Error (${upstreamResp.status}): ${errorText.substring(0, 500)}` });
+      clearInterval(keepalive);
+      if (!res.writableEnded && !res.destroyed) res.end();
+      return;
+    }
+
+    let accumulatedText = '';
+    let usage = null;
+    const reader = upstreamResp.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
+
+    while (true) {
+      if (clientGone) break;
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      // SSE events are separated by blank lines (\n\n). Each event may have
+      // multiple lines; we only care about "data: ..." lines.
+      const events = buffer.split('\n\n');
+      buffer = events.pop() || '';
+      for (const evt of events) {
+        for (const line of evt.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6);
+          if (data === '[DONE]') continue;
+          let parsed;
+          try { parsed = JSON.parse(data); } catch { continue; }
+
+          if (parsed.type === 'message_start' && parsed.message?.usage) {
+            usage = { ...(usage || {}), ...parsed.message.usage };
+          } else if (parsed.type === 'content_block_delta' && parsed.delta?.type === 'text_delta') {
+            const delta = parsed.delta.text || '';
+            if (delta) {
+              accumulatedText += delta;
+              if (!writeFrame({ type: 'text', delta }) && !isInternalPipelineCall) break;
+            }
+          } else if (parsed.type === 'message_delta' && parsed.usage) {
+            usage = { ...(usage || {}), ...parsed.usage };
+          } else if (parsed.type === 'error') {
+            const msg = parsed.error?.message || 'upstream error';
+            console.error(`${tag} status=stream_error duration_ms=${Date.now() - started} msg="${msg.replace(/"/g, "'")}"`);
+            failInternalModelResult(internalCallId, msg, metadata);
+            console.error(`${tag} event=internal_result_error message="${msg.replace(/"/g, "'")}"${callIdLog}`);
+            writeFrame({ type: 'error', message: msg });
+            clearInterval(keepalive);
+            if (!res.writableEnded && !res.destroyed) res.end();
+            return;
+          }
+        }
+      }
+    }
+
+    const duration = Date.now() - started;
+    if (clientGone) {
+      console.warn(`${tag} status=aborted_mid_stream duration_ms=${duration} chars_read=${accumulatedText.length}`);
+    } else if (responseClosed) {
+      completeInternalModelResult(internalCallId, accumulatedText, usage, metadata);
+      console.warn(`${tag} status=completed_after_response_closed duration_ms=${duration} response_chars=${accumulatedText.length} input_tokens=${usage?.input_tokens || 0} output_tokens=${usage?.output_tokens || 0} internal_pipeline_call=${isInternalPipelineCall}${callIdLog}`);
+      console.log(`${tag} level=info event=internal_result_stored status=done response_chars=${accumulatedText.length}${callIdLog}`);
+    } else {
+      completeInternalModelResult(internalCallId, accumulatedText, usage, metadata);
+      console.log(`${tag} status=ok duration_ms=${duration} response_chars=${accumulatedText.length} input_tokens=${usage?.input_tokens || 0} output_tokens=${usage?.output_tokens || 0}`);
+      writeFrame({ type: 'done', text: accumulatedText, usage });
+    }
+    clearInterval(keepalive);
+    if (!res.writableEnded && !res.destroyed) res.end();
+  } catch (error) {
+    clearInterval(keepalive);
+    const duration = Date.now() - started;
+    if (error?.name === 'AbortError' || clientGone) {
+      console.warn(`${tag} status=aborted duration_ms=${duration}`);
+    } else {
+      const msg = (error?.message || '').replace(/"/g, "'");
+      console.error(`${tag} status=error duration_ms=${duration} msg="${msg}"`);
+      failInternalModelResult(internalCallId, error?.message || 'Internal server error', metadata);
+      console.error(`${tag} event=internal_result_error message="${msg}"${callIdLog}`);
+      writeFrame({ type: 'error', message: error?.message || 'Internal server error' });
+    }
+    if (!res.writableEnded && !res.destroyed) res.end();
+  }
+}

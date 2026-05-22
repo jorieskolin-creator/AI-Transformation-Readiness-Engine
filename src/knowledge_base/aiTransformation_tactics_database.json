@@ -1,0 +1,410 @@
+{
+  "version": "1.0.0",
+  "description": "Verified tactics database for AI Transformation Readiness synthesis. Each tactic maps a detected readiness gap or anti-pattern to a solution mechanism.",
+  "tactics": [
+    {
+      "id": "TAC-OPS-001",
+      "category": "Operating Model",
+      "canonical_name": "AI Operating Rhythm",
+      "problem_pattern": "Decision fog and fragmented governance",
+      "solution_mechanism": "Establish an AI operating rhythm with decision-rights matrix, intake cadence, risk triage, decision log, and escalation boundaries.",
+      "case_study": "READY-AND-ADAPT: Uses a monthly strategy-to-learning cadence and weekly portfolio triage to keep AI work moving with auditable decisions.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "transformation_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "A1",
+        "C3"
+      ],
+      "antipattern_criteria": [
+        "AP-A1",
+        "AP-C3"
+      ]
+    },
+    {
+      "id": "TAC-OPS-002",
+      "category": "Operating Model",
+      "canonical_name": "Adaptive Demand Routing",
+      "problem_pattern": "One-size-fits-all AI delivery",
+      "solution_mechanism": "Classify AI demand by predictability, uncertainty, risk, and value. Route predictable automation through standard delivery and uncertain work through Launch-and-Learn slices.",
+      "case_study": "READY-AND-ADAPT: Separates predictable work from exploratory AI so teams do not force experiments into fixed-scope delivery.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "transformation_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "A2",
+        "C5"
+      ],
+      "antipattern_criteria": [
+        "AP-A2",
+        "AP-C5"
+      ]
+    },
+    {
+      "id": "TAC-OPS-003",
+      "category": "Learning",
+      "canonical_name": "Launch-and-Learn Vertical Slice",
+      "problem_pattern": "Pilot purgatory",
+      "solution_mechanism": "Run bounded vertical slices with explicit learning goals, production-readiness criteria, safety evidence, and a conversion path into reusable patterns.",
+      "case_study": "LAUNCH-AND-LEARN: Validates a safe service slice before scaling the operating model, architecture, data, and governance.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "transformation_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "A3",
+        "E5"
+      ],
+      "antipattern_criteria": [
+        "AP-A3",
+        "AP-E5"
+      ]
+    },
+    {
+      "id": "TAC-OPS-004",
+      "category": "Learning",
+      "canonical_name": "Shared AI Learning System",
+      "problem_pattern": "Hero culture and repeated mistakes",
+      "solution_mechanism": "Create communities, chapters, incident reviews, failure libraries, reusable playbooks, and cross-functional learning rituals.",
+      "case_study": "COMMUNITIES OF KNOWLEDGE: Converts pilot lessons and incidents into practices shared across business, data, platform, and service teams.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "transformation_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "A4"
+      ],
+      "antipattern_criteria": [
+        "AP-A4"
+      ]
+    },
+    {
+      "id": "TAC-WORK-001",
+      "category": "Work Design",
+      "canonical_name": "Human-AI Work Redesign",
+      "problem_pattern": "Digital Taylorism and workslop",
+      "solution_mechanism": "Redesign roles, handoffs, review points, human-in-the-loop responsibilities, and experience metrics before scaling AI into work.",
+      "case_study": "IMPACT BEFORE OUTPUT: Moves capacity toward higher-value work and measures quality, cognitive load, and customer impact after AI introduction.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "service_owner",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "A5",
+        "E2"
+      ],
+      "antipattern_criteria": [
+        "AP-A5",
+        "AP-E2"
+      ]
+    },
+    {
+      "id": "TAC-ARCH-001",
+      "category": "Architecture",
+      "canonical_name": "Service-Boundary AI Integration",
+      "problem_pattern": "Brittle AI connectivity",
+      "solution_mechanism": "Expose legacy systems through governed APIs, events, service boundaries, connector standards, versioning, ownership, and failure-mode documentation.",
+      "case_study": "BUSINESS ARCHITECTURE INTEGRATION: AI becomes a component of service architecture rather than a layer of brittle point integrations.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "B1",
+        "E1"
+      ],
+      "antipattern_criteria": [
+        "AP-B1",
+        "AP-E1"
+      ]
+    },
+    {
+      "id": "TAC-ARCH-002",
+      "category": "Lifecycle",
+      "canonical_name": "AI Release Control",
+      "problem_pattern": "Prompt-to-production chaos",
+      "solution_mechanism": "Version models, prompts, agents, tools, datasets, configs, and evaluation suites through build-test-deploy-monitor-rollback controls.",
+      "case_study": "AI LIFECYCLE CONTROL: Makes production behavior traceable to release, prompt, tool, model, data, and evaluation versions.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "B2",
+        "E3"
+      ],
+      "antipattern_criteria": [
+        "AP-B2",
+        "AP-E3"
+      ]
+    },
+    {
+      "id": "TAC-ARCH-003",
+      "category": "Observability",
+      "canonical_name": "AI Evaluation and Drift System",
+      "problem_pattern": "Black-box AI operations",
+      "solution_mechanism": "Define offline and online evaluation, drift checks, groundedness tests, safety thresholds, business-impact metrics, and alert workflows.",
+      "case_study": "EVALUATION-FIRST OPERATIONS: Treats quality, safety, cost, latency, and business impact as production AI telemetry.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "B3"
+      ],
+      "antipattern_criteria": [
+        "AP-B3"
+      ]
+    },
+    {
+      "id": "TAC-RISK-001",
+      "category": "Trust & Safety",
+      "canonical_name": "Agent Behavioral Contract",
+      "problem_pattern": "Safety theater and unbounded autonomy",
+      "solution_mechanism": "Define forbidden actions, data boundaries, tool permissions, escalation paths, adversarial tests, and human override for agents and AI workflows.",
+      "case_study": "SECURE-BY-DESIGN: Embeds trust and safety into service design instead of relying on late-stage review.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "B4",
+        "C4"
+      ],
+      "antipattern_criteria": [
+        "AP-B4",
+        "AP-C4"
+      ]
+    },
+    {
+      "id": "TAC-PLAT-001",
+      "category": "Platform",
+      "canonical_name": "AI Platform as Product",
+      "problem_pattern": "Tool fragmentation and hidden factory",
+      "solution_mechanism": "Offer model gateways, reusable data-access patterns, deployment templates, evaluation services, observability, and developer experience as internal products.",
+      "case_study": "PLATFORM-AS-PRODUCT: Platform teams serve service-area teams as customers and measure adoption, reliability, flow, and value enablement.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "B5"
+      ],
+      "antipattern_criteria": [
+        "AP-B5"
+      ]
+    },
+    {
+      "id": "TAC-STRAT-001",
+      "category": "Strategy",
+      "canonical_name": "Purpose-Driven AI Thesis",
+      "problem_pattern": "AI slogan strategy",
+      "solution_mechanism": "Define why AI matters, where it creates value, where not to use it, and how ambition areas map to services and value streams.",
+      "case_study": "PURPOSE-DRIVEN AI: Converts generic AI enthusiasm into strategic choices, boundaries, and service-area focus.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "transformation_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "C1",
+        "E1"
+      ],
+      "antipattern_criteria": [
+        "AP-C1",
+        "AP-E1"
+      ]
+    },
+    {
+      "id": "TAC-VALUE-001",
+      "category": "Value",
+      "canonical_name": "Impact Statement Portfolio",
+      "problem_pattern": "Use-case chasing and vanity benefits",
+      "solution_mechanism": "Require impact statements, baselines, value hypotheses, and post-release measurement for AI initiatives before scale decisions.",
+      "case_study": "IMPACT BEFORE OUTPUT: Routes AI opportunities by measurable customer, quality, flow, risk, or financial impact rather than tool novelty.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "service_owner",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "C2",
+        "C5"
+      ],
+      "antipattern_criteria": [
+        "AP-C2",
+        "AP-C5"
+      ]
+    },
+    {
+      "id": "TAC-DATA-001",
+      "category": "Data",
+      "canonical_name": "Domain-Owned AI Data Products",
+      "problem_pattern": "Ownerless data and context loss",
+      "solution_mechanism": "Assign service/domain owners for AI-critical datasets with quality accountability, definitions, access rules, lifecycle, and usage expectations.",
+      "case_study": "DATA AS FUEL: Data owners preserve business meaning so AI decisions are grounded in service context.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "D1",
+        "D2"
+      ],
+      "antipattern_criteria": [
+        "AP-D1",
+        "AP-D2"
+      ]
+    },
+    {
+      "id": "TAC-DATA-002",
+      "category": "Data",
+      "canonical_name": "AI Data Quality and Lineage Control",
+      "problem_pattern": "Data swamp and broken lineage",
+      "solution_mechanism": "Catalog and version AI-critical data, monitor freshness and completeness, and trace training, retrieval, inference, and decision data.",
+      "case_study": "DATA AS FUEL: Makes AI outputs explainable through source, version, quality, and freshness evidence.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "D3",
+        "D4"
+      ],
+      "antipattern_criteria": [
+        "AP-D3",
+        "AP-D4"
+      ]
+    },
+    {
+      "id": "TAC-DATA-003",
+      "category": "Retrieval",
+      "canonical_name": "Reusable Retrieval and Feature Patterns",
+      "problem_pattern": "Ad hoc retrieval and duplicate knowledge stores",
+      "solution_mechanism": "Define governed RAG, embedding, search, feature, event-stream, source coverage, freshness, and grounding patterns for reuse.",
+      "case_study": "GROUNDING PATTERNS: Treats retrieval quality as data-access architecture rather than a model-only problem.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "technology_lead",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "D5",
+        "B5"
+      ],
+      "antipattern_criteria": [
+        "AP-D5",
+        "AP-B5"
+      ]
+    },
+    {
+      "id": "TAC-SVC-001",
+      "category": "Service Architecture",
+      "canonical_name": "Service Blueprint AI Opportunity Mapping",
+      "problem_pattern": "Detached AI ideas",
+      "solution_mechanism": "Map customer journey, backstage work, systems, data, decisions, bottlenecks, and ownership before placing AI interventions.",
+      "case_study": "SERVICE-AREA OWNERSHIP: Anchors AI opportunities in service blueprints and end-to-end value streams.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "service_owner",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "E1",
+        "E2",
+        "E4"
+      ],
+      "antipattern_criteria": [
+        "AP-E1",
+        "AP-E2",
+        "AP-E4"
+      ]
+    },
+    {
+      "id": "TAC-SVC-002",
+      "category": "Scaling",
+      "canonical_name": "Service-Area Scaling Playbook",
+      "problem_pattern": "Big-bang AI transformation",
+      "solution_mechanism": "Sequence scaling by service readiness, data ownership, architecture clarity, risk level, reusable patterns, and readiness reassessment.",
+      "case_study": "SAFE SCALING: Converts pilot learning into guardrails, playbooks, templates, and platform capabilities before expansion.",
+      "prerequisites": [
+        "Named owner",
+        "Current-state evidence",
+        "Decision forum"
+      ],
+      "owner_persona": "service_owner",
+      "expected_outcome": "Evidence-backed readiness improvement with measurable operating proof.",
+      "risk_notes": "Do not prescribe beyond verified gaps; scale only after control and value evidence exist.",
+      "maturity_criteria": [
+        "E4",
+        "E5"
+      ],
+      "antipattern_criteria": [
+        "AP-E4",
+        "AP-E5"
+      ]
+    }
+  ]
+}

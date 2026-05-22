@@ -1,0 +1,13 @@
+Northstar Retail — AI Transformation Demo Pack
+
+<DOCUMENT name="ai-operating-model.txt">
+The AI operating model is federated. The AI Transformation Council meets monthly, weekly portfolio triage routes demand by uncertainty and risk, and each service-area AI initiative has a named owner. Decisions are captured in a decision log.
+</DOCUMENT>
+
+<DOCUMENT name="ai-platform-and-safety.txt">
+The AI platform provides a model gateway, prompt registry, approved tool catalog, deployment template, evaluation suite, and observability dashboard. Production prompts are versioned. Agent tool access is limited by behavioral contracts and human escalation paths.
+</DOCUMENT>
+
+<DOCUMENT name="data-and-service-architecture.txt">
+Customer-support data is owned by the Customer Service Area. The data product includes definitions, freshness checks, access rules, and source coverage for RAG retrieval. Service blueprints map customer journey, backstage work, systems, handoffs, and AI intervention points.
+</DOCUMENT>

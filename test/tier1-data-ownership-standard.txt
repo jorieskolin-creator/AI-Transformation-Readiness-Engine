@@ -1,0 +1,5 @@
+AI Data Ownership Standard
+
+This standard defines ownership expectations for AI-critical datasets. Each data product must have a service-area owner, business definition, quality expectations, access rules, usage expectations, and lifecycle owner.
+
+Data products used for AI retrieval or inference must declare source meaning, process linkage, freshness expectation, privacy class, and permitted use. Owners must review quality and access exceptions monthly.

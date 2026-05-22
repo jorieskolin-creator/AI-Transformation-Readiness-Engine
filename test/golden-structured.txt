@@ -1,0 +1,17 @@
+Northstar Services — AI Transformation Readiness Update
+
+Northstar has established an AI Transformation Council with representatives from business service areas, IT, data, security, legal, and enterprise architecture. The council meets monthly and records decisions in a shared decision log. Decision rights are documented for low-risk assistant use, but escalation boundaries for autonomous agents remain unclear.
+
+Demand intake classifies AI requests as predictable automation, workflow assistant, exploratory GenAI, or transformative service redesign. Predictable automation goes through standard delivery. Exploratory GenAI uses Launch-and-Learn pilots. Capacity and risk are considered, but service-area ownership is not always assigned before work starts.
+
+Three pilots have used a bounded vertical-slice method. Pilot reviews capture adoption, safety issues, data gaps, and technical lessons. One customer-service summarization pilot moved into production after human review controls were added. Other pilots remain disconnected from reusable platform capabilities.
+
+The platform team provides a shared model gateway, approved model list, prompt repository, and deployment template. Prompt versions are stored in Git for production use cases. Rollback is manual. Evaluation tests exist for the customer-service pilot, but there is no enterprise-wide evaluation library.
+
+AI observability dashboards track latency, cost, user feedback, and exception rates for two production assistants. Groundedness and data freshness are reviewed weekly for the customer-service knowledge base. Drift alerts are still being configured.
+
+Responsible AI policy classifies use cases by risk and data sensitivity. High-risk cases require legal and security review. Human override and escalation are documented for customer-facing assistants. Agent tool-use boundaries are drafted but not yet tested through red teaming.
+
+Data ownership is improving. Customer service data has a named service owner, data definitions, access rules, and freshness checks. Other datasets are still interpreted by central IT without domain context. RAG indexes exist for service knowledge, but each team currently builds its own embeddings.
+
+AI opportunities are linked to customer journeys in two service areas. Service blueprints show frontstage and backstage work for customer support, including AI intervention points. The portfolio review uses value hypotheses and adoption data, but kill/scale decisions are still influenced by executive enthusiasm.
