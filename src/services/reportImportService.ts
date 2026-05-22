@@ -19,7 +19,7 @@ export const isDiagnosticResultPayload = (payload: unknown): payload is Diagnost
 
 const AI_DATA_SCRIPT_RE = /<script\b(?=[^>]*\bid\s*=\s*["']ai-transformation-data["'])[^>]*>([\s\S]*?)<\/script>/i;
 
-const extractAI TransformationPayloadScript = (html: string): string | null => {
+const extractAiTransformationPayloadScript = (html: string): string | null => {
   if (typeof DOMParser !== 'undefined') {
     try {
       const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -47,7 +47,7 @@ export const parseDiagnosticResultJson = (jsonText: string): ReportImportResult 
 };
 
 export const extractDiagnosticResultFromHtmlReport = (html: string): ReportImportResult => {
-  const payload = extractAI TransformationPayloadScript(html);
+  const payload = extractAiTransformationPayloadScript(html);
   if (!payload) return { kind: 'not_report' };
   return parseDiagnosticResultJson(payload);
 };
