@@ -1,109 +1,1132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Transformation Readiness Engine Architecture</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        --bg: #071018;
-        --panel: #0f1f2a;
-        --ink: #e5eef6;
-        --muted: #96a8b8;
-        --accent: #34d399;
-        --line: rgba(255, 255, 255, 0.12);
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--ink);
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        line-height: 1.55;
-      }
-      main {
-        width: min(1040px, calc(100vw - 40px));
-        margin: 0 auto;
-        padding: 72px 0 96px;
-      }
-      h1, h2 { line-height: 1.1; letter-spacing: 0; }
-      h1 { max-width: 820px; margin: 0 0 18px; font-size: clamp(40px, 7vw, 76px); }
-      h2 { margin: 44px 0 16px; font-size: 28px; }
-      p { color: var(--muted); max-width: 820px; }
-      .lede { font-size: 20px; color: #cbd8e4; }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 14px;
-        margin-top: 24px;
-      }
-      .card {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--panel);
-        padding: 18px;
-      }
-      .label {
-        color: var(--accent);
-        font: 700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
-        text-transform: uppercase;
-      }
-      ul { padding-left: 20px; color: var(--muted); }
-      strong { color: var(--ink); }
-      code {
-        color: #bbf7d0;
-        background: rgba(52, 211, 153, 0.08);
-        border: 1px solid rgba(52, 211, 153, 0.18);
-        border-radius: 5px;
-        padding: 2px 5px;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <div class="label">Evidence-Gated Scanner Architecture</div>
-      <h1>AI Transformation Readiness Engine</h1>
-      <p class="lede">
-        AI readiness is not technical readiness. This engine evaluates whether an organization can sense, decide, design, deliver, govern, learn, and scale AI-enabled value creation safely.
-      </p>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Transformation Assessment Engine - Evidence-Gated Scanner Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #0E1B2C;
+    --ink-2:      #1F2D3F;
+    --ink-3:      #4A5668;
+    --paper:      #F7F5F0;
+    --paper-2:    #ECE8DF;
+    --rule:       #C9C2B5;
+    --rule-soft:  #E1DCD0;
 
-      <h2>Reusable Engine Logic</h2>
-      <p>
-        The application keeps the proven scanner mechanics: dual-stream scoring, independent evidence verification, targeted rescans, deterministic metrics, confidence-gated synthesis, fact-checking, strategy sanitation, and GO/WARN/BLOCK quality gating.
-      </p>
+    --accent:     #B5472D;
+    --accent-2:   #2D5F4E;
+    --accent-3:   #8C6D2F;
+    --accent-4:   #395A7F;
 
-      <div class="grid">
-        <div class="card"><div class="label">Stream A</div><strong>Maturity indicators</strong><p>Evidence of operating, architectural, data, governance, and service capability readiness.</p></div>
-        <div class="card"><div class="label">Stream B</div><strong>Anti-patterns</strong><p>Evidence of AI decision fog, pilot purgatory, brittle platform patterns, data context loss, and detached use-case logic.</p></div>
-        <div class="card"><div class="label">Evidence Gate</div><strong>Proof before score</strong><p>Plans and slogans score low; operating proof scores higher; measured feedback loops score highest.</p></div>
+    --good:       #2D5F4E;
+    --warn:       #B5472D;
+
+    --serif:      'Fraunces', Georgia, serif;
+    --sans:       'Inter', -apple-system, system-ui, sans-serif;
+    --mono:       'JetBrains Mono', 'Courier New', monospace;
+
+    --max:        1180px;
+    --gutter:     clamp(20px, 4vw, 56px);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(14, 27, 44, 0.025) 1px, transparent 0);
+    background-size: 24px 24px;
+    z-index: 0;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  .container {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  section { padding: 80px 0; border-bottom: 1px solid var(--rule-soft); }
+  section:last-of-type { border-bottom: none; }
+
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(38px, 5.5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: 0;
+    margin: 0 0 32px;
+    max-width: 940px;
+    font-variation-settings: "opsz" 144;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 800px;
+    font-variation-settings: "opsz" 36;
+  }
+
+  .lede strong {
+    color: var(--ink);
+    font-weight: 500;
+    background: linear-gradient(transparent 60%, rgba(181, 71, 45, 0.18) 60%);
+    padding: 0 2px;
+  }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .section-tag .num {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.15;
+    letter-spacing: 0;
+    margin: 0 0 24px;
+    max-width: 900px;
+    font-variation-settings: "opsz" 96;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(20px, 2vw, 26px);
+    line-height: 1.25;
+    letter-spacing: 0;
+    margin: 0 0 14px;
+    font-variation-settings: "opsz" 36;
+  }
+
+  h4 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 10px;
+  }
+
+  p { margin: 0 0 16px; }
+  p:last-child { margin-bottom: 0; }
+  strong { font-weight: 600; color: var(--ink); }
+  em { font-style: italic; }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    gap: 48px;
+    align-items: start;
+    margin-top: 40px;
+  }
+
+  .quote-panel {
+    border-left: 4px solid var(--accent);
+    background: #FDFCF8;
+    padding: 24px 28px;
+    color: var(--ink-2);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.45;
+  }
+
+  .pipeline {
+    margin-top: 48px;
+    display: grid;
+    gap: 28px;
+  }
+
+  .stage {
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 28px 32px;
+    position: relative;
+  }
+  .stage[data-phase="0"] { border-left-color: var(--ink-3); }
+  .stage[data-phase="1"] { border-left-color: var(--accent); }
+  .stage[data-phase="2"] { border-left-color: var(--ink); }
+  .stage[data-phase="3"] { border-left-color: var(--accent-2); }
+  .stage[data-phase="output"] { border-left-color: var(--accent-3); background: var(--paper-2); }
+
+  .stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .stage-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .stage-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .stage-body {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-2);
+  }
+
+  .stage::after {
+    content: '▼';
+    position: absolute;
+    left: 50%;
+    bottom: -24px;
+    transform: translateX(-50%);
+    color: var(--rule);
+    font-size: 14px;
+  }
+  .stage:last-child::after { display: none; }
+
+  .batch-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin: 22px 0 18px;
+  }
+
+  .batch {
+    border: 1px solid var(--rule-soft);
+    padding: 14px;
+    background: var(--paper);
+    min-height: 116px;
+  }
+  .batch strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .batch span {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    margin-top: 32px;
+  }
+
+  .rule-card {
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    padding: 28px;
+  }
+
+  .rule-card h3 { color: var(--accent); }
+  .rule-card.green h3 { color: var(--accent-2); }
+  .rule-card.blue h3 { color: var(--accent-4); }
+
+  .compact-list {
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .compact-list li {
+    padding: 12px 0;
+    border-top: 1px solid var(--rule-soft);
+    color: var(--ink-2);
+  }
+
+  .criteria-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: 36px 0;
+    border: 1px solid var(--rule);
+    background: #FDFCF8;
+  }
+
+  .criteria-col {
+    padding: 30px;
+  }
+  .criteria-col + .criteria-col {
+    border-left: 1px solid var(--rule);
+  }
+  .criteria-col.maturity {
+    border-top: 4px solid var(--accent-2);
+  }
+  .criteria-col.antipattern {
+    border-top: 4px solid var(--accent-3);
+  }
+  .criteria-col .stream {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 18px;
+  }
+  .criteria-col ul {
+    margin: 16px 0 0;
+    padding-left: 20px;
+    color: var(--ink-2);
+  }
+  .criteria-col li { margin-bottom: 9px; }
+
+  .scale-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 32px 0;
+  }
+  .scale {
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    padding: 22px;
+  }
+  .scale-num {
+    font-family: var(--serif);
+    font-size: 42px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .scale-title {
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .metrics-list {
+    display: grid;
+    gap: 14px;
+  }
+  .metric-item {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    gap: 24px;
+    align-items: start;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .metric-name {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .metric-name span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .metric-formula {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.55;
+    background: #FDFCF8;
+    border: 1px solid var(--rule-soft);
+    padding: 12px 14px;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+  }
+  .metric-interp {
+    color: var(--ink-2);
+    font-size: 15px;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 32px 0;
+  }
+  .matrix-cell {
+    background: #FDFCF8;
+    padding: 24px;
+  }
+  .matrix-cell h4 {
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .matrix-cell.good h4 { color: var(--accent-2); }
+  .matrix-cell.warn h4 { color: var(--accent-3); }
+
+  .callout {
+    margin: 40px 0;
+    padding: 28px 32px;
+    background: var(--paper-2);
+    border-left: 4px solid var(--accent);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .model-card {
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    padding: 22px;
+  }
+  .model-card .stage-meta {
+    margin-bottom: 10px;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    background: rgba(181, 71, 45, 0.08);
+    border: 1px solid rgba(181, 71, 45, 0.16);
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .intro-grid, .two-col, .criteria-pair, .metric-item, .model-grid {
+      grid-template-columns: 1fr;
+    }
+    .criteria-col + .criteria-col {
+      border-left: none;
+      border-top: 1px solid var(--rule);
+    }
+    .batch-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .scale-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    section { padding: 56px 0; }
+    .hero { padding: 72px 0 58px; }
+    .stage, .rule-card, .criteria-col, .model-card {
+      padding: 22px;
+    }
+    .batch-grid, .scale-grid, .matrix {
+      grid-template-columns: 1fr;
+    }
+    .metric-item {
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">Vivicta · Engine Architecture · Internal Document</div>
+    <h1>AI Transformation Assessment Engine — <em>Evidence-Gated Scanner Architecture</em></h1>
+    <p class="lede">
+      The AI Transformation Engine is not an AI tool checklist. It is a <strong>structured analytical pipeline</strong> for testing whether an organization can sense, decide, design, deliver, govern, learn, and scale AI-enabled value creation safely. AI readiness is organizational and architectural readiness, not tool readiness.
+    </p>
+    <div class="intro-grid">
+      <div>
+        <p>
+          The engine evaluates actual evidence: operating rhythm, decision rights, service-area ownership, AI lifecycle control, semantic data context, value framing, governance, safety, learning loops, and business architecture. Plans and slogans score low. Tool adoption alone does not prove readiness. Pilots become meaningful only when they are tied to value, safety, learning, and repeatable scaling.
+        </p>
+        <p>
+          The design reuses the proven evidence-gated scanner mechanics: local parsing, parse-quality checks, DLP scanning, five parallel forensic audit batches, independent evidence verification, targeted rescans, deterministic metrics, confidence-gated synthesis, fact-checking, sanitation, and a GO/WARN/BLOCK quality gate.
+        </p>
+      </div>
+      <div class="quote-panel">
+        AI readiness is the organization’s ability to turn AI into measurable value through adaptive operating models, reliable architecture, governed data, accountable service ownership, and safe learning loops.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">01</span> How the Engine Thinks</div>
+    <h2>The Forensic Analysis Pipeline</h2>
+    <p>
+      The pipeline is deliberately constrained. The scanner extracts candidate evidence. The verifier checks whether the source material really supports it. The mathematics layer scores only verified data. The synthesizer receives validated metrics as hard boundaries. The fact-checker and sanitation layer then remove unsupported claims before the report is shown.
+    </p>
+
+    <div class="pipeline">
+      <div class="stage" data-phase="0">
+        <div class="stage-header">
+          <div class="stage-title">Phase 0 — Pre-Flight</div>
+          <div class="stage-meta">Local parsing · DLP scan · parse-quality metadata · relevance warnings</div>
+        </div>
+        <div class="stage-body">
+          Client-side parsers extract source material before model analysis. PDF text is extracted with page markers, sparse or visual PDF pages can be attached as visual evidence, tables are normalized into summaries, HTML is sanitized, and JSON is normalized. A DLP pass plus deterministic redaction catches secrets and sensitive identifiers. Low AI-transformation keyword signal is a warning when material is safe and parseable, not a hard rejection.
+        </div>
       </div>
 
-      <h2>Domain Pack</h2>
-      <ul>
-        <li><strong>A:</strong> Adaptive Operating Model</li>
-        <li><strong>B:</strong> Enterprise AI Architecture &amp; Platform Readiness</li>
-        <li><strong>C:</strong> AI Strategy, Governance &amp; Value Realization</li>
-        <li><strong>D:</strong> Data Foundations, Ownership &amp; Accessibility</li>
-        <li><strong>E:</strong> Business Capability &amp; Service Architecture</li>
-      </ul>
-      <p>
-        The first MVP domain pack contains 25 maturity criteria, 25 opposing anti-patterns, and AI transformation tactics covering Ready-and-Adapt, Impact before Output, Launch-and-Learn, Secure-by-Design, Data as Fuel, platform-as-product, service-area ownership, and value-stream scaling.
-      </p>
+      <div class="stage" data-phase="1">
+        <div class="stage-header">
+          <div class="stage-title">Phase 1 — Forensic Audit</div>
+          <div class="stage-meta">5 parallel AI calls · claude-sonnet-4-6 primary · A-E batches</div>
+        </div>
+        <div class="stage-body">
+          Five batches run simultaneously. Each batch evaluates 10 criteria: 5 maturity indicators and 5 opposing anti-patterns. Each criterion has 3 evidence questions scored on a 0-3 scale. Every captured quote is tagged with one evidence category so the report can distinguish policy evidence from operational, architecture, data, governance, learning, or value evidence.
+          <div class="batch-grid">
+            <div class="batch"><strong>Batch A</strong><span>Adaptive Operating Model</span></div>
+            <div class="batch"><strong>Batch B</strong><span>Enterprise AI Architecture & Platform Readiness</span></div>
+            <div class="batch"><strong>Batch C</strong><span>AI Strategy, Governance & Value Realization</span></div>
+            <div class="batch"><strong>Batch D</strong><span>Data Foundations, Ownership & Accessibility</span></div>
+            <div class="batch"><strong>Batch E</strong><span>Business Capability & Service Architecture</span></div>
+          </div>
+          Total: 50 criteria · 150 evidence questions · 10-category evidence taxonomy · structured JSON output.
+        </div>
+      </div>
 
-      <h2>Readiness Ladder</h2>
-      <ul>
-        <li>Insufficient evidence</li>
-        <li>Emerging</li>
-        <li>Structured</li>
-        <li>Scaling with friction</li>
-        <li>Adaptive / Value-creating</li>
-      </ul>
+      <div class="stage" data-phase="1" style="border-style: dashed;">
+        <div class="stage-header">
+          <div class="stage-title">Phase 1.5 — Evidence Check</div>
+          <div class="stage-meta">gemini-3.1-pro-preview · independent verifier · targeted rescan budget</div>
+        </div>
+        <div class="stage-body">
+          Each completed A-E batch is checked against the raw source material before Phase 2 calculates metrics. The verifier classifies every item as supported, weak, unsupported, or missing. Anti-pattern absence is separately labeled as confirmed present, partial finding, tested absent, or not assessed. Weak or over-scored criteria can trigger targeted rescans; the engine now budgets those rescans toward the highest-value evidence gaps instead of chasing every weak signal.
+        </div>
+      </div>
 
-      <h2>Quality Contract</h2>
-      <p>
-        The engine may recommend action only inside the confidence allowed by verified evidence. Anti-pattern absence is credited only when it has been meaningfully tested, and roadmap tactics must map to locked findings or to the approved tactics database.
-      </p>
-    </main>
-  </body>
+      <div class="stage" data-phase="2">
+        <div class="stage-header">
+          <div class="stage-title">Phase 2 — Mathematical Validation</div>
+          <div class="stage-meta">No AI · deterministic scoring · evidence firewall</div>
+        </div>
+        <div class="stage-body">
+          This is the firewall between evidence extraction and strategy. Evidence-checked scores are processed through deterministic arithmetic to produce readiness, maturity depth, anti-pattern burden, anti-pattern clearance, anti-pattern coverage, delivery integrity, evidence density, domain scores, confirmed findings, verified absences, not-assessable anti-patterns, and silent areas. Sparse evidence caps the result.
+        </div>
+      </div>
+
+      <div class="stage" data-phase="3">
+        <div class="stage-header">
+          <div class="stage-title">Phase 3 — Confidence-Gated Synthesis</div>
+          <div class="stage-meta">sonnet summary · opus roadmap · LOW-confidence fast path</div>
+        </div>
+        <div class="stage-body">
+          Outputs depend on confidence. Summary and diagnosis are separated from roadmap planning. HIGH and MEDIUM confidence can produce planning and a four-phase roadmap. LOW confidence deliberately returns findings mode only: evidence-backed findings, missing evidence, validation plan, NO_GO, and an empty directive roadmap. This avoids spending time and trust on advice the evidence cannot support.
+        </div>
+      </div>
+
+      <div class="stage" data-phase="3" style="border-style: dashed;">
+        <div class="stage-header">
+          <div class="stage-title">Fact-Check, Sanitation & Quality Gate</div>
+          <div class="stage-meta">gpt-5.5 · independent validation · GO / WARN / BLOCK</div>
+        </div>
+        <div class="stage-body">
+          GPT-5.5 checks whether claims can be traced to source evidence or validated metrics. Unsupported strategy fragments are removed, rewritten, quarantined, or surfaced in the hygiene appendix. The quality gate then aggregates delivery integrity, evidence density, grounding, fact-check status, and sanitation results into a visible GO/WARN/BLOCK decision.
+        </div>
+      </div>
+
+      <div class="stage" data-phase="output">
+        <div class="stage-header">
+          <div class="stage-title">Interactive Dashboard + Standalone HTML Export</div>
+          <div class="stage-meta">Final deliverable · persona switcher · findings mode · source coverage gaps</div>
+        </div>
+        <div class="stage-body">
+          The artifact includes the scorecard, domain breakdown, evidence check section, source coverage gaps, anti-pattern semantics, persona-specific summaries, roadmap or findings mode, and quality appendix. The report ships with its own audit trail attached.
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 64px;">Why This Order Matters</h3>
+    <div class="two-col">
+      <div>
+        <p><strong>The forensic auditor extracts evidence; it does not recommend.</strong> This prevents confirmation bias where the system scores evidence higher because a strategy would be attractive.</p>
+        <p><strong>The evidence checker treats scanner output as provisional.</strong> Unsupported claims are downgraded before deterministic scoring can see them.</p>
+        <p><strong>Phase 2 mathematics cannot be charmed by prose.</strong> Readiness is capped by evidence density and anti-pattern absence is positive only when tested.</p>
+      </div>
+      <div>
+        <p><strong>The Knowledge Base is not customer evidence.</strong> It can inform rubric language and roadmap tactics, but it cannot prove the customer’s current state.</p>
+        <p><strong>The strategy writer cannot rewrite the diagnosis.</strong> It receives locked metrics and must stay inside the confidence bracket.</p>
+        <p><strong>The model that drafts the roadmap does not grade its own work.</strong> Independent validation and sanitation sit after synthesis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">02</span> Roles and Guardrails</div>
+    <h2>Three Personas. One Evidence Contract.</h2>
+    <p>
+      The report has three executive lenses, but the facts must agree. The Transformation Lead needs operating-model truth. The CIO/CTO or CDAO needs architecture, platform, data, and governance implications. The Business / Service Area Owner needs impact, adoption, ownership, and value-stream consequences.
+    </p>
+
+    <div class="two-col">
+      <div class="rule-card">
+        <h3>Forensic Auditor</h3>
+        <ul class="compact-list">
+          <li>Extract explicit proof of AI transformation capability from the submitted material.</li>
+          <li>Do not give the benefit of the doubt. Plans, slogans, and ambitions score 1 at most.</li>
+          <li>Tool presence is not readiness. A model, platform, chatbot, or pilot must show operating proof.</li>
+          <li>Silence is data. If a document is silent on a criterion, score the criterion 0 and name the absence.</li>
+          <li>Document-type signatures matter. A narrow policy is allowed to be silent on architecture, data, or value realization.</li>
+        </ul>
+      </div>
+      <div class="rule-card green">
+        <h3>Transformation Strategist</h3>
+        <ul class="compact-list">
+          <li>Use Phase 2 metrics and checked findings as the source of truth.</li>
+          <li>Do not invent scores, numbers, capabilities, owners, maturity, or business impact.</li>
+          <li>Use the Knowledge Base only for roadmap mechanisms and tactic IDs, never as current-state proof.</li>
+          <li>LOW confidence means findings mode: no directive roadmap, no tactic prescriptions, and planning decision NO_GO.</li>
+          <li>Use active language for allowed roadmap actions: establish, implement, test, route, govern, integrate, measure.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      The engine is intentionally strict because AI transformation self-assessments are usually over-optimistic. Organizations often have tools, pilots, and ambition before they have ownership, data meaning, release control, service architecture, or value proof.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">03</span> Dual Streams</div>
+    <h2>Two Streams. One Diagnosis.</h2>
+    <p>
+      Every domain has two opposing streams. Stream A measures maturity: evidence of capability, ownership, operating proof, architecture, governance, data quality, learning, and value realization. Stream B measures anti-patterns: evidence of friction, fragility, decision fog, brittle integration, context-poor data, unsafe autonomy, or tool adoption without value proof.
+    </p>
+
+    <div class="matrix">
+      <div class="matrix-cell good">
+        <h4>High Maturity + Low Anti-Patterns</h4>
+        <p>Genuinely adaptive only when anti-pattern coverage is high and absence has been meaningfully tested.</p>
+      </div>
+      <div class="matrix-cell warn">
+        <h4>High Maturity + High Anti-Patterns</h4>
+        <p>Structured but inconsistent. The organization has mechanisms, but friction blocks scale or trust.</p>
+      </div>
+      <div class="matrix-cell">
+        <h4>Low Maturity + High Anti-Patterns</h4>
+        <p>Transformation work is needed before AI-enabled value creation can scale safely.</p>
+      </div>
+      <div class="matrix-cell">
+        <h4>Low Maturity + Low Anti-Patterns</h4>
+        <p>Usually insufficient evidence unless the absence of anti-patterns was directly tested by source material.</p>
+      </div>
+    </div>
+
+    <p>
+      Anti-pattern absence is positive only when verified. A zero anti-pattern score can mean tested absent, which is useful evidence of clearance, or not assessed, where the source simply did not cover the issue. Low burden with low coverage means unknown, not excellent.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">04</span> The Domain Pack</div>
+    <h2>The 50-Criteria AI Transformation Knowledge Base</h2>
+    <p>
+      Five domains. Each domain holds 5 maturity indicators paired against 5 anti-patterns. Each criterion carries 3 evidence questions. The result is a 50-criterion, 150-question scanner for whether AI can become safe, measurable, service-owned value creation.
+    </p>
+
+    <div class="criteria-pair">
+      <div class="criteria-col maturity">
+        <div class="stream">Stream A · Batch A · Adaptive Operating Model</div>
+        <h3>Maturity Indicators</h3>
+        <ul>
+          <li><strong>A1 — AI Operating Rhythm & Decision Rights:</strong> strategy, demand intake, delivery, learning, and governance are connected through clear cadence and ownership.</li>
+          <li><strong>A2 — Adaptive AI Demand Routing:</strong> predictable, iterative, exploratory, and transformative work are routed through appropriate delivery paths.</li>
+          <li><strong>A3 — Evidence-Based Launch-and-Learn:</strong> Kickstart validation, bounded vertical slices, and learning loops feed Building-the-System scaling.</li>
+          <li><strong>A4 — Shared Learning Architecture:</strong> communities, chapters, guilds, incidents, and pilot lessons create reusable competence.</li>
+          <li><strong>A5 — Human-AI Work Redesign:</strong> roles, handoffs, review points, and human-in-the-loop responsibilities are redesigned around higher-value work.</li>
+        </ul>
+      </div>
+      <div class="criteria-col antipattern">
+        <div class="stream">Stream B · Batch A · Adaptive Operating Model</div>
+        <h3>Anti-Patterns</h3>
+        <ul>
+          <li>AI decision fog and governance fat.</li>
+          <li>One-size-fits-all AI delivery.</li>
+          <li>Pilot purgatory without production, ownership, or value proof.</li>
+          <li>Fragmented AI knowledge and expert-dependent hero culture.</li>
+          <li>Digital Taylorism and workslop that speed fragments while degrading the whole system.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="criteria-pair">
+      <div class="criteria-col maturity">
+        <div class="stream">Stream A · Batch B · Enterprise AI Architecture & Platform Readiness</div>
+        <h3>Maturity Indicators</h3>
+        <ul>
+          <li><strong>B1 — Service-Boundary-Based AI Integration:</strong> brownfield systems are wrapped through stable APIs, events, connectors, and documented failure modes.</li>
+          <li><strong>B2 — AI Lifecycle & Release Control:</strong> models, prompts, agents, tools, datasets, configurations, and evaluations are versioned and releasable.</li>
+          <li><strong>B3 — AI Observability & Evaluation System:</strong> production AI is monitored for quality, safety, cost, latency, groundedness, drift, and business impact.</li>
+          <li><strong>B4 — Secure-by-Design AI Trust & Safety Layer:</strong> red teaming, guardrails, access controls, escalation, and Agent Behavioral Contracts are embedded.</li>
+          <li><strong>B5 — AI Platform as Product:</strong> shared AI services, model gateways, deployment templates, and developer experience are managed as reusable platform products.</li>
+        </ul>
+      </div>
+      <div class="criteria-col antipattern">
+        <div class="stream">Stream B · Batch B · Enterprise AI Architecture & Platform Readiness</div>
+        <h3>Anti-Patterns</h3>
+        <ul>
+          <li>Legacy labyrinth and brittle AI connectivity.</li>
+          <li>Notebook-to-production or prompt-to-production chaos.</li>
+          <li>Black-box AI operations without evaluation or drift detection.</li>
+          <li>Safety theater and unbounded autonomy.</li>
+          <li>Tool fragmentation and hidden factory platform work.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="criteria-pair">
+      <div class="criteria-col maturity">
+        <div class="stream">Stream A · Batch C · AI Strategy, Governance & Value Realization</div>
+        <h3>Maturity Indicators</h3>
+        <ul>
+          <li><strong>C1 — Purpose-Driven AI Strategy:</strong> AI ambition is tied to strategy, customers, values, business model, and where-not-to-use boundaries.</li>
+          <li><strong>C2 — Impact-Driven AI Value Framing:</strong> initiatives start from Impact Statements, baselines, value hypotheses, and post-release measurement.</li>
+          <li><strong>C3 — Embedded AI Governance Model:</strong> governance enables safe value creation inside service, platform, security, data, and business ownership.</li>
+          <li><strong>C4 — Risk-Based Responsible AI Control:</strong> use cases are classified by risk, autonomy, data sensitivity, user impact, and regulatory exposure.</li>
+          <li><strong>C5 — Evidence-Based AI Investment Portfolio:</strong> kill, continue, pivot, and scale decisions use impact, risk, readiness, cost, and learning evidence.</li>
+        </ul>
+      </div>
+      <div class="criteria-col antipattern">
+        <div class="stream">Stream B · Batch C · AI Strategy, Governance & Value Realization</div>
+        <h3>Anti-Patterns</h3>
+        <ul>
+          <li>AI slogan strategy without strategic choices.</li>
+          <li>Use-case chasing and vanity benefits.</li>
+          <li>Rigid gatekeeping governance that slows flow without improving safety.</li>
+          <li>Unclassified risk and ambiguous accountability.</li>
+          <li>AI investment drift, sunk-cost persistence, and platform spend without value validation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="criteria-pair">
+      <div class="criteria-col maturity">
+        <div class="stream">Stream A · Batch D · Data Foundations, Ownership & Accessibility</div>
+        <h3>Maturity Indicators</h3>
+        <ul>
+          <li><strong>D1 — Domain-Owned AI Data Products:</strong> service areas or domains own AI-critical data quality, meaning, lifecycle, and usability.</li>
+          <li><strong>D2 — Context-Rich AI-Ready Data:</strong> data includes semantic context, service meaning, process linkage, and decision relevance.</li>
+          <li><strong>D3 — Data Quality & Lineage Control:</strong> training, retrieval, inference, and decision data are cataloged, versioned, freshness-monitored, and traceable.</li>
+          <li><strong>D4 — Governed AI Data Access:</strong> classification, purpose limitation, privacy, masking, retention, and boundaries are built into AI data flows.</li>
+          <li><strong>D5 — Reusable AI Data Access Patterns:</strong> RAG, embeddings, search, feature, batch, real-time, and event-stream patterns are governed and reusable.</li>
+        </ul>
+      </div>
+      <div class="criteria-col antipattern">
+        <div class="stream">Stream B · Batch D · Data Foundations, Ownership & Accessibility</div>
+        <h3>Anti-Patterns</h3>
+        <ul>
+          <li>Ownerless data and context loss.</li>
+          <li>Raw data without meaning.</li>
+          <li>Data swamp, broken lineage, stale copies, and manual files.</li>
+          <li>Data leakage and over-broad AI access.</li>
+          <li>Ad hoc retrieval and duplicate knowledge stores.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="criteria-pair">
+      <div class="criteria-col maturity">
+        <div class="stream">Stream A · Batch E · Business Capability & Service Architecture</div>
+        <h3>Maturity Indicators</h3>
+        <ul>
+          <li><strong>E1 — AI-Anchored Service & Capability Architecture:</strong> AI opportunities connect to service catalogs, capability maps, customer paths, and value streams.</li>
+          <li><strong>E2 — AI-Ready Service Blueprinting:</strong> services are mapped end-to-end across customer journey, frontstage, backstage, systems, data, and handoffs.</li>
+          <li><strong>E3 — Traceable AI Solution Structure:</strong> AI features trace from customer need to capability, component, data, platform, and work package.</li>
+          <li><strong>E4 — Service Area Ownership of AI Value Creation:</strong> integrated teams own business, application, data, AI outcomes, and continuous improvement.</li>
+          <li><strong>E5 — Phased AI Scaling Through Service Areas:</strong> rollout is sequenced by readiness, architecture, data, risk, and reusable learning patterns.</li>
+        </ul>
+      </div>
+      <div class="criteria-col antipattern">
+        <div class="stream">Stream B · Batch E · Business Capability & Service Architecture</div>
+        <h3>Anti-Patterns</h3>
+        <ul>
+          <li>AI ideas detached from business architecture.</li>
+          <li>Spot optimization and silo automation.</li>
+          <li>Untraceable AI build logic.</li>
+          <li>Disconnected AI project teams.</li>
+          <li>Big-bang AI transformation without absorption readiness.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">05</span> Evidence and Scoring</div>
+    <h2>0-3 Evidence Scale and AI Maturity Ladder</h2>
+    <p>
+      The scanner asks what the submitted material proves. A statement that “AI is strategic” is not enough. A pilot is not enough. A platform purchase is not enough. Higher scores require operating proof, measured feedback loops, tested controls, ownership records, or traceable production behavior.
+    </p>
+
+    <div class="scale-grid">
+      <div class="scale">
+        <div class="scale-num">0</div>
+        <div class="scale-title">Absent</div>
+        <p>No evidence found. The source is silent or not assessable for that criterion.</p>
+      </div>
+      <div class="scale">
+        <div class="scale-num">1</div>
+        <div class="scale-title">Aspirational</div>
+        <p>Intent, buzzwords, plans, pilots being explored, or future-tense claims without operating proof.</p>
+      </div>
+      <div class="scale">
+        <div class="scale-num">2</div>
+        <div class="scale-title">Operational</div>
+        <p>Functioning behavior, process, ownership, review, or delivery practice is described.</p>
+      </div>
+      <div class="scale">
+        <div class="scale-num">3</div>
+        <div class="scale-title">Embedded</div>
+        <p>Mechanisms, enforcement, automation, measurement, release control, and learning loops are visible.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 56px;">Readiness Classification</h3>
+    <div class="metrics-list">
+      <div class="metric-item">
+        <div class="metric-name">Insufficient evidence<span>blocked classification</span></div>
+        <div class="metric-interp">The source material does not support a directive maturity conclusion. The report should name missing evidence and return findings mode.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Emerging<span>early capability</span></div>
+        <div class="metric-interp">The organization shows intent, early pilots, or isolated mechanisms, but lacks enough operating proof to show repeatable AI value creation.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Structured<span>defined mechanisms</span></div>
+        <div class="metric-interp">Core structures exist: ownership, governance, platform, data practices, and service framing are visible but not yet fluid or scaled.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Scaling with friction<span>capability plus blockers</span></div>
+        <div class="metric-interp">The organization has meaningful AI transformation capability, but anti-pattern burden or uneven service-area absorption blocks smooth scaling.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Adaptive / Value-creating<span>high evidence, low tested burden</span></div>
+        <div class="metric-interp">AI-enabled value creation is service-owned, architecturally integrated, data-grounded, governed, measured, and continuously improved.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 56px;">Evidence Categories</h3>
+    <p>
+      The score asks how strong the evidence is. The category tag asks what kind of evidence it is. Every evidence quote is tagged with exactly one category: Policy, Process, Operational, Automation, Accountability, Architecture, Data, Governance, Learning, or Value.
+    </p>
+    <div class="callout">
+      This matters because a company can have extensive policy evidence and almost no operating evidence. Another can have platform automation but no service ownership. The category footprint makes those differences visible.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">06</span> Submission Guidance</div>
+    <h2>What to Submit</h2>
+    <p>
+      The assessment accepts any combination of documents. More document types provide richer signal across all five domains. Absence of entire document categories is itself a maturity signal. Do not manufacture missing documents for the assessment; the absence is part of the diagnosis.
+    </p>
+
+    <div class="metrics-list" style="margin: 28px 0 36px;">
+      <div class="metric-item">
+        <div class="metric-name">Accepted Set<span>source material</span></div>
+        <div class="metric-interp">Strategy documents, AI governance standards, architecture diagrams, data ownership models, platform lifecycle standards, pilot reviews, service blueprints, value stream maps, risk registers, model/prompt release records, red-team reports, and AI value realization reviews.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Local Parsing<span>not model parsing</span></div>
+        <div class="metric-interp">PDF, HTML, CSV/TSV, JSON, and image inputs are parsed or encoded locally before analysis. Models analyze extracted material; they are not the primary parsers.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Visual Evidence<span>selected pages</span></div>
+        <div class="metric-interp">Sparse-text or dashboard-like PDF pages can be included as images so visible diagrams, tables, operating models, service maps, and evidence screenshots are not lost.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Reference Knowledge Base<span>rubric and tactics context</span></div>
+        <div class="metric-interp">The remote Knowledge Base can provide methodology context and approved tactics. It is never treated as proof of the assessed organization’s current state.</div>
+      </div>
+    </div>
+
+    <h3>Useful Evidence Types</h3>
+    <div class="two-col">
+      <div>
+        <ul class="compact-list">
+          <li>AI operating model, decision-rights map, or governance cadence.</li>
+          <li>AI strategy with explicit value hypotheses and where-not-to-use boundaries.</li>
+          <li>Portfolio review materials showing kill, continue, pivot, or scale decisions.</li>
+          <li>Service blueprints, value-stream maps, or capability maps tied to AI opportunities.</li>
+          <li>Service-area ownership model for business, application, data, and AI outcomes.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="compact-list">
+          <li>AI platform lifecycle, model/prompt registry, evaluation, rollback, or observability records.</li>
+          <li>Data product ownership, semantic definitions, lineage, access, privacy, and retrieval-quality evidence.</li>
+          <li>Responsible AI risk classification, human escalation, red-team, and Agent Behavioral Contract artifacts.</li>
+          <li>Pilot retrospectives showing Launch-and-Learn feedback converted into reusable playbooks.</li>
+          <li>Value realization dashboards showing impact, quality, flow, adoption, safety, and learning outcomes.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">07</span> Deterministic Metrics</div>
+    <h2>The Firewall Between AI and Roadmap</h2>
+    <p>
+      Phase 2 contains no generative AI. It applies deterministic arithmetic to evidence-checked audit logs. Unsupported scanner output has already been rescanned or downgraded before this layer runs.
+    </p>
+
+    <div class="metrics-list">
+      <div class="metric-item">
+        <div class="metric-name">Evidence-Gated Readiness<span>0-100, capped</span></div>
+        <div>
+          <div class="metric-formula">readiness = maturity_depth - anti_pattern_penalty + tested_clearance_bonus
+then capped by evidence density and delivery integrity</div>
+          <div class="metric-interp">The headline score starts from validated maturity, subtracts confirmed anti-pattern burden, rewards only tested clearance, and caps optimistic scores when source evidence is sparse.</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Maturity Depth<span>0-100</span></div>
+        <div>
+          <div class="metric-formula">maturity_depth = (sum of 25 maturity scores / 75) * 100</div>
+          <div class="metric-interp">Average maturity across all five domains. Captures partial progress that a simple “fully mature criteria” count would miss.</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Anti-Pattern Burden<span>0-100</span></div>
+        <div>
+          <div class="metric-formula">burden = (sum of confirmed or partial anti-pattern scores / 75) * 100</div>
+          <div class="metric-interp">Average severity across harmful evidence. Higher means more friction blocking safe AI-enabled value creation.</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Anti-Pattern Clearance<span>0-100</span></div>
+        <div>
+          <div class="metric-formula">clearance = (tested absent anti-pattern criteria / 25) * 100</div>
+          <div class="metric-interp">How much of the anti-pattern surface was meaningfully tested and found absent. This is the only way absence becomes positive evidence.</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Anti-Pattern Coverage<span>0-100</span></div>
+        <div>
+          <div class="metric-formula">coverage = (tested_absent + confirmed_present + partial_finding) / 25 * 100</div>
+          <div class="metric-interp">Separates “we found no problems” from “the submitted material did not test the problems.”</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Evidence Density<span>0-100</span></div>
+        <div>
+          <div class="metric-formula">evidence_density = criteria with source evidence or verified absence / 50 * 100</div>
+          <div class="metric-interp">Measures whether the source actually supports the assessment, not merely whether the pipeline returned data.</div>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Domain Breakdown<span>A-E scores</span></div>
+        <div>
+          <div class="metric-formula">domain_score[batch] = sum of 5 maturity scores in that domain (0-15)</div>
+          <div class="metric-interp">Shows whether readiness is concentrated in governance, platform, data, operating model, or service architecture.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">08</span> Strategy and Roadmap</div>
+    <h2>Strategy Synthesis Output</h2>
+    <p>
+      Phase 3 produces structured JSON consumed by the dashboard. It cannot fabricate optimism because the visual scorecard, classification, evidence density, domain scores, anti-pattern findings, and source gaps are locked by deterministic validation.
+    </p>
+
+    <div class="two-col">
+      <div class="rule-card green">
+        <h3>Kickstart</h3>
+        <p>
+          Early roadmap phases diagnose readiness, select a service-area domain, validate a bounded vertical slice, test value and safety, and convert pilot learning into a playbook. This is where Impact Statements, Launch-and-Learn, Secure-by-Design, and evidence-backed business cases become practical.
+        </p>
+      </div>
+      <div class="rule-card blue">
+        <h3>Building the System</h3>
+        <p>
+          Later roadmap phases integrate architecture, platform, data products, service teams, operating rhythm, embedded governance, AI lifecycle management, Sense & Respond loops, and scaled learning across value streams.
+        </p>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 56px;">What Makes Phase 3 Trustworthy</h3>
+    <ul class="compact-list">
+      <li>The visual scorecard and readiness classification come from Phase 2. The synthesizer cannot change them.</li>
+      <li>Persona summaries differ by lens, not facts.</li>
+      <li>Evidence summary and diagnosis are separate from roadmap synthesis.</li>
+      <li>Roadmap actions must cite valid tactics only when the Knowledge Base problem pattern matches the locked finding.</li>
+      <li>Generic evidence-gathering or validation actions may omit tactic IDs; no tactic ID is better than a wrong tactic ID.</li>
+      <li>LOW-confidence reports return findings mode and an empty roadmap.</li>
+      <li>No fabricated numbers: any percentage in prose must correspond to Phase 2 metrics.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">09</span> Model Routing</div>
+    <h2>Model Roles and Fallback Chains</h2>
+    <p>
+      Model routing is centralized in <code>src/models.ts</code>. Each stage has a primary model and an ordered fallback chain. The design avoids lightweight fallbacks for this engine and prefers GPT-5.5, Claude Sonnet/Opus, and Gemini Pro-class models when fallback is needed.
+    </p>
+
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="stage-meta">Pre-flight</div>
+        <p><strong>Primary:</strong> gemini-3.5-flash. <strong>Fallback:</strong> gemini-2.5-pro, then gpt-5.5 low reasoning.</p>
+      </div>
+      <div class="model-card">
+        <div class="stage-meta">Forensic audit</div>
+        <p><strong>Primary:</strong> claude-sonnet-4-6. <strong>Fallback:</strong> gpt-5.5 audit profile, then gemini-2.5-pro.</p>
+      </div>
+      <div class="model-card">
+        <div class="stage-meta">Targeted rescan</div>
+        <p><strong>Primary:</strong> claude-opus-4-7. <strong>Fallback:</strong> gpt-5.5 roadmap profile, claude-sonnet-4-6, then gemini-2.5-pro.</p>
+      </div>
+      <div class="model-card">
+        <div class="stage-meta">Evidence check</div>
+        <p><strong>Primary:</strong> gemini-3.1-pro-preview. <strong>Fallback:</strong> claude-sonnet-4-6, then gpt-5.5 evidence-check profile.</p>
+      </div>
+      <div class="model-card">
+        <div class="stage-meta">Synthesis and roadmap</div>
+        <p><strong>Summary primary:</strong> claude-sonnet-4-6. <strong>Roadmap primary:</strong> claude-opus-4-7. <strong>Fallbacks:</strong> gpt-5.5 profiles and Gemini Pro-class models.</p>
+      </div>
+      <div class="model-card">
+        <div class="stage-meta">Fact-check and quality gate</div>
+        <p><strong>Primary:</strong> gpt-5.5. <strong>Fallback:</strong> claude-sonnet-4-6 for fact-check and quality-gate explanation; high fact-check uses gpt-5.5 high reasoning first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">10</span> Why It Matters</div>
+    <h2>The Difference Between Tool Adoption and Value Creation</h2>
+    <p>
+      A generic AI-readiness survey asks whether the organization has a strategy, tools, pilots, data, and governance. The AI Transformation Engine asks whether the documents prove that those things operate together as a value-creation system.
+    </p>
+
+    <div class="metrics-list" style="margin-top: 30px;">
+      <div class="metric-item">
+        <div class="metric-name">Tool Adoption Without Readiness<span>false positive</span></div>
+        <div class="metric-interp">A chatbot rollout, model gateway, or pilot portfolio can look advanced while decision rights, data context, release control, service ownership, and value measurement are still missing.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Governance Without Enablement<span>control theater</span></div>
+        <div class="metric-interp">Policies and approvals do not prove safe value creation unless controls are embedded into workflows, architecture, data access, release lifecycle, and escalation paths.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Pilots Without Absorption<span>pilot purgatory</span></div>
+        <div class="metric-interp">A pilot is useful only when it tests value, safety, integration, adoption, learning, and the transition from Kickstart to Building the System.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Data Without Meaning<span>context failure</span></div>
+        <div class="metric-interp">Data becomes fuel only when it carries semantic and service context. Raw availability is not the same as usable AI grounding.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Architecture Without Ownership<span>scaling friction</span></div>
+        <div class="metric-interp">AI cannot scale safely when service boundaries, ownership, platform capabilities, and human accountability are unclear.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      The differentiator is not “AI readiness.” The differentiator is evidence-gated proof that the organization has the operating, architectural, data, governance, and service structures required for AI to create measurable value safely.
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
 </html>
