@@ -8,7 +8,7 @@
 // Gemini 3 (flash/pro):   thinkingConfig.thinkingLevel: 'low' | 'medium' | 'high'
 // Gemini 2.5 (flash/pro): thinkingConfig.thinkingBudget: number
 //                         (-1 dynamic, 0 disables on Flash only, positive = budget)
-// Anthropic (Sonnet/Opus/Haiku): maxTokens, optional extended thinking budget
+// Anthropic (Sonnet/Opus): maxTokens, optional extended thinking budget
 // OpenAI (GPT-5.x): reasoning.effort, maxTokens
 //
 // Model IDs may need adjustment as providers rename previews → GA. The router
@@ -77,12 +77,6 @@ export const PROFILES = {
     thinkingConfig: { thinkingLevel: 'high' },
   } satisfies ModelProfile,
 
-  GEMINI_25_FLASH: {
-    id: 'gemini-2.5-flash',
-    provider: 'gemini',
-    thinkingConfig: { thinkingBudget: -1 },
-  } satisfies ModelProfile,
-
   GEMINI_25_PRO: {
     id: 'gemini-2.5-pro',
     provider: 'gemini',
@@ -102,13 +96,42 @@ export const PROFILES = {
     maxTokens: 8192,
   } satisfies ModelProfile,
 
-  HAIKU_45: {
-    id: 'claude-haiku-4-5-20251001',
-    provider: 'anthropic',
-    maxTokens: 4096,
+  // OpenAI family
+  GPT_55_PREFLIGHT: {
+    id: 'gpt-5.5',
+    provider: 'openai',
+    openaiReasoning: { effort: 'low' },
+    maxTokens: 8192,
   } satisfies ModelProfile,
 
-  // OpenAI family
+  GPT_55_AUDIT: {
+    id: 'gpt-5.5',
+    provider: 'openai',
+    openaiReasoning: { effort: 'medium' },
+    maxTokens: 12000,
+  } satisfies ModelProfile,
+
+  GPT_55_EVIDENCE_CHECK: {
+    id: 'gpt-5.5',
+    provider: 'openai',
+    openaiReasoning: { effort: 'medium' },
+    maxTokens: 12000,
+  } satisfies ModelProfile,
+
+  GPT_55_SYNTHESIS: {
+    id: 'gpt-5.5',
+    provider: 'openai',
+    openaiReasoning: { effort: 'medium' },
+    maxTokens: 12000,
+  } satisfies ModelProfile,
+
+  GPT_55_ESCALATION: {
+    id: 'gpt-5.5',
+    provider: 'openai',
+    openaiReasoning: { effort: 'high' },
+    maxTokens: 12000,
+  } satisfies ModelProfile,
+
   GPT_55_FACT_CHECK: {
     id: 'gpt-5.5',
     provider: 'openai',
@@ -159,22 +182,20 @@ export const STAGE_MODELS: Record<StageId, ModelProfile> = {
 // ============================================================================
 // Fallback chains — tried in order if primary fails
 //
-// Tiering rule: in-family next-tier-down first, cross-provider last.
-// For quality_gate / fact_check, keep the fallback non-Gemini during the
-// GPT-5.5 trial so Gemini streaming instability cannot dominate Phase 3
-// validation outcomes.
+// Tiering rule: avoid lightweight fallbacks for this app. Fallback chains
+// prefer GPT-5.5, Claude Sonnet/Opus, and Gemini Pro-class models.
 // ============================================================================
 
 export const FALLBACK_CHAIN: Record<StageId, ModelProfile[]> = {
-  preflight:            [PROFILES.GEMINI_25_FLASH, PROFILES.HAIKU_45],
-  forensic_audit:       [PROFILES.HAIKU_45, PROFILES.GEMINI_25_PRO],
-  targeted_rescan:      [PROFILES.GPT_55_ROADMAP, PROFILES.SONNET_46],
-  evidence_check:       [PROFILES.GEMINI_25_PRO, PROFILES.SONNET_46],
+  preflight:            [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_PREFLIGHT],
+  forensic_audit:       [PROFILES.GPT_55_AUDIT, PROFILES.GEMINI_25_PRO],
+  targeted_rescan:      [PROFILES.GPT_55_ROADMAP, PROFILES.SONNET_46, PROFILES.GEMINI_25_PRO],
+  evidence_check:       [PROFILES.SONNET_46, PROFILES.GPT_55_EVIDENCE_CHECK],
   evidence_adjudication: [PROFILES.OPUS_47],
-  synthesis:            [PROFILES.HAIKU_45, PROFILES.GEMINI_25_PRO],
+  synthesis:            [PROFILES.GPT_55_SYNTHESIS, PROFILES.GEMINI_25_PRO],
   roadmap_synthesis:    [PROFILES.GPT_55_ROADMAP, PROFILES.GEMINI_31_PRO],
-  synthesis_escalation: [PROFILES.SONNET_46, PROFILES.GEMINI_25_PRO],
-  fact_check:           [PROFILES.SONNET_46],
+  synthesis_escalation: [PROFILES.GPT_55_ESCALATION, PROFILES.GEMINI_31_PRO],
+  fact_check:           [PROFILES.SONNET_46, PROFILES.GEMINI_25_PRO],
   fact_check_high:      [PROFILES.SONNET_46],
   quality_gate:         [PROFILES.SONNET_46],
 };

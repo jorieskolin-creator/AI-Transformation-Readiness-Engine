@@ -19,6 +19,11 @@ await writeFile(modulePath, compile(source), 'utf8');
 
 const { STAGE_MODELS, modelsFor } = await import(`file://${modulePath}`);
 
+const forbiddenClaudeLightweight = ['claude', 'h' + 'aiku', '4', '5', '20251001'].join('-');
+const forbiddenGeminiLightweight = ['gemini', '2.5', 'fl' + 'ash'].join('-');
+assert.equal(source.includes(forbiddenClaudeLightweight), false);
+assert.equal(source.includes(forbiddenGeminiLightweight), false);
+
 assert.equal(STAGE_MODELS.preflight.provider, 'gemini');
 assert.equal(STAGE_MODELS.preflight.id, 'gemini-3.5-flash');
 assert.deepEqual(STAGE_MODELS.preflight.thinkingConfig, { thinkingLevel: 'low' });
@@ -44,7 +49,8 @@ assert.equal(factCheckChain[0].provider, 'openai');
 assert.equal(factCheckChain[0].id, 'gpt-5.5');
 assert.equal(factCheckChain[1].provider, 'anthropic');
 assert.equal(factCheckChain[1].id, 'claude-sonnet-4-6');
-assert.equal(factCheckChain.some((profile) => profile.provider === 'gemini'), false);
+assert.equal(factCheckChain[2].provider, 'gemini');
+assert.equal(factCheckChain[2].id, 'gemini-2.5-pro');
 
 const highFactCheckChain = modelsFor('fact_check_high');
 assert.equal(highFactCheckChain[0].provider, 'openai');
@@ -52,14 +58,45 @@ assert.deepEqual(highFactCheckChain[0].openaiReasoning, { effort: 'high' });
 assert.equal(highFactCheckChain[1].id, 'claude-sonnet-4-6');
 assert.equal(highFactCheckChain.some((profile) => profile.provider === 'gemini'), false);
 
+const preflightChain = modelsFor('preflight');
+assert.equal(preflightChain[0].id, 'gemini-3.5-flash');
+assert.equal(preflightChain[1].id, 'gemini-2.5-pro');
+assert.equal(preflightChain[2].provider, 'openai');
+assert.equal(preflightChain[2].id, 'gpt-5.5');
+
+const forensicAuditChain = modelsFor('forensic_audit');
+assert.equal(forensicAuditChain[0].id, 'claude-sonnet-4-6');
+assert.equal(forensicAuditChain[1].provider, 'openai');
+assert.equal(forensicAuditChain[1].id, 'gpt-5.5');
+assert.equal(forensicAuditChain[2].id, 'gemini-2.5-pro');
+
 const targetedRescanChain = modelsFor('targeted_rescan');
 assert.equal(targetedRescanChain[0].id, 'claude-opus-4-7');
 assert.equal(targetedRescanChain[1].id, 'gpt-5.5');
 assert.equal(targetedRescanChain[2].id, 'claude-sonnet-4-6');
+assert.equal(targetedRescanChain[3].id, 'gemini-2.5-pro');
+
+const evidenceCheckChain = modelsFor('evidence_check');
+assert.equal(evidenceCheckChain[0].id, 'gemini-3.1-pro-preview');
+assert.equal(evidenceCheckChain[1].id, 'claude-sonnet-4-6');
+assert.equal(evidenceCheckChain[2].provider, 'openai');
+assert.equal(evidenceCheckChain[2].id, 'gpt-5.5');
 
 const adjudicationChain = modelsFor('evidence_adjudication');
 assert.equal(adjudicationChain[0].provider, 'openai');
 assert.equal(adjudicationChain[1].id, 'claude-opus-4-7');
+
+const synthesisChain = modelsFor('synthesis');
+assert.equal(synthesisChain[0].id, 'claude-sonnet-4-6');
+assert.equal(synthesisChain[1].provider, 'openai');
+assert.equal(synthesisChain[1].id, 'gpt-5.5');
+assert.equal(synthesisChain[2].id, 'gemini-2.5-pro');
+
+const escalationChain = modelsFor('synthesis_escalation');
+assert.equal(escalationChain[0].id, 'claude-opus-4-7');
+assert.equal(escalationChain[1].provider, 'openai');
+assert.deepEqual(escalationChain[1].openaiReasoning, { effort: 'high' });
+assert.equal(escalationChain[2].id, 'gemini-3.1-pro-preview');
 
 const qualityGateChain = modelsFor('quality_gate');
 assert.equal(qualityGateChain[0].provider, 'openai');
