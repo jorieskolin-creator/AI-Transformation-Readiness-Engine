@@ -1,4 +1,5 @@
 import { FactCheckClaim, FactCheckResult, StrategySanitationItem } from '../types';
+import type { RemoteKnowledgeBaseDocument } from '../types';
 import {
   isBlockingUnsupportedClaim,
   isDomainTaxonomyHygieneClaim,
@@ -75,6 +76,116 @@ const removeClaimFromString = (value: string, claim: string): { value: string; c
   }
 
   return { value, changed: false };
+};
+
+const basename = (value: string): string =>
+  String(value || '').split('/').pop()?.replace(/\.[^.]+$/, '').trim() || '';
+
+export const buildReferenceLeakTerms = (documents: RemoteKnowledgeBaseDocument[] = []): string[] => {
+  const terms = new Set<string>();
+  const add = (value: any) => {
+    const text = compact(String(value || '').replace(/\.[a-z0-9]{2,6}$/i, ''));
+    if (text.length >= 8 && !/^internal reference/i.test(text)) terms.add(text);
+  };
+  for (const doc of documents) {
+    add(doc.title);
+    add(doc.kb_id);
+    add(doc.pathname);
+    add(basename(doc.pathname));
+  }
+  return Array.from(terms).sort((a, b) => b.length - a.length);
+};
+
+const REFERENCE_PROVENANCE_PATTERNS = [
+  /\baccording to (?:the )?(?:knowledge base|reference knowledge base|reference document|kb)\b/gi,
+  /\b(?:the )?(?:knowledge base|reference knowledge base|reference document|kb) (?:states|says|shows|describes|recommends|indicates)\b/gi,
+  /\bbased on (?:the )?(?:knowledge base|reference document|internal reference)\b/gi,
+];
+
+const replaceReferenceLeaksInString = (
+  value: string,
+  terms: string[],
+): { value: string; changed: boolean; hits: string[] } => {
+  let next = value;
+  const hits = new Set<string>();
+  for (const term of terms) {
+    const pattern = new RegExp(escapeRegExp(term), 'gi');
+    if (pattern.test(next)) {
+      hits.add(term);
+      pattern.lastIndex = 0;
+      next = next.replace(pattern, 'internal reference material');
+    }
+  }
+  for (const pattern of REFERENCE_PROVENANCE_PATTERNS) {
+    if (pattern.test(next)) {
+      hits.add('reference provenance language');
+      pattern.lastIndex = 0;
+      next = next.replace(pattern, 'methodologically');
+    }
+  }
+  next = next.replace(/[ \t]{2,}/g, ' ').trim();
+  return { value: next, changed: next !== value, hits: Array.from(hits) };
+};
+
+const sanitizeReferenceLeaksDeep = (
+  value: any,
+  terms: string[],
+): { value: any; changed: boolean; hits: string[] } => {
+  if (typeof value === 'string') return replaceReferenceLeaksInString(value, terms);
+  if (Array.isArray(value)) {
+    let changed = false;
+    const hits = new Set<string>();
+    const items = value.map(item => {
+      const sanitized = sanitizeReferenceLeaksDeep(item, terms);
+      changed ||= sanitized.changed;
+      sanitized.hits.forEach(hit => hits.add(hit));
+      return sanitized.value;
+    });
+    return { value: items, changed, hits: Array.from(hits) };
+  }
+  if (value && typeof value === 'object') {
+    let changed = false;
+    const hits = new Set<string>();
+    const next: any = {};
+    for (const [key, child] of Object.entries(value)) {
+      const sanitized = sanitizeReferenceLeaksDeep(child, terms);
+      changed ||= sanitized.changed;
+      sanitized.hits.forEach(hit => hits.add(hit));
+      next[key] = sanitized.value;
+    }
+    return { value: next, changed, hits: Array.from(hits) };
+  }
+  return { value, changed: false, hits: [] };
+};
+
+export const sanitizeStrategyReferenceLeaks = (
+  strategyData: any,
+  factCheck: FactCheckResult,
+  referenceTerms: string[],
+): { strategyData: any; factCheck: FactCheckResult; sanitized: StrategySanitationItem[] } => {
+  if (!referenceTerms.length && REFERENCE_PROVENANCE_PATTERNS.length === 0) {
+    return { strategyData, factCheck, sanitized: [] };
+  }
+  const data = clone(strategyData);
+  const result = sanitizeReferenceLeaksDeep(data.phase_3_strategy, referenceTerms);
+  if (!result.changed) return { strategyData, factCheck, sanitized: [] };
+
+  const sanitized: StrategySanitationItem[] = result.hits.map(hit => ({
+    action: 'rewritten',
+    claim: hit,
+    rationale: 'Removed confidential Knowledge Base document, source, or provenance leakage from generated report output.',
+    failure_type: 'unverifiable_entity',
+    severity: 'BLOCKING_UNSUPPORTED_FACT',
+  }));
+  data.phase_3_strategy = result.value;
+  return {
+    strategyData: data,
+    factCheck: {
+      ...factCheck,
+      sanitized_claims: [...(factCheck.sanitized_claims || []), ...sanitized],
+    },
+    sanitized,
+  };
 };
 
 const sanitizeStringsDeep = (

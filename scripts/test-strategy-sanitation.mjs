@@ -30,7 +30,11 @@ await writeFile(
 );
 
 const { runQualityGate } = await import(`file://${join(dir, 'qualityGateService.mjs')}`);
-const { sanitizeStrategyAfterFactCheck } = await import(`file://${join(dir, 'strategySanitationService.mjs')}`);
+const {
+  buildReferenceLeakTerms,
+  sanitizeStrategyAfterFactCheck,
+  sanitizeStrategyReferenceLeaks
+} = await import(`file://${join(dir, 'strategySanitationService.mjs')}`);
 
 const ids = ['A', 'B', 'C', 'D', 'E'].flatMap(batch => [1, 2, 3, 4, 5].map(n => `${batch}${n}`));
 const emptyItem = {
@@ -155,6 +159,56 @@ assert.equal(hygieneSanitized.sanitized.length, 2);
 assert.equal(hygieneSanitized.factCheck.unsupported_claims.length, 0);
 assert.doesNotMatch(JSON.stringify(hygieneSanitized.strategyData), /low-severity anomaly escalation/);
 assert.doesNotMatch(JSON.stringify(hygieneSanitized.strategyData), /exact verified tactics database patterns/);
+
+const referenceLeakTerms = buildReferenceLeakTerms([
+  {
+    pathname: 'AI-Driven Value Creation Engine_Service Description_28.9.2025.pdf',
+    title: 'AI-Driven Value Creation Engine Service Description',
+    domain_id: 'GENERAL',
+    domain_name: 'AI Transformation Knowledge Base',
+    stream: 'maturity',
+    criterion_id: 'GENERAL',
+    capability_id: 'GENERAL',
+    evidence_categories: [],
+    allowed_uses: [],
+    forbidden_uses: [],
+    legacy_ids: [],
+    body_excerpt: ''
+  }
+]);
+assert.ok(referenceLeakTerms.some(term => term.includes('AI-Driven Value Creation Engine')));
+
+const leakedReferenceStrategy = {
+  phase_3_strategy: {
+    executive_summaries: {
+      transformation_lead: 'According to the Knowledge Base, AI-Driven Value Creation Engine_Service Description_28.9.2025.pdf proves the organization is ready.',
+      service_owner: 'The AI-Driven Value Creation Engine Service Description should be cited.',
+      technology_lead: 'No leak here.'
+    },
+    diagnosis: {
+      primary_bottleneck: 'Based on the reference document, the bottleneck is known.',
+      root_causes: [],
+      domain_diagnosis: {},
+      confidence: 'low',
+      confidence_rationale: 'Reference document says so.'
+    },
+    planning_decision: { decision: 'NO_GO', rationale: 'Proceed only with validation.', safe_to_act_on: [], evidence_needed_before_action: [] },
+    remediation_roadmap: []
+  }
+};
+const leakSanitized = sanitizeStrategyReferenceLeaks(leakedReferenceStrategy, {
+  attempts: 1,
+  total_claims: 0,
+  supported_count: 0,
+  failed: false,
+  unsupported_claims: []
+}, referenceLeakTerms);
+const leakOutput = JSON.stringify(leakSanitized.strategyData);
+assert.ok(leakSanitized.sanitized.length >= 2);
+assert.doesNotMatch(leakOutput, /AI-Driven Value Creation Engine/);
+assert.doesNotMatch(leakOutput, /Knowledge Base/);
+assert.doesNotMatch(leakOutput, /reference document/i);
+assert.match(leakOutput, /internal reference material|methodologically/);
 
 const sanitized = sanitizeStrategyAfterFactCheck(strategyData, factCheck);
 assert.equal(sanitized.sanitized.length, 2);

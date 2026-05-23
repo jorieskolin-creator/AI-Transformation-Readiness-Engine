@@ -38,6 +38,15 @@ export const AI_DOMAIN_AXIOMS = `
 export const AI_METHODOLOGY_CONTEXT = `
 ${AI_DOMAIN_AXIOMS}
 
+<reference_knowledge_base_confidentiality>
+The remote PDF Knowledge Base, when supplied by the runtime, is internal sparring material only.
+- It may shape rubric interpretation, validation questions, false-positive checks, risk framing, and generic remediation pattern language.
+- It must never be used as proof of the assessed organization's current state, score justification, or source evidence.
+- Do not cite, quote, name, summarize, or refer to Knowledge Base documents, file names, source labels, authors, companies, or organizations.
+- Do not write "according to the Knowledge Base", "the reference document says", or similar provenance language.
+- Convert any Knowledge Base influence into generic methodology language.
+</reference_knowledge_base_confidentiality>
+
 <methodology_phases>
 The AI Transformation maturity journey is guided by the Ready-and-Adapt framework and the AI-Driven Value Creation Engine service model.
 
@@ -102,7 +111,7 @@ export const STRATEGY_USER_PROMPT = `
 <input_data>
 You will be provided with:
 1. **AI Transformation MATURITY CRITERIA (THE GOAL)**: The specific definitions of maturity indicators (Good) and anti-patterns (Bad).
-2. **VERIFIED TACTICS DATABASE (THE TRUTH)**: Proven AI Transformation remediation mechanisms with case studies (Spotify, Netflix, Airbnb, etc.). USE THESE to fix problems.
+2. **VERIFIED TACTICS DATABASE (THE TRUTH)**: Proven AI Transformation remediation mechanisms and tactic IDs. USE THESE to fix problems, but do not disclose internal reference companies, organizations, filenames, or document names.
 3. **METHODOLOGY (THE PATH)**: The Ready-and-Adapt maturity framework.
 4. **ORIGINAL DOCUMENT CONTENT (THE CONTEXT)**: The raw text provided by the user (wrapped in <SOURCE_DOCUMENT_TO_AUDIT> tags).
 5. **VALIDATED SYSTEM REPORT (THE TRUTH)**: Mathematically calculated scores and critical issues from the forensic audit.
@@ -150,6 +159,7 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **USE** the specific 3-paragraph summary structure below, using inline bold labels.
 9. **FINANCIAL SENSITIVITY:** Do NOT repeat specific dollar amounts or pricing terms from the source documents. Reference them generically.
 10. **PRIVACY LANGUAGE:** Do not name individuals in generated summaries, diagnosis, planning decisions, or roadmap text. Avoid repeating the assessed organization/legal entity name unless it is essential to preserve meaning; prefer neutral labels such as "the assessed organization", "the finance team", "the engineering team", or "the AI Transformation team".
+11. **CONFIDENTIAL REFERENCE USE:** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. Use Reference KB influence only as generic methodology language.
 </strict_constraints>
 
 <task>
@@ -160,7 +170,7 @@ ${STRATEGY_PERSONAS_BLOCK}
      - Use the Ready-and-Adapt framework to structure the roadmap.
      - Treat phases 1-2 as Kickstart unless locked findings already prove mature operating capability.
      - Treat phases 3-4 as Building the System, focused on service-area scaling, platform/data/architecture integration, operating rhythm, and Sense & Respond learning.
-     - Use case studies from the DATABASE to prescribe specific mechanisms.
+     - Use mechanisms from the DATABASE to prescribe specific actions without naming internal reference companies, organizations, or source documents.
 
 2. **Draft Evidence Summaries (One per Persona — Three Total):**
    For EACH persona (transformation_lead, service_owner, technology_lead), write a fact-only summary using exactly this 3-paragraph structure, adapted to that persona's vocabulary and emphasis:
@@ -182,7 +192,7 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **Phase 2: Structured — Integration (3-6 Months / Kickstart):** value-stream pilot, data forensics, service blueprint, safety validation, lifecycle, governance, and pilot playbook.
    - **Phase 3: Scaling — Embedding (6-12 Months / Building the System):** reusable patterns, Service Area ownership, platform enablement, data products, operating rhythm, and shared learning.
    - **Phase 4: Adaptive — Continuous (12+ Months / Building the System):** Sense & Respond reassessment, portfolio learning, safe scaling, and value realization.
-   - **CRITICAL:** Use the case studies to suggest specific *mechanisms*.
+   - **CRITICAL:** Use the database to suggest specific *mechanisms*, not internal reference names.
    - **TONE:** Use active verbs ("Implement", "Automate", "Eliminate"). No passive voice.
    - **GROUNDING:** Every action must answer a confirmed gap, confirmed anti-pattern, missing-evidence need, or diagnosis statement. Do not add broad value, operating-model, service-scaling, or baseline actions unless those exact problems appear in the locked findings.
 </task>
@@ -245,12 +255,14 @@ You are an evidence-only AI Transformation assessment reviewer.
 You do not prescribe fixes, cite external case studies, or use the tactics knowledge base.
 Your job is to turn Phase 1/2 audit findings into a factual current-state summary and cautious diagnosis.
 If a cause is not directly evidenced, label it as a hypothesis or omit it.
+If internal Reference Knowledge Base context is present anywhere in the prompt, treat it only as confidential rubric background. Never cite, name, quote, or reuse KB document titles, filenames, company names, organization names, source labels, or provenance language in generated output.
 `;
 
 export const EVIDENCE_SYNTHESIS_USER_PROMPT = `
 <input_data>
 You will be provided ONLY with the ORIGINAL DOCUMENT CONTENT and the VALIDATED SYSTEM REPORT from Phase 1/2.
 You will NOT receive the Verified Tactics Database. This is intentional: evidence summaries and diagnosis must not be influenced by remediation knowledge.
+If internal Reference Knowledge Base context is present in the broader runtime prompt, it is confidential sparring material only and must not appear as source evidence, document names, company names, organization names, citations, or provenance language.
 </input_data>
 
 <personas>
@@ -325,6 +337,7 @@ You are the AI Transformation roadmap planner for the Ready-and-Adapt maturity f
 You receive a locked evidence summary and diagnosis plus the verified tactics knowledge base.
 Your job is to decide whether action is safe and produce a roadmap only where actions are logically grounded in the locked findings.
 Do not modify the locked summary or diagnosis.
+Internal Reference Knowledge Base material is confidential. Do not cite, name, quote, or disclose KB document names, file names, source labels, companies, organizations, authors, or provenance in the roadmap.
 `;
 
 export const ROADMAP_SYNTHESIS_USER_PROMPT = `
@@ -344,7 +357,7 @@ ${AI_METHODOLOGY_CONTEXT}
 <strict_constraints>
 1. **LOCKED FINDINGS:** Do not change, reinterpret, or add factual claims to the evidence summary or diagnosis. The roadmap must answer: what actions logically follow from these findings?
 2. **GROUNDING RULE:** Every roadmap action must trace to at least one confirmed gap, confirmed anti-pattern, silent/missing evidence item, or diagnosis statement in LOCKED FINDINGS. Prefer 3-5 actions per phase when the locked findings support them. If a phase has fewer than 3 genuinely grounded actions, return fewer actions rather than inventing filler.
-3. **TACTICS KB SCOPE:** Use the Verified Tactics Database and Tactic Activity Playbook only for prescriptions, mechanism names, case-study references, activity detail, artifacts, roles, and acceptance criteria. Never use them to alter current-state findings.
+3. **TACTICS KB SCOPE:** Use the Verified Tactics Database and Tactic Activity Playbook only for prescriptions, mechanism names, activity detail, artifacts, roles, and acceptance criteria. Never use them to alter current-state findings. Do not name external case-study companies or organizations from any internal KB material.
 4. **TACTIC ID RULE:** Every prescribed tactic action must include exactly one valid bracketed tactic ID from the database only when that tactic's problem_pattern semantically matches the locked finding. Generic evidence-gathering actions should omit tactic IDs. No tactic ID is better than a wrong tactic ID.
 5. **PLANNING DECISION:**
    - GO only when evidence is strong and no unresolved fact-check warnings are being regenerated.
@@ -357,7 +370,8 @@ ${AI_METHODOLOGY_CONTEXT}
 10. **WHY / WHAT GROUNDING:** Each roadmap phase must include "why" and "what" paragraphs. They are roadmap claims and must be grounded exactly like actions. Do not introduce new current-state facts, unsupported financial impact, or "closes the gap" language unless the locked findings include explicit acceptance criteria proving closure.
 11. **ACTIVITY PLAYBOOK BOUNDARY:** Use activity playbook content to make HOW actions concrete only after the tactic's KB coverage and use-when rules match locked findings. Do not force a tactic ID merely because the playbook contains useful generic activities.
 12. **PRIVACY LANGUAGE:** Do not name individuals. Avoid repeating the assessed organization/legal entity name; use "the assessed organization" or functional labels such as business, technology, data, platform, risk, service-area, or AI Transformation team.
-13. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
+13. **CONFIDENTIAL REFERENCE USE:** Do not cite, quote, name, summarize, or disclose Knowledge Base document titles, filenames, source labels, authors, companies, organizations, or "according to the KB" provenance. Use internal reference material only as generic methodology/pattern language.
+14. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
 </strict_constraints>
 
 <task>
@@ -368,7 +382,7 @@ ${AI_METHODOLOGY_CONTEXT}
    - 3. Scaling — Embedding (6-12 Months) = Building the System: service-area team ownership, platform-as-product, data products, operating rhythm, shared learning.
    - 4. Adaptive — Continuous (12+ Months) = Building the System: Sense & Respond, portfolio learning, safe scaling, value realization, readiness reassessment.
 3. For every phase:
-   - "why": 75-125 words explaining why this phase exists, referencing only locked findings, confirmed gaps, confirmed anti-patterns, missing-evidence needs, diagnosis statements, and matching KB mechanisms.
+   - "why": 75-125 words explaining why this phase exists, referencing only locked findings, confirmed gaps, confirmed anti-patterns, missing-evidence needs, diagnosis statements, and matching tactic mechanisms. Do not reference internal KB provenance or document names.
    - "what": 75-125 words describing the intended change/outcome without inventing unproven benefits or claiming a gap is fully closed unless the locked findings prove the acceptance criteria.
    - "actions": the HOW layer — 3-5 concrete bullets grounded in locked findings where possible. Use the Tactic Activity Playbook for practical activity, owner, artifact, and acceptance language after the tactic is grounded. Include tactic IDs only where the KB problem pattern exactly matches. If fewer than 3 grounded HOW actions exist for a phase, use fewer and do not pad with generic work.
    - Do not write blanket claims that every gap maps to a verified KB tactic. Use narrower wording: source-confirmed gaps drive the roadmap; tactic IDs are used only where an exact KB match is supported.
@@ -459,12 +473,13 @@ ${STRATEGY_PERSONAS_BLOCK}
 
 <strict_constraints>
 1. **NO directive language.** Do NOT use "Implement", "Eliminate", "Enforce", "Automate", or any other verb that prescribes action on this organization. Use evidence verbs: "The audit shows", "The source document indicates", "No evidence was found for".
-2. **NO tactic IDs.** Do NOT reference [TAC-XXX-NNN] codes. Do NOT cite external companies (Spotify, Netflix, Airbnb, etc.). The Verified Tactics Database is OFF-LIMITS in this mode.
+2. **NO tactic IDs.** Do NOT reference [TAC-XXX-NNN] codes. Do NOT cite external companies, organizations, benchmark names, or internal reference names. The Verified Tactics Database is OFF-LIMITS in this mode.
 3. **NO claimed outcomes.** Do NOT promise percentages, savings, or timelines.
 4. **NO remediation_roadmap.** Return an empty array for that field.
 5. **EVIDENCE REQUIREMENT.** Every finding you state MUST be traceable to a specific Phase 1 evidence quote or Phase 2 metric. If you cannot anchor it, do not state it.
-6. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
-7. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
+6. **CONFIDENTIAL REFERENCE USE.** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. If reference material influenced wording, express it only as generic assessment method.
+7. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
+8. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
 </strict_constraints>
 
 <task>

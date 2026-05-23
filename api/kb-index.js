@@ -1,5 +1,5 @@
 import { requireSession } from '../lib/auth.js';
-import { buildKbStatus, sanitizeKbDocument } from '../lib/kbIndex.js';
+import { buildKbStatus, normalizeKbBlobPrefix, sanitizeKbDocument } from '../lib/kbIndex.js';
 
 const BLOB_API_URL = 'https://vercel.com/api/blob';
 const BLOB_API_VERSION = '12';
@@ -15,11 +15,6 @@ const parseStoreIdFromReadWriteToken = (token) => {
   return storeId;
 };
 
-const normalizePrefix = (prefix) => {
-  const value = String(prefix || DEFAULT_PREFIX).trim();
-  return value.endsWith('/') ? value : `${value}/`;
-};
-
 const blobHeaders = (token) => {
   const storeId = parseStoreIdFromReadWriteToken(token);
   return {
@@ -33,7 +28,8 @@ async function listBlobPdfs({ token, prefix }) {
   const blobs = [];
   let cursor = undefined;
   do {
-    const params = new URLSearchParams({ limit: '100', prefix });
+    const params = new URLSearchParams({ limit: '100' });
+    if (prefix) params.set('prefix', prefix);
     if (cursor) params.set('cursor', cursor);
     const response = await fetch(`${BLOB_API_URL}?${params.toString()}`, {
       method: 'GET',
@@ -88,12 +84,14 @@ async function fetchBlobBytes(blob, token) {
 
 async function buildRemoteIndex() {
   const token = process.env.BLOB_READ_WRITE_TOKEN;
-  const prefix = normalizePrefix(process.env.AI_KB_BLOB_PREFIX || DEFAULT_PREFIX);
+  const prefixConfig = normalizeKbBlobPrefix(process.env.AI_KB_BLOB_PREFIX || DEFAULT_PREFIX, DEFAULT_PREFIX);
+  const prefix = prefixConfig.requestPrefix;
+  const displayPrefix = prefixConfig.displayPrefix;
   if (!token) {
-    const failures = [{ pathname: prefix, reason: 'BLOB_READ_WRITE_TOKEN is not configured' }];
-    console.info(`[AI Transformation KnowledgeBase] kb_index_fallback reason=no_blob_token prefix="${prefix}"`);
+    const failures = [{ pathname: displayPrefix, reason: 'BLOB_READ_WRITE_TOKEN is not configured' }];
+    console.info(`[AI Transformation KnowledgeBase] kb_index_fallback reason=no_blob_token prefix="${displayPrefix}"`);
     return {
-      status: buildKbStatus([], failures, 'fallback', prefix),
+      status: buildKbStatus([], failures, 'fallback', displayPrefix),
       documents: [],
       failures,
     };
@@ -124,11 +122,11 @@ async function buildRemoteIndex() {
   }
 
   documents.sort((a, b) => String(a.criterion_id).localeCompare(String(b.criterion_id)));
-  const status = buildKbStatus(documents, failures, documents.length > 0 ? 'remote_blob' : 'fallback', prefix);
+  const status = buildKbStatus(documents, failures, documents.length > 0 ? 'remote_blob' : 'fallback', displayPrefix);
   if (documents.length > 0) {
-    console.info(`[AI Transformation KnowledgeBase] kb_index_loaded documents=${documents.length} failures=${failures.length} prefix="${prefix}"`);
+    console.info(`[AI Transformation KnowledgeBase] kb_index_loaded documents=${documents.length} failures=${failures.length} prefix="${displayPrefix}"`);
   } else {
-    console.info(`[AI Transformation KnowledgeBase] kb_index_fallback reason=no_valid_documents failures=${failures.length} prefix="${prefix}"`);
+    console.info(`[AI Transformation KnowledgeBase] kb_index_fallback reason=no_valid_documents failures=${failures.length} prefix="${displayPrefix}"`);
   }
   return { status, documents, failures };
 }
@@ -153,7 +151,7 @@ export default async function handler(req, res) {
   } catch (error) {
     const reason = error?.message || String(error);
     console.error(`[AI Transformation KnowledgeBase] kb_index_fallback reason="${reason}"`);
-    const prefix = normalizePrefix(process.env.AI_KB_BLOB_PREFIX || DEFAULT_PREFIX);
+    const prefix = normalizeKbBlobPrefix(process.env.AI_KB_BLOB_PREFIX || DEFAULT_PREFIX, DEFAULT_PREFIX).displayPrefix;
     const failures = [{ pathname: prefix, reason }];
     const payload = {
       status: buildKbStatus([], failures, 'fallback', prefix),

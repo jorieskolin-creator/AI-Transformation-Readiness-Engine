@@ -84,26 +84,40 @@
     "required_front_matter": {
       "forbidden_uses": [
         "customer_current_state_claim",
-        "source_evidence_quote"
+        "source_evidence_quote",
+        "audited_finding",
+        "phase1_evidence_quote",
+        "hallucinated_capability_claim",
+        "score_justification_without_evidence",
+        "kb_document_name_disclosure",
+        "kb_organization_name_disclosure"
       ]
     }
   },
   "usage_boundaries": {
     "reference_kb_allowed_uses": [
       "rubric_context",
+      "domain_context",
       "maturity_examples",
       "antipattern_examples",
       "evidence_requirements",
       "validation_questions",
+      "false_positive_checks",
       "tactic_selection",
       "remediation_patterns",
-      "risk_notes"
+      "roadmap_pattern_inspiration",
+      "risk_notes",
+      "abstract_theme_interpretation"
     ],
     "reference_kb_forbidden_uses": [
       "customer_current_state_claim",
       "source_evidence_quote",
       "audited_finding",
-      "phase1_evidence_quote"
+      "phase1_evidence_quote",
+      "hallucinated_capability_claim",
+      "score_justification_without_evidence",
+      "kb_document_name_disclosure",
+      "kb_organization_name_disclosure"
     ]
   }
 }

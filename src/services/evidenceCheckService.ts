@@ -132,7 +132,8 @@ ${summarizeBatch(batch)}
 - "missing": the scanner scored >0 but did not provide usable traceable evidence, or the evidence cannot be located.
 - For text evidence, quoted text must be a real substring or clearly faithful excerpt from the source.
 - For image evidence, the description must be something visible in the attached image content.
-- The REFERENCE_KNOWLEDGE_BASE is rubric/reference material only. It can clarify what good evidence looks like, false positives, and coverage expectations, but it is never source evidence for this customer.
+- The REFERENCE_KNOWLEDGE_BASE is confidential rubric/reference material only. It can clarify what good evidence looks like, false positives, and coverage expectations, but it is never source evidence for this customer.
+- Do not cite, quote, name, summarize, or reuse Reference Knowledge Base document names, filenames, source labels, companies, organizations, or provenance. Convert reference influence into generic validation logic.
 - Do not invent stronger scores. If unsure, recommend the lower score.
 - verified_count must be 0-3 and must not exceed original_count.
 - rescan_recommended should be true when status is weak, unsupported, or missing and original_count > 0.
@@ -185,7 +186,8 @@ You are a senior AI Transformation evidence adjudicator. A first evidence-check 
 </role>
 
 <rules>
-- The REFERENCE or Knowledge Base is not customer source evidence.
+- The REFERENCE or Knowledge Base is confidential rubric/reference material only and is not customer source evidence.
+- Do not cite, quote, name, summarize, or reuse KB document names, filenames, source labels, companies, organizations, or provenance.
 - Do not upgrade maturity or invent new findings.
 - For each item choose exactly one status:
   - "partially_present": the source contains weak, partial, indirect, or low-confidence evidence of the harmful anti-pattern.

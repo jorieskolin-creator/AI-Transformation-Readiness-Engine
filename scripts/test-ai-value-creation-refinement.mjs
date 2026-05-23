@@ -61,6 +61,9 @@ for (const phrase of [
 assert.ok(constants.includes('AI_DOMAIN_AXIOMS'), 'domain axioms must be injected into prompts');
 assert.ok(constants.includes('Tool adoption, platform build-out, strategy slogans, and pilots are not readiness evidence by themselves.'), 'tool adoption axiom must be explicit');
 assert.ok(constants.includes('Predictable AI work and uncertain AI value creation must be routed differently'), 'dual-path routing axiom must be explicit');
+assert.ok(constants.includes('internal sparring material only'), 'Reference KB must be framed as internal sparring material');
+assert.ok(constants.includes('Do not cite, quote, name, summarize, or disclose'), 'Reference KB confidentiality must be explicit in prompts');
+assert.ok(constants.includes('Convert any Knowledge Base influence into generic methodology language'), 'Reference KB influence must be genericized');
 assert.ok(fixture.includes('This snippet should not prove AI readiness.'), 'synthetic fixture must lock tool adoption without readiness');
 assert.ok(fixture.includes('pilot AI playbook'), 'synthetic fixture must include Kickstart-to-Building proof');
 

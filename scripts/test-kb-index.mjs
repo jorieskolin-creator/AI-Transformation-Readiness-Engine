@@ -2,11 +2,24 @@ import assert from 'node:assert/strict';
 import {
   extractJsonFrontMatter,
   expectedIdsFromPathname,
+  normalizeKbBlobPrefix,
   normalizeCapabilityId,
   normalizeCriterionId,
+  ROOT_PREFIX_SENTINEL,
   sanitizeKbDocument,
   validateKbMetadata,
 } from '../lib/kbIndex.js';
+
+const requiredForbiddenUses = [
+  'customer_current_state_claim',
+  'source_evidence_quote',
+  'audited_finding',
+  'phase1_evidence_quote',
+  'hallucinated_capability_claim',
+  'score_justification_without_evidence',
+  'kb_document_name_disclosure',
+  'kb_organization_name_disclosure',
+];
 
 const baseMeta = {
   kb_type: 'reference',
@@ -18,9 +31,20 @@ const baseMeta = {
   capability_name: 'AI Operating Rhythm & Decision Rights',
   evidence_categories: ['Policy', 'Process'],
   allowed_uses: ['rubric_context', 'evidence_requirements'],
-  forbidden_uses: ['customer_current_state_claim', 'source_evidence_quote'],
+  forbidden_uses: requiredForbiddenUses,
   version: '1.0.0',
 };
+
+assert.deepEqual(normalizeKbBlobPrefix(ROOT_PREFIX_SENTINEL), {
+  requestPrefix: '',
+  displayPrefix: '(root)',
+  isRoot: true,
+});
+assert.deepEqual(normalizeKbBlobPrefix('AI_ASSESSMENT_KNOWLEDGE_BASE'), {
+  requestPrefix: 'AI_ASSESSMENT_KNOWLEDGE_BASE/',
+  displayPrefix: 'AI_ASSESSMENT_KNOWLEDGE_BASE/',
+  isRoot: false,
+});
 
 const maturityPath = 'Knowledge Base/Adaptive Operating Model/A - Adaptive Operating Model - A1 - AI Operating Rhythm & Decision Rights.pdf';
 const antiPath = 'Knowledge Base/Adaptive Operating Model/A - Adaptive Operating Model - AP-A1 - AI Decision Fog & Governance Fat.pdf';
@@ -105,7 +129,10 @@ assert.equal(simpleDoc.domain_name, 'AI Transformation Knowledge Base');
 assert.equal(simpleDoc.criterion_id, 'GENERAL');
 assert.equal(simpleDoc.title, 'Ready and Adapt Overview');
 assert(simpleDoc.allowed_uses.includes('rubric_context'));
+assert(simpleDoc.allowed_uses.includes('roadmap_pattern_inspiration'));
 assert(simpleDoc.forbidden_uses.includes('source_evidence_quote'));
+assert(simpleDoc.forbidden_uses.includes('kb_document_name_disclosure'));
+assert(simpleDoc.forbidden_uses.includes('kb_organization_name_disclosure'));
 assert(simpleDoc.body_excerpt.includes('AI readiness is an operating'));
 
 console.log('KB index tests passed');

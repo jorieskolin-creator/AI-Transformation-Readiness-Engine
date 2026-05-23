@@ -20,23 +20,16 @@ export const AI_TACTIC_ACTIVITY_PLAYBOOK = tacticActivityPlaybookData.entries as
 export const AI_VALIDATION_RULES = validationData;
 export const AI_TAXONOMY_REGISTRY = taxonomyRegistryData as KnowledgeTaxonomyRegistry;
 
-// Extract the primary case-study company from a tactic. The DB uses the
-// convention "COMPANY: prose..." for each case_study; we pull the leading
-// upper-case token. Falls back to "(no company)" if absent.
-export function extractTacticCompany(t: StrategicTactic): string {
-  const cs = t.case_study || '';
-  const m = cs.match(/^([A-Z][A-Z0-9 &/.-]+):/);
-  return m ? m[1].trim() : '(no company)';
+export function tacticReferenceScope(t: StrategicTactic): string {
+  return t.category || 'AI Transformation tactic';
 }
 
-// Hard ID → canonical_name → company table, one line per tactic. Designed to
+// Hard ID → canonical_name → category table, one line per tactic. Designed to
 // be injected at the TOP of the synthesis SSOT so the model can never confuse
-// which company is paired with which tactic ID. Without this, the model leans
-// on training-data associations (e.g. generic AI CoE patterns) and emits IDs that
-// don't match the DB's actual pairings.
+// which mechanism is paired with which tactic ID.
 export function buildTacticIdTable(tactics: StrategicTactic[] = AI_TACTICS_LOCAL): string {
   return tactics
-    .map(t => `${t.id} — ${t.canonical_name ?? '(unnamed)'} — ${extractTacticCompany(t)}`)
+    .map(t => `${t.id} — ${t.canonical_name ?? '(unnamed)'} — ${tacticReferenceScope(t)}`)
     .join('\n');
 }
 
@@ -233,12 +226,15 @@ const normalizeKbText = (text: string, maxChars: number): string => {
     : compacted;
 };
 
-const formatKbDoc = (doc: RemoteKnowledgeBaseDocument, maxChars: number): string => {
+const formatKbDoc = (doc: RemoteKnowledgeBaseDocument, maxChars: number, ordinal: number): string => {
   const allowed = doc.allowed_uses?.length ? doc.allowed_uses.join(', ') : 'rubric_context';
-  const forbidden = doc.forbidden_uses?.length ? doc.forbidden_uses.join(', ') : 'customer_current_state_claim, source_evidence_quote';
+  const forbidden = doc.forbidden_uses?.length
+    ? doc.forbidden_uses.join(', ')
+    : 'customer_current_state_claim, source_evidence_quote, kb_document_name_disclosure, kb_organization_name_disclosure';
   const categories = doc.evidence_categories?.length ? doc.evidence_categories.join(', ') : '(not declared)';
   return [
-    `[${doc.stream.toUpperCase()} ${doc.criterion_id}] ${doc.title}`,
+    `[INTERNAL_REFERENCE_${ordinal} ${doc.stream.toUpperCase()} ${doc.criterion_id}]`,
+    'Source label: internal reference document (document name withheld from model output).',
     `Domain: ${doc.domain_id} ${doc.domain_name}`,
     `Capability: ${doc.capability_id}`,
     `Evidence categories: ${categories}`,
@@ -271,12 +267,15 @@ Remote PDF Knowledge Base unavailable or empty (${reason}). Use built-in criteri
 Remote PDF Knowledge Base loaded: ${index.status.document_count} document(s), ${index.status.failure_count} parse/validation issue(s).
 
 BOUNDARIES:
-- Use this KB only for rubric interpretation, domain context, evidence requirements, false-positive checks, validation questions, and roadmap/remediation patterns.
+- Treat this KB as internal sparring material: use it only for rubric interpretation, domain context, evidence requirements, false-positive checks, validation questions, risk framing, and roadmap/remediation pattern language.
 - Never cite this KB as proof of the assessed customer's current state.
 - Never copy KB text into source_evidence_quote.
+- Never name, cite, quote, summarize, or refer to any KB document title, file name, author/source name, company name, organization name, or identifiable KB-origin label in generated assessment output.
+- Never write "according to the Knowledge Base", "the reference document says", or similar provenance language. Convert KB influence into generic methodology language only.
+- Never use KB content as an audited finding, Phase 1 evidence quote, score justification, or claim that the assessed organization has a capability.
 - Evidence summaries and diagnosis must remain grounded in uploaded source material, Phase 1 evidence quotes, and Phase 2 metrics.
 
-${documents.map(doc => formatKbDoc(doc, maxDocChars)).join('\n\n---\n\n')}
+${documents.map((doc, index) => formatKbDoc(doc, maxDocChars, index + 1)).join('\n\n---\n\n')}
 </REFERENCE_KNOWLEDGE_BASE>`;
 };
 
@@ -365,7 +364,9 @@ export const knowledgeBaseService = {
 
     const formattedContext = tactics.map(t => {
       let entry = `[${t.category}] IF FOUND "${t.problem_pattern}" -> PRESCRIBE "${t.solution_mechanism}".`;
-      entry += `\n   PROOF: ${t.case_study}`;
+      if (t.case_study) {
+        entry += `\n   REFERENCE PATTERN: ${t.case_study}`;
+      }
       if (t.prerequisites?.length) {
         entry += `\n   PREREQUISITES: ${t.prerequisites.join(', ')}`;
       }
@@ -374,9 +375,6 @@ export const knowledgeBaseService = {
       }
       if (t.risk_notes) {
         entry += `\n   RISK: ${t.risk_notes}`;
-      }
-      if (t.resource_label) {
-        entry += `\n   REFERENCE: ${t.resource_label}`;
       }
       return entry;
     }).join("\n\n");

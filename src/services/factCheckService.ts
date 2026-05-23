@@ -39,27 +39,11 @@ const compactEvidence = (phase1: Phase1AuditLogs): string => {
   return lines.join('\n');
 };
 
-// Extract company names from a tactic's case_study field. Most entries follow
-// "COMPANY: ..." but we also pick up any ALL-CAPS word (Spotify, Netflix etc.
-// are usually capitalized) as a fallback.
-const extractCompanies = (caseStudy: string): string[] => {
-  if (!caseStudy) return [];
-  const set = new Set<string>();
-  const colon = caseStudy.match(/^([A-Z][A-Z0-9 &/.-]+):/);
-  if (colon) set.add(colon[1].trim());
-  for (const word of caseStudy.match(/\b[A-Z][A-Z0-9]{2,}\b/g) || []) {
-    if (word.length <= 30) set.add(word);
-  }
-  return Array.from(set);
-};
-
 const compactTactics = (tactics: StrategicTactic[] | undefined): string => {
   if (!tactics || tactics.length === 0) return '(no tactics database supplied)';
-  return tactics.map(t => {
-    const companies = extractCompanies(t.case_study);
-    const companyList = companies.length > 0 ? companies.join(', ') : '(no named company)';
-    return `${t.id} [${t.category}]: "${t.problem_pattern}" → companies: ${companyList}`;
-  }).join('\n');
+  return tactics.map(t =>
+    `${t.id} [${t.category}]: "${t.problem_pattern}" -> mechanism="${t.solution_mechanism}"; external names withheld`
+  ).join('\n');
 };
 
 const compactTacticActivityPlaybook = (entries: TacticActivityPlaybookEntry[] | undefined): string => {
@@ -110,12 +94,13 @@ CURRENT-STATE CLAIMS (about the audited organization — what they have, what th
 - "supported_by_source": directly stated or clearly implied in the SOURCE_DOCUMENT, OR clearly visible in one of the attached SOURCE_IMAGES.
 - "supported_by_audit": derived from PHASE_1_EVIDENCE or PHASE_2_METRICS (both produced by this engine from the source).
 
-PRESCRIPTION CLAIMS (about external best-practice patterns the strategy is recommending — tactic IDs, mechanism names, named companies cited as exemplars):
+PRESCRIPTION CLAIMS (about external best-practice patterns the strategy is recommending — tactic IDs and mechanism names):
 - "supported_by_tactics_db": the claim references a tactic ID (e.g. "TAC-OPS-001"), mechanism, or named pattern that EXISTS in the VERIFIED_TACTICS_DB section below. This is a legitimate prescription pattern, NOT a hallucination. The synthesis step is explicitly instructed to use this database — these references are sanctioned.
   IMPORTANT: a pattern name is supported_by_tactics_db ONLY if the database actually pairs that pattern with the specific tactic/mechanism being prescribed. "Implement TAC-OPS-001 using an AI operating rhythm" → supported only if TAC-OPS-001 contains that mechanism.
+  Named companies, organizations, document titles, filenames, source labels, authors, and "according to the Knowledge Base" provenance are NOT sanctioned. They must be classified as unsupported unless they appear in the customer source document itself.
 
 NEITHER:
-- "unsupported": the claim cannot be traced to any of the three sources above. This includes invented numbers, named entities not in the source AND not in the tactics DB, organizational claims with no evidence, mismatched pairings (right company / wrong tactic), and confident assertions about facts not present in any input.
+- "unsupported": the claim cannot be traced to any of the three sources above. This includes invented numbers, named entities not in the customer source, organizational claims with no evidence, mismatched tactic/mechanism pairings, and confident assertions about facts not present in any input.
 </classifications>
 
 <image_verification_rule>
@@ -126,12 +111,12 @@ ${(inputs.imageCount ?? 0) > 0
 
 <rules>
 - ONLY flag CONCRETE FACTUAL CLAIMS. Skip stylistic adjectives ("dangerously misleading"), generic AI Transformation principles ("AI Transformation requires culture change"), and uncontroversial truths.
-- Specifically check: percentages, named tools/companies/teams/products, numerical counts (e.g. "22 anti-patterns"), claims about specific organizational structures, claims about specific named processes.
+- Specifically check: percentages, named tools/companies/teams/products, numerical counts (e.g. "22 anti-patterns"), claims about specific organizational structures, claims about specific named processes, and any Knowledge Base document/provenance references.
 - Be skeptical: if a claim is specific enough to be falsifiable but you cannot find it in the inputs, classify as "unsupported".
 - Maximum 15 claims per pass — focus on the most consequential.
 - The strategy output below is divided into persona evidence summaries (with [Persona: ...] headers), [Diagnosis], [Planning Decision], and REMEDIATION ROADMAP ACTIONS. For every claim you flag, tag "source_location" as the persona id, "diagnosis", "planning_decision", or "roadmap" based on where it was found.
 - For every claim classified "unsupported", you MUST additionally emit:
-  - "failure_type": one of "fabricated_number" (invented %, $, count), "unverifiable_entity" (named tool / company / team / product that is NOT in the source AND NOT in the VERIFIED_TACTICS_DB; legitimate KB-sanctioned references must be classified "supported_by_tactics_db" instead), "unsupported_org_claim" (assertion about org structure or behavior not in source), "out_of_scope" (claim about something the inputs simply do not address), or "other".
+  - "failure_type": one of "fabricated_number" (invented %, $, count), "unverifiable_entity" (named tool / company / team / product / KB document / source label that is NOT in the customer source; tactic IDs and mechanism names can be supported by the VERIFIED_TACTICS_DB, but company/document/source names from internal KB material are never sanctioned), "unsupported_org_claim" (assertion about org structure or behavior not in source), "out_of_scope" (claim about something the inputs simply do not address), or "other".
   - "severity": one of:
     - "BLOCKING_UNSUPPORTED_FACT" for fabricated numbers, invented current-state facts, unsupported org facts, or unverifiable entities.
     - "BLOCKING_UNSAFE_ROADMAP" for roadmap prescriptions that do not follow from locked findings, use invalid/mismatched tactic IDs, or introduce unsafe implementation claims.
@@ -251,7 +236,7 @@ export const parseFactCheckResponse = (text: string, attempts: number): FactChec
 
 const FAILURE_TYPE_GUIDANCE: Record<ClaimFailureType, string> = {
   fabricated_number: 'You invented a number not present in Phase 2 metrics or the source. Do not replace it with another invented number. Reference the relevant metric generically ("the audit shows significant burden") or omit the figure.',
-  unverifiable_entity: 'You named a tool, team, company, or product that is NOT in the source AND NOT in the Verified Tactics Database. Legitimate KB-sanctioned references (tactic IDs like [TAC-OPS-001], or patterns paired with their actual tactic in the database) are allowed — DO NOT strip those. For the flagged items below, the entity is genuinely not in any source: remove it, reference it generically ("the deployment pipeline", "the central team"), or replace with a verified tactic ID from the database.',
+  unverifiable_entity: 'You named a tool, team, company, product, KB document, source label, or organization that is NOT in the customer source. Tactic IDs and mechanism names can be used when valid, but internal KB document/source/company/organization names are never customer-facing. Remove the entity, reference it generically ("the deployment pipeline", "the central team", "internal reference material"), or replace with a verified tactic ID/mechanism from the database.',
   unsupported_org_claim: 'You asserted something about the organization (structure, behavior, ownership) that is not in the source. Remove the assertion or qualify it as a recommended state, not a current one.',
   out_of_scope: 'You made a claim about something the source simply does not address. Do not address it at all in the regenerated output.',
   other: 'The claim could not be verified. Remove it or replace with a verified statement from the Phase 1 evidence.'
@@ -290,7 +275,7 @@ Regenerate the evidence summaries (all three personas), diagnosis, planning deci
 - MUST NOT include any of the above claims, even rephrased.
 - MUST follow the failure-mode-specific guidance above.
 - Evidence summaries and diagnosis MUST cite only facts that appear in <SOURCE_DOCUMENT_TO_AUDIT>, Phase 1 evidence quotes, or Phase 2 metrics. Do not use tactics DB knowledge there.
-- Planning decisions and roadmap actions MUST trace to the locked findings and may use only tactic IDs/companies actually paired in the Verified Tactics Database.
+- Planning decisions and roadmap actions MUST trace to the locked findings and may use only tactic IDs/mechanisms actually paired in the Verified Tactics Database. Do not name internal KB documents, source labels, companies, organizations, or provenance.
 - Prefer fewer specific claims over inventing replacements. It is better to be vague but truthful than precise but unsupported.
 - Keep the exact same JSON output shape (executive_summaries with transformation_lead / service_owner / technology_lead, evidence_summary, diagnosis, planning_decision, visual_scorecard, remediation_roadmap).
 `;
@@ -314,6 +299,7 @@ Your job: verify ONLY the evidence summaries and diagnosis. The tactics database
 - Check only current-state and diagnostic claims in the evidence summaries and diagnosis.
 - Be especially skeptical of claims about organizational ownership, executive sponsorship, culture, tooling adoption, team behavior, savings, and root causes.
 - If the source appears to be a best-practices or case-study document rather than evidence about the audited organization, flag claims that treat document coverage as proven operational adoption.
+- If the output cites, names, quotes, or reveals Knowledge Base documents, filenames, source labels, authors, companies, organizations, or "according to the Knowledge Base" provenance, classify the claim as unsupported with failure_type "unverifiable_entity".
 - If the underlying source fact is real but the output assigns the wrong category/domain/anti-pattern label, classify unsupported with severity "WARN_MISCLASSIFIED_BUT_REAL" rather than a blocking fact.
 - Maximum 15 claims per pass — focus on consequential claims.
 - For every unsupported claim, emit failure_type, severity, and missing_material.
@@ -363,8 +349,8 @@ Your job: verify that the planning decision and roadmap are logical, grounded re
 ROADMAP GROUNDING:
 - "supported_by_audit": the action or planning rationale logically follows from LOCKED_FINDINGS, PHASE_1_EVIDENCE, or PHASE_2_METRICS.
 - "supported_by_source": the action or rationale is directly supported by the SOURCE_DOCUMENT.
-- "supported_by_tactics_db": tactic IDs, mechanism names, named case-study references, and implementation activity details are valid and correctly paired in VERIFIED_TACTICS_DB or TACTIC_ACTIVITY_PLAYBOOK.
-- "unsupported": the roadmap action, planning rationale, or tactic reference does not trace to locked findings/evidence, uses a mismatched tactic/company pairing, or introduces a new current-state claim not present in LOCKED_FINDINGS.
+- "supported_by_tactics_db": tactic IDs, mechanism names, and implementation activity details are valid and correctly paired in VERIFIED_TACTICS_DB or TACTIC_ACTIVITY_PLAYBOOK.
+- "unsupported": the roadmap action, planning rationale, or tactic reference does not trace to locked findings/evidence, uses a mismatched tactic/mechanism pairing, leaks internal KB document/source/company/organization names, or introduces a new current-state claim not present in LOCKED_FINDINGS.
 </classifications>
 
 <rules>
@@ -375,6 +361,7 @@ ROADMAP GROUNDING:
 - If tactic IDs appear in the planning decision but the underlying action is grounded, classify the issue as unsupported with severity "WARN_TACTIC_HYGIENE" instead of a blocking roadmap failure.
 - A grounded roadmap action may have zero tactic IDs when no exact tactics DB match exists. Do not flag zero tactic IDs by itself.
 - Activity-playbook details support roadmap HOW language only. They do not support new claims about what the audited organization currently has or does.
+- Internal KB document titles, filenames, source labels, authors, company names, organization names, and "according to the Knowledge Base" provenance are not customer-facing support. Flag them as unsupported unless the named entity is in the customer source itself.
 - If the action is grounded but the output uses a wrong label/category for the finding, classify unsupported with severity "WARN_MISCLASSIFIED_BUT_REAL".
 - WHY and WHAT may summarize context and intended change, but they may not invent new current-state claims, unsupported financial impacts, or claim that a gap is fully closed unless LOCKED_FINDINGS provide acceptance criteria proving closure.
 - Maximum 15 claims per pass — focus on consequential grounding errors.

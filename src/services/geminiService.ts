@@ -25,7 +25,7 @@ import { FactCheckClaim, FactCheckResult, FactCheckPassSnapshot } from "../types
 import { STAGE_MODELS, StageId } from "../models";
 import { runStage, serverLog, newRunId } from "./modelRouter";
 import { sanitizeRoadmapTacticGrounding } from "./tacticGroundingService";
-import { sanitizeStrategyAfterFactCheck } from "./strategySanitationService";
+import { buildReferenceLeakTerms, sanitizeStrategyAfterFactCheck, sanitizeStrategyReferenceLeaks } from "./strategySanitationService";
 
 const FACT_CHECK_MAX_RETRIES = 2;
 const ID_VALIDATION_MAX_REGENS = 2;
@@ -389,9 +389,8 @@ export const analyzeDocument = async (
 
     const definitionsContext = JSON.stringify(BATCH_DEFINITIONS, null, 2);
     const taxonomyContext = JSON.stringify(AI_TAXONOMY_REGISTRY, null, 2);
-    // Hard ID lookup at the TOP — prevents the model from confusing which
-    // company goes with which tactic ID. See knowledge_base/index.ts for
-    // the rationale. The prose case studies still follow below.
+    // Hard ID lookup at the TOP prevents the model from confusing which
+    // mechanism/category goes with which tactic ID.
     const tacticIdTable = buildTacticIdTable();
     const fullSSOT = `=== TACTIC IDS — LOOKUP TABLE (use ONLY these IDs; never invent, abbreviate, or modify) ===
 ${tacticIdTable}
@@ -500,7 +499,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
       const textParts: string[] = [ROADMAP_SYNTHESIS_USER_PROMPT];
       if (confidenceBracket === 'MEDIUM') textParts.push(ROADMAP_SYNTHESIS_PROMPT_CAUTIOUS_APPENDIX);
       if (confidenceBracket !== 'LOW') {
-        textParts.push(`\n\n### THE GOLDEN STANDARD (SSOT)\nYou may ONLY prescribe solutions found in this Knowledge Base. Use it for roadmap actions only; never alter locked findings from it:\n\n${fullSSOT}`);
+        textParts.push(`\n\n### THE GOLDEN STANDARD (SSOT)\nUse the verified tactics database and activity playbook for approved tactic IDs, mechanism names, roles, artifacts, and acceptance language. Use Reference Knowledge Base material only as confidential methodology context. Never alter locked findings from it, never cite it, and never disclose KB document names, filenames, source labels, authors, companies, or organizations:\n\n${fullSSOT}`);
       }
       textParts.push(`\n\n### LOCKED FINDINGS JSON (IMMUTABLE)\n${compactLockedFindings(lockedStrategy)}`);
       textParts.push(`\n\n### DIAGNOSTIC FINDINGS (Phase 1 & 2)\n${handoffSummary}`);
@@ -855,22 +854,27 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
       }
     }
 
+    const referenceLeakTerms = buildReferenceLeakTerms(referenceKbIndex.documents);
+
     const applySanitation = (data: any, fc: FactCheckResult, event: string = 'strategy_sanitized') => {
       const sanitation = sanitizeStrategyAfterFactCheck(data, fc);
-      if (sanitation.sanitized.length > 0) {
-        const removed = sanitation.sanitized.filter(i => i.action === 'removed').length;
-        const rewritten = sanitation.sanitized.filter(i => i.action === 'rewritten').length;
-        const quarantined = sanitation.sanitized.filter(i => i.action === 'quarantined').length;
-        console.warn(`[AI Transformation] [${runId}] Strategy sanitation handled ${sanitation.sanitized.length} unsupported item(s): removed=${removed}, rewritten=${rewritten}, quarantined=${quarantined}.`);
+      const leakageSanitation = sanitizeStrategyReferenceLeaks(sanitation.strategyData, sanitation.factCheck, referenceLeakTerms);
+      const allSanitized = [...sanitation.sanitized, ...leakageSanitation.sanitized];
+      if (allSanitized.length > 0) {
+        const removed = allSanitized.filter(i => i.action === 'removed').length;
+        const rewritten = allSanitized.filter(i => i.action === 'rewritten').length;
+        const quarantined = allSanitized.filter(i => i.action === 'quarantined').length;
+        console.warn(`[AI Transformation] [${runId}] Strategy sanitation handled ${allSanitized.length} unsupported/confidential item(s): removed=${removed}, rewritten=${rewritten}, quarantined=${quarantined}.`);
         serverLog(runId, 'warn', event, {
-          total: sanitation.sanitized.length,
+          total: allSanitized.length,
           removed,
           rewritten,
           quarantined,
-          remaining_unsupported: sanitation.factCheck.unsupported_claims.length,
+          reference_leaks: leakageSanitation.sanitized.length,
+          remaining_unsupported: leakageSanitation.factCheck.unsupported_claims.length,
         });
       }
-      return sanitation;
+      return leakageSanitation;
     };
 
     let sanitation = applySanitation(strategyData, factCheck);
