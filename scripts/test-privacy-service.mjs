@@ -5,6 +5,9 @@ import { join } from 'node:path';
 import ts from '../node_modules/typescript/lib/typescript.js';
 
 const source = await readFile(new URL('../src/services/privacyService.ts', import.meta.url), 'utf8');
+const constantsSource = await readFile(new URL('../src/constants.ts', import.meta.url), 'utf8');
+const factCheckSource = await readFile(new URL('../src/services/factCheckService.ts', import.meta.url), 'utf8');
+const qualityGateSource = await readFile(new URL('../src/services/qualityGateService.ts', import.meta.url), 'utf8');
 const compiled = ts.transpileModule(source, {
   compilerOptions: {
     module: ts.ModuleKind.ES2022,
@@ -45,7 +48,7 @@ const {
     redactOrganizationName: 'HUS',
     redactPersonNames: false,
   });
-  assert.equal(scrubbed.text, '[ORGANIZATION_REDACTED] has a AI Transformation process. [ORGANIZATION_REDACTED] needs evidence.');
+  assert.equal(scrubbed.text, 'the assessed organization has a AI Transformation process. the assessed organization needs evidence.');
 }
 
 {
@@ -57,7 +60,25 @@ const {
     redactOrganizationNames: names,
     redactPersonNames: false,
   });
-  assert.equal(scrubbed.text, '[ORGANIZATION_REDACTED] has a process and [ORGANIZATION_REDACTED] service area owns it.');
+  assert.equal(scrubbed.text, "the assessed organization has a process and the assessed organization's service area owns it.");
+  assert.doesNotMatch(scrubbed.text, /\[ORGANIZATION_REDACTED\]/);
+}
+
+{
+  const source = [
+    'Current State evidence shows Model coverage and Value framing.',
+    'Source confidence, Enterprise Architecture, Evidence Density, Governance Framework, and Target Model are repeated.',
+    'Current State Model Value Source Enterprise Target Evidence Framework Process Governance.'
+  ].join(' ');
+  const names = collectSourceOrganizationNames(source);
+  assert.deepEqual(names, [], 'domain vocabulary must not be collected as organization names');
+}
+
+{
+  const scrubbed = scrubGeneratedText("[ORGANIZATION_REDACTED]'s process and [ORGANIZATION_REDACTED] evidence should read naturally.", {
+    redactPersonNames: false,
+  });
+  assert.equal(scrubbed.text, "the assessed organization's process and the assessed organization evidence should read naturally.");
 }
 
 const result = {
@@ -94,7 +115,8 @@ const scrubbed = scrubDiagnosticResultForPrivacy(result, {
 
 assert.notEqual(scrubbed.result.phase_3_strategy.executive_summary, result.phase_3_strategy.executive_summary);
 assert.match(scrubbed.result.phase_3_strategy.executive_summary, /\[PERSON_NAME_REDACTED\]/);
-assert.match(scrubbed.result.phase_3_strategy.executive_summary, /\[ORGANIZATION_REDACTED\]/);
+assert.doesNotMatch(scrubbed.result.phase_3_strategy.executive_summary, /\[ORGANIZATION_REDACTED\]/);
+assert.match(scrubbed.result.phase_3_strategy.executive_summary, /the assessed organization/);
 assert.match(scrubbed.result.quality_gate.warnings[0], /\[PERSON_NAME_REDACTED\]/);
 assert.equal(
   scrubbed.result.phase_1_audit_logs.maturity.A1.evidence_quotes[0].quote,
@@ -102,5 +124,12 @@ assert.equal(
   'raw Phase 1 audit evidence must remain unchanged'
 );
 assert.ok(findGeneratedReportPrivacyFindings(result).includes('Toni Eskolin'));
+
+assert.match(constantsSource, /fluent anonymized prose/i);
+assert.match(constantsSource, /Do not output placeholder tokens such as \[ORGANIZATION_REDACTED\]/);
+assert.match(constantsSource, /Focus on what the evidence shows/i);
+assert.match(factCheckSource, /placeholder tokens such as \[ORGANIZATION_REDACTED\] are also not acceptable/i);
+assert.match(factCheckSource, /Rewrite the sentence fluently with neutral language/i);
+assert.match(qualityGateSource, /Write fluent anonymized prose/i);
 
 console.log('privacy service unit tests passed');

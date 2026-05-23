@@ -59,6 +59,46 @@ const SAFE_ORGANIZATION_TERMS = new Set([
   'Yes',
   'Role',
   'Roles',
+  'Current',
+  'State',
+  'Current State',
+  'Model',
+  'Models',
+  'Value',
+  'Values',
+  'Source',
+  'Sources',
+  'Target',
+  'Targets',
+  'Evidence',
+  'Framework',
+  'Frameworks',
+  'Enterprise',
+  'Organization',
+  'Organizations',
+  'Assessment',
+  'Assessments',
+  'Report',
+  'Reports',
+  'Summary',
+  'Summaries',
+  'Maturity',
+  'Readiness',
+  'Integrity',
+  'Coverage',
+  'Delivery',
+  'System',
+  'Systems',
+  'Operating',
+  'Operational',
+  'Portfolio',
+  'Lifecycle',
+  'Automation',
+  'Accountability',
+  'Learning',
+  'Roadmap',
+  'Strategy',
+  'Strategies',
   'Head',
   'Market',
   'Markets',
@@ -106,6 +146,8 @@ const SAFE_ORGANIZATION_TERMS = new Set([
   'Google Cloud'
 ]);
 
+const ORG_SUFFIX_RE = /\b(Inc|Ltd|Oy|Oyj|LLC|GmbH|Group|Corporation|Corp|Company|Co)\b/i;
+
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -144,7 +186,7 @@ const isSafeOrganizationCandidate = (value: string): boolean => {
   if (!normalized || normalized.length < 3) return true;
   if (SAFE_ORGANIZATION_TERMS.has(normalized)) return true;
   if (/^\d/.test(normalized)) return true;
-  if (/\b(Process|Policy|Procedure|Report|Assessment|Summary|Dashboard|Plan|Planning|Management|Governance|Architecture|Transformation|Readiness|Engine|Service Area|Service Practice|Decision|Authority|Capacity|Performance|Project Delivery|AI Governance)\b/i.test(normalized)) {
+  if (/\b(Process|Policy|Procedure|Report|Assessment|Summary|Dashboard|Plan|Planning|Management|Governance|Architecture|Transformation|Readiness|Engine|Service Area|Service Practice|Decision|Authority|Capacity|Performance|Project Delivery|AI Governance|Current State|Maturity|Evidence|Value|Model|Source|Enterprise|Framework|Operating|Lifecycle|Portfolio|Roadmap|Strategy|Integrity|Coverage|Delivery)\b/i.test(normalized)) {
     return true;
   }
   return false;
@@ -170,15 +212,8 @@ export const collectSourceOrganizationNames = (sourceText: string): string[] => 
   const fromTitlePattern = /\b(?:for|to|at|within|inside)\s+([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,})(?:\s+(?:Group|Corporation|Corp|Company|Oy|Oyj|Ltd|Inc|LLC|GmbH))?\b/g;
   for (const match of sourceText.matchAll(fromTitlePattern)) add(match[1]);
 
-  const repeatedProperPattern = /\b([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{3,})\b/g;
-  for (const match of sourceText.matchAll(repeatedProperPattern)) {
-    const candidate = normalizeOrgCandidate(match[1]);
-    if (isSafeOrganizationCandidate(candidate)) continue;
-    found.set(candidate, (found.get(candidate) || 0) + 1);
-  }
-
   return Array.from(found.entries())
-    .filter(([term, count]) => count >= 2 || /(?:\s|^)(Inc|Ltd|Oy|Oyj|LLC|GmbH|Group|Corporation|Corp|Company|Co)$/i.test(term))
+    .filter(([term, count]) => count >= 1 || ORG_SUFFIX_RE.test(term))
     .map(([term]) => term)
     .sort((a, b) => b.length - a.length);
 };
@@ -196,12 +231,21 @@ export const scrubGeneratedText = (
       return token;
     });
   };
+  const replaceWith = (pattern: RegExp, replacer: (match: string, ...args: string[]) => string) => {
+    text = text.replace(pattern, (match, ...args) => {
+      replacements += 1;
+      return replacer(match, ...args);
+    });
+  };
 
   replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL_REDACTED]');
   replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, '[IP_REDACTED]');
   replace(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}\b/g, '[PHONE_REDACTED]');
   replace(/AKIA[0-9A-Z]{16}/g, '[AWS_KEY_REDACTED]');
   replace(/(?:sk-|pk_|vercel_blob_rw_)[a-zA-Z0-9_\-]{20,}/g, '[TOKEN_REDACTED]');
+  replaceWith(/\[ORGANIZATION_REDACTED\]((?:'s|’s)?)/g, (_match, possessive) =>
+    possessive ? "the assessed organization's" : 'the assessed organization'
+  );
 
   const orgNames = [
     options.redactOrganizationName,
@@ -211,7 +255,10 @@ export const scrubGeneratedText = (
     .filter((name, index, all) => name.length >= 2 && all.indexOf(name) === index)
     .sort((a, b) => b.length - a.length);
   for (const orgName of orgNames) {
-    replace(new RegExp(`\\b${escapeRegExp(orgName)}(?:'s|’s)?\\b`, 'gi'), '[ORGANIZATION_REDACTED]');
+    const pattern = new RegExp(`\\b${escapeRegExp(orgName)}((?:'s|’s)?)\\b`, 'gi');
+    replaceWith(pattern, (_match, possessive) =>
+      possessive ? "the assessed organization's" : 'the assessed organization'
+    );
   }
 
   const potentialNames = collectPotentialNames(text);
