@@ -2,6 +2,7 @@ import type { DiagnosticResult } from '../types';
 
 export interface PrivacyScrubOptions {
   redactOrganizationName?: string;
+  redactOrganizationNames?: string[];
   redactPersonNames?: boolean;
 }
 
@@ -43,11 +44,79 @@ const SAFE_PERSON_TERMS = new Set([
   'AI Transformation Team'
 ]);
 
+const SAFE_ORGANIZATION_TERMS = new Set([
+  'AI',
+  'IT',
+  'EU',
+  'GDPR',
+  'ISO',
+  'NIST',
+  'The',
+  'This',
+  'These',
+  'There',
+  'No',
+  'Yes',
+  'Role',
+  'Roles',
+  'Head',
+  'Market',
+  'Markets',
+  'Service',
+  'Area',
+  'Practice',
+  'Practices',
+  'Function',
+  'Unit',
+  'Units',
+  'Team',
+  'Teams',
+  'Responsibilities',
+  'Service Area',
+  'Service Practice',
+  'Project',
+  'Phase',
+  'Domain',
+  'Batch',
+  'Source',
+  'Process',
+  'Governance',
+  'Architecture',
+  'Data',
+  'Security',
+  'Risk',
+  'Compliance',
+  'Finance',
+  'Sales',
+  'Business',
+  'Customer',
+  'Client',
+  'Vendor',
+  'Supplier',
+  'Internal',
+  'External',
+  'Technology',
+  'Platform',
+  'Engineering',
+  'Knowledge Base',
+  'AI Governance',
+  'IT Governance',
+  'Power BI',
+  'Microsoft',
+  'Google Cloud'
+]);
+
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const normalizeSpaces = (value: string): string =>
   value.replace(/\s+/g, ' ').trim();
+
+const normalizeOrgCandidate = (value: string): string =>
+  normalizeSpaces(value)
+    .replace(/^[^A-Za-zÅÄÖåäö0-9]+|[^A-Za-zÅÄÖåäö0-9]+$/g, '')
+    .replace(/(?:'s|’s)$/i, '')
+    .trim();
 
 const isSafeNameCandidate = (value: string): boolean => {
   const normalized = normalizeSpaces(value);
@@ -70,6 +139,50 @@ const collectPotentialNames = (text: string): string[] => {
   return Array.from(found);
 };
 
+const isSafeOrganizationCandidate = (value: string): boolean => {
+  const normalized = normalizeOrgCandidate(value);
+  if (!normalized || normalized.length < 3) return true;
+  if (SAFE_ORGANIZATION_TERMS.has(normalized)) return true;
+  if (/^\d/.test(normalized)) return true;
+  if (/\b(Process|Policy|Procedure|Report|Assessment|Summary|Dashboard|Plan|Planning|Management|Governance|Architecture|Transformation|Readiness|Engine|Service Area|Service Practice|Decision|Authority|Capacity|Performance|Project Delivery|AI Governance)\b/i.test(normalized)) {
+    return true;
+  }
+  return false;
+};
+
+export const collectSourceOrganizationNames = (sourceText: string): string[] => {
+  const found = new Map<string, number>();
+  const add = (value?: string) => {
+    const candidate = normalizeOrgCandidate(value || '');
+    if (isSafeOrganizationCandidate(candidate)) return;
+    found.set(candidate, (found.get(candidate) || 0) + 1);
+  };
+
+  const possessivePattern = /\b([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}(?:\s+[A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}){0,2})(?:'s|’s)\b/g;
+  for (const match of sourceText.matchAll(possessivePattern)) add(match[1]);
+
+  const legalSuffixPattern = /\b([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}(?:\s+[A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}){0,3}\s+(?:Inc|Ltd|Oy|Oyj|LLC|GmbH|Group|Corporation|Corp|Company|Co))\b/g;
+  for (const match of sourceText.matchAll(legalSuffixPattern)) add(match[1]);
+
+  const labeledPattern = /\b(?:company|organization|organisation|customer|client|vendor|supplier|provider|group)\s+(?:name\s*)?:?\s*([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}(?:\s+[A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,}){0,3})\b/gi;
+  for (const match of sourceText.matchAll(labeledPattern)) add(match[1]);
+
+  const fromTitlePattern = /\b(?:for|to|at|within|inside)\s+([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{2,})(?:\s+(?:Group|Corporation|Corp|Company|Oy|Oyj|Ltd|Inc|LLC|GmbH))?\b/g;
+  for (const match of sourceText.matchAll(fromTitlePattern)) add(match[1]);
+
+  const repeatedProperPattern = /\b([A-ZÅÄÖ][A-Za-zÅÄÖåäö0-9&.-]{3,})\b/g;
+  for (const match of sourceText.matchAll(repeatedProperPattern)) {
+    const candidate = normalizeOrgCandidate(match[1]);
+    if (isSafeOrganizationCandidate(candidate)) continue;
+    found.set(candidate, (found.get(candidate) || 0) + 1);
+  }
+
+  return Array.from(found.entries())
+    .filter(([term, count]) => count >= 2 || /(?:\s|^)(Inc|Ltd|Oy|Oyj|LLC|GmbH|Group|Corporation|Corp|Company|Co)$/i.test(term))
+    .map(([term]) => term)
+    .sort((a, b) => b.length - a.length);
+};
+
 export const scrubGeneratedText = (
   input: string,
   options: PrivacyScrubOptions = {}
@@ -90,9 +203,15 @@ export const scrubGeneratedText = (
   replace(/AKIA[0-9A-Z]{16}/g, '[AWS_KEY_REDACTED]');
   replace(/(?:sk-|pk_|vercel_blob_rw_)[a-zA-Z0-9_\-]{20,}/g, '[TOKEN_REDACTED]');
 
-  const orgName = normalizeSpaces(options.redactOrganizationName || '');
-  if (orgName.length >= 2) {
-    replace(new RegExp(`\\b${escapeRegExp(orgName)}\\b`, 'gi'), '[ORGANIZATION_REDACTED]');
+  const orgNames = [
+    options.redactOrganizationName,
+    ...(options.redactOrganizationNames || [])
+  ]
+    .map(name => normalizeOrgCandidate(name || ''))
+    .filter((name, index, all) => name.length >= 2 && all.indexOf(name) === index)
+    .sort((a, b) => b.length - a.length);
+  for (const orgName of orgNames) {
+    replace(new RegExp(`\\b${escapeRegExp(orgName)}(?:'s|’s)?\\b`, 'gi'), '[ORGANIZATION_REDACTED]');
   }
 
   const potentialNames = collectPotentialNames(text);
@@ -145,7 +264,7 @@ export const scrubDiagnosticResultForPrivacy = (
   if (next.quality_gate) {
     next.quality_gate = scrubStringDeep(next.quality_gate, options, stats) as DiagnosticResult['quality_gate'];
   }
-  if (options.redactOrganizationName && next.meta?.document_analyzed) {
+  if ((options.redactOrganizationName || options.redactOrganizationNames?.length) && next.meta?.document_analyzed) {
     const scrubbed = scrubGeneratedText(next.meta.document_analyzed, options);
     next.meta.document_analyzed = scrubbed.text;
     stats.replacements += scrubbed.replacements;

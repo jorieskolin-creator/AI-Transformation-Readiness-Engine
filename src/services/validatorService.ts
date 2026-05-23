@@ -59,7 +59,7 @@ export const validatePhase1Output = (rawData: any): ValidationResult => {
       if (auditItem?.count === 0 && !(stream === 'antipattern' && auditItem?.antipattern_absence_status === 'tested_absent')) {
         const evidence = (auditItem?.evidence || '').toLowerCase();
         if (!silenceKeywords.some(kw => evidence.includes(kw)) && evidence.length > silenceMaxLenBeforeWarn) {
-          warnings.push(`${stream}.${id}: Score 0 but evidence does not indicate silence`);
+          warnings.push(`${stream}.${id}: Score 0 with related source signal; signal did not satisfy this criterion after verification`);
         }
       }
 

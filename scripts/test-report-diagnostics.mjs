@@ -28,7 +28,7 @@ const {
   splitQualityGateDiagnostics,
 } = await import(`file://${modulePath}`);
 
-const disagreement = 'Phase 1: maturity.A1: Score 0 but evidence does not indicate silence';
+const disagreement = 'Phase 1: maturity.A1: Score 0 with related source signal; signal did not satisfy this criterion after verification';
 const normalWarning = 'Anti-pattern coverage 24% < 60% — low burden mostly means not assessable, not proven absence.';
 const hygieneWarning = 'Strategy hygiene: 7 non-material wording or taxonomy issue(s) remain after fact-check. These do not invalidate the assessment score.';
 
@@ -37,7 +37,7 @@ assert.equal(isScannerEvidenceCheckDisagreement(normalWarning), false);
 assert.equal(isStrategyHygieneDiagnostic(hygieneWarning), true);
 assert.equal(
   displayQualityGateDiagnostic(disagreement),
-  `${scannerEvidenceCheckDisagreementTitle}: maturity.A1: Score 0 but evidence does not indicate silence`
+  `${scannerEvidenceCheckDisagreementTitle}: maturity.A1: Score 0 with related source signal; signal did not satisfy this criterion after verification (A - Adaptive Operating Model)`
 );
 assert.equal(
   displayQualityGateDiagnostic(hygieneWarning),

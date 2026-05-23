@@ -3,7 +3,14 @@ import type { FactCheckClaim, QualityGateResult } from '../types';
 export const scannerEvidenceCheckDisagreementTitle = 'Scanner/evidence-check disagreement resolved by downgrade';
 export const strategyHygieneNotesTitle = 'Strategy Hygiene Notes';
 
-const phase1ScannerDisagreementPattern = /^Phase 1: (maturity|antipattern)\.[A-E][1-5]: Score 0 but evidence does not indicate silence$/;
+const phase1ScannerDisagreementPattern = /^Phase 1: (maturity|antipattern)\.([A-E][1-5]): Score 0 with related source signal; signal did not satisfy this criterion after verification$/;
+const domainLabels: Record<string, string> = {
+  A: 'Adaptive Operating Model',
+  B: 'Enterprise AI Architecture & Platform Readiness',
+  C: 'AI Strategy, Governance & Value Realization',
+  D: 'Data Foundations, Ownership & Accessibility',
+  E: 'Business Capability & Service Architecture',
+};
 const strategyHygienePatterns = [
   /^Strategy hygiene:/,
   /^Roadmap tactic grounding /,
@@ -24,7 +31,13 @@ export const isStrategyHygieneDiagnostic = (warning: string): boolean =>
 
 export const displayQualityGateDiagnostic = (warning: string): string =>
   isScannerEvidenceCheckDisagreement(warning)
-    ? `${scannerEvidenceCheckDisagreementTitle}: ${warning.replace(/^Phase 1: /, '')}`
+    ? (() => {
+        const match = warning.match(phase1ScannerDisagreementPattern);
+        const criterion = match?.[2] || '';
+        const domain = criterion ? domainLabels[criterion.charAt(0)] : undefined;
+        const scoped = warning.replace(/^Phase 1: /, '');
+        return `${scannerEvidenceCheckDisagreementTitle}: ${scoped}${domain ? ` (${criterion.charAt(0)} - ${domain})` : ''}`;
+      })()
     : isStrategyHygieneDiagnostic(warning)
       ? `${strategyHygieneNotesTitle}: ${warning.replace(/^Strategy hygiene:\s*/, '')}`
     : warning;

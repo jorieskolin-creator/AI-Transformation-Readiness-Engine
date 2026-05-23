@@ -18,6 +18,7 @@ const modulePath = join(dir, 'privacyService.mjs');
 await writeFile(modulePath, compiled, 'utf8');
 
 const {
+  collectSourceOrganizationNames,
   scrubGeneratedText,
   scrubDiagnosticResultForPrivacy,
   findGeneratedReportPrivacyFindings,
@@ -45,6 +46,18 @@ const {
     redactPersonNames: false,
   });
   assert.equal(scrubbed.text, '[ORGANIZATION_REDACTED] has a AI Transformation process. [ORGANIZATION_REDACTED] needs evidence.');
+}
+
+{
+  const source = 'Clearly defined roles in Vivicta ensure customer needs are met. Vivicta’s IT function provides services. Service Area is a functional label.';
+  const names = collectSourceOrganizationNames(source);
+  assert.ok(names.includes('Vivicta'));
+  assert.equal(names.includes('Service Area'), false);
+  const scrubbed = scrubGeneratedText('Vivicta has a process and Vivicta’s service area owns it.', {
+    redactOrganizationNames: names,
+    redactPersonNames: false,
+  });
+  assert.equal(scrubbed.text, '[ORGANIZATION_REDACTED] has a process and [ORGANIZATION_REDACTED] service area owns it.');
 }
 
 const result = {
@@ -75,7 +88,8 @@ const result = {
 
 const scrubbed = scrubDiagnosticResultForPrivacy(result, {
   redactPersonNames: true,
-  redactOrganizationName: 'HUS'
+  redactOrganizationName: 'HUS',
+  redactOrganizationNames: ['Vivicta']
 });
 
 assert.notEqual(scrubbed.result.phase_3_strategy.executive_summary, result.phase_3_strategy.executive_summary);

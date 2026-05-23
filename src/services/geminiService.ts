@@ -26,6 +26,8 @@ import { STAGE_MODELS, StageId } from "../models";
 import { runStage, serverLog, newRunId } from "./modelRouter";
 import { sanitizeRoadmapTacticGrounding } from "./tacticGroundingService";
 import { buildReferenceLeakTerms, sanitizeStrategyAfterFactCheck, sanitizeStrategyReferenceLeaks } from "./strategySanitationService";
+import { normalizeDomainDiagnosis } from "./domainDiagnosisService";
+import { collectSourceOrganizationNames, scrubDiagnosticResultForPrivacy } from "./privacyService";
 
 const FACT_CHECK_MAX_RETRIES = 2;
 const ID_VALIDATION_MAX_REGENS = 2;
@@ -800,6 +802,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
         });
       }
       const grounding = sanitizeRoadmapTacticGrounding(data, validationData);
+      data = normalizeDomainDiagnosis(grounding.strategyData, auditLogs, validationData);
       tacticGroundingWarnings = grounding.warnings;
       if (grounding.adjustments.length > 0) {
         console.warn(`[AI Transformation] [${runId}] Roadmap tactic grounding adjusted ${grounding.adjustments.length} tactic reference(s) before fact-check.`);
@@ -808,7 +811,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
           tactic_ids: grounding.adjustments.map(a => a.tactic_id).join(','),
         });
       }
-      return grounding.strategyData;
+      return data;
     };
 
     const trajectory: FactCheckPassSnapshot[] = [];
@@ -973,7 +976,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
       models: actuals,
     });
 
-    return {
+    const rawResult: DiagnosticResult = {
       meta: {
         document_analyzed: "Uploaded Text",
         timestamp: new Date().toISOString(),
@@ -1011,6 +1014,20 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
       },
       quality_gate: qualityGate
     };
+
+    const organizationNames = collectSourceOrganizationNames(text);
+    const privacyScrub = scrubDiagnosticResultForPrivacy(rawResult, {
+      redactPersonNames: true,
+      redactOrganizationNames: organizationNames,
+    });
+    if (privacyScrub.changed) {
+      serverLog(runId, 'warn', 'generated_report_privacy_scrubbed', {
+        replacements: privacyScrub.replacements,
+        organization_terms: organizationNames.length,
+        potential_names: privacyScrub.potentialNames.length,
+      });
+    }
+    return privacyScrub.result;
 
   } catch (error: any) {
     const duration = Date.now() - pipelineStarted;

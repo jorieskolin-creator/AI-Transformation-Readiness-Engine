@@ -158,7 +158,7 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **DO NOT** use large headers (###) for the main sections of the evidence summary.
    - **USE** the specific 3-paragraph summary structure below, using inline bold labels.
 9. **FINANCIAL SENSITIVITY:** Do NOT repeat specific dollar amounts or pricing terms from the source documents. Reference them generically.
-10. **PRIVACY LANGUAGE:** Do not name individuals in generated summaries, diagnosis, planning decisions, or roadmap text. Avoid repeating the assessed organization/legal entity name unless it is essential to preserve meaning; prefer neutral labels such as "the assessed organization", "the finance team", "the engineering team", or "the AI Transformation team".
+10. **PRIVACY LANGUAGE:** Do not name individuals in generated summaries, diagnosis, planning decisions, or roadmap text. Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material. Use neutral labels such as "the assessed organization", "the service area", "the business team", "the technology team", "the data team", or "the AI Transformation team".
 11. **CONFIDENTIAL REFERENCE USE:** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. Use Reference KB influence only as generic methodology language.
 </strict_constraints>
 
@@ -256,6 +256,7 @@ You do not prescribe fixes, cite external case studies, or use the tactics knowl
 Your job is to turn Phase 1/2 audit findings into a factual current-state summary and cautious diagnosis.
 If a cause is not directly evidenced, label it as a hypothesis or omit it.
 If internal Reference Knowledge Base context is present anywhere in the prompt, treat it only as confidential rubric background. Never cite, name, quote, or reuse KB document titles, filenames, company names, organization names, source labels, or provenance language in generated output.
+Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material. Use neutral functional labels.
 `;
 
 export const EVIDENCE_SYNTHESIS_USER_PROMPT = `
@@ -283,8 +284,9 @@ ${STRATEGY_PERSONAS_BLOCK}
 5. **NO DOMAIN REASSIGNMENT:** Do not attribute B findings to D, D findings to E, or governance/culture findings to A merely because they sound related. Domain diagnosis must follow the criterion IDs in Phase 1/2.
 6. **NO IMPLEMENTATION LANGUAGE:** Do not use directive verbs such as Implement, Enforce, Automate, Launch, Establish, Deploy, or Optimize except when quoting source evidence.
 7. **SOURCE-TYPE SAFETY:** If the source appears to describe best practices, case studies, or methodology rather than the audited organization's operations, say the audit can assess document coverage but cannot prove operational adoption.
-8. **PRIVACY LANGUAGE:** Do not name individuals. Avoid repeating the assessed organization/legal entity name unless it is essential to preserve meaning; prefer neutral labels such as "the assessed organization", "the finance team", "the engineering team", or "the AI Transformation team".
-9. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
+8. **PRIVACY LANGUAGE:** Do not name individuals. Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material. Use neutral labels such as "the assessed organization", "the service area", "the business team", "the technology team", "the data team", or "the AI Transformation team".
+9. **GENERAL PROCESS BOUNDARY:** General IT governance, process governance, project delivery, capacity management, sales/service operating model, role/accountability, or finance-steering evidence is adjacent source context only. It is not AI Transformation readiness proof unless it explicitly shows AI-specific operating rhythm, AI platform/architecture, AI governance/value realization, AI data foundations, or AI service-capability ownership.
+10. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
 </strict_constraints>
 
 <task>
@@ -338,6 +340,7 @@ You receive a locked evidence summary and diagnosis plus the verified tactics kn
 Your job is to decide whether action is safe and produce a roadmap only where actions are logically grounded in the locked findings.
 Do not modify the locked summary or diagnosis.
 Internal Reference Knowledge Base material is confidential. Do not cite, name, quote, or disclose KB document names, file names, source labels, companies, organizations, authors, or provenance in the roadmap.
+Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material.
 `;
 
 export const ROADMAP_SYNTHESIS_USER_PROMPT = `
@@ -369,7 +372,7 @@ ${AI_METHODOLOGY_CONTEXT}
 9. **NO VAGUE MATURITY ACTIONS:** Do not prescribe shifting from activity tracking to outcome tracking, product-level cadence embedding, growth/scale operating model work, or access-pattern baselines unless that exact gap appears in LOCKED FINDINGS.
 10. **WHY / WHAT GROUNDING:** Each roadmap phase must include "why" and "what" paragraphs. They are roadmap claims and must be grounded exactly like actions. Do not introduce new current-state facts, unsupported financial impact, or "closes the gap" language unless the locked findings include explicit acceptance criteria proving closure.
 11. **ACTIVITY PLAYBOOK BOUNDARY:** Use activity playbook content to make HOW actions concrete only after the tactic's KB coverage and use-when rules match locked findings. Do not force a tactic ID merely because the playbook contains useful generic activities.
-12. **PRIVACY LANGUAGE:** Do not name individuals. Avoid repeating the assessed organization/legal entity name; use "the assessed organization" or functional labels such as business, technology, data, platform, risk, service-area, or AI Transformation team.
+12. **PRIVACY LANGUAGE:** Do not name individuals. Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material; use "the assessed organization" or functional labels such as business, technology, data, platform, risk, service-area, or AI Transformation team.
 13. **CONFIDENTIAL REFERENCE USE:** Do not cite, quote, name, summarize, or disclose Knowledge Base document titles, filenames, source labels, authors, companies, organizations, or "according to the KB" provenance. Use internal reference material only as generic methodology/pattern language.
 14. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
 </strict_constraints>
@@ -478,8 +481,10 @@ ${STRATEGY_PERSONAS_BLOCK}
 4. **NO remediation_roadmap.** Return an empty array for that field.
 5. **EVIDENCE REQUIREMENT.** Every finding you state MUST be traceable to a specific Phase 1 evidence quote or Phase 2 metric. If you cannot anchor it, do not state it.
 6. **CONFIDENTIAL REFERENCE USE.** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. If reference material influenced wording, express it only as generic assessment method.
-7. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
-8. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
+7. **INPUT NAME PRIVACY.** Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, or source-origin organization labels from the input material. Use neutral functional language only.
+8. **GENERAL PROCESS BOUNDARY.** General IT governance, process governance, project delivery, capacity management, sales/service operating model, role/accountability, or finance-steering evidence is adjacent source context only. It is not AI Transformation readiness proof unless it explicitly shows AI-specific operating rhythm, AI platform/architecture, AI governance/value realization, AI data foundations, or AI service-capability ownership.
+9. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
+10. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
 </strict_constraints>
 
 <task>
