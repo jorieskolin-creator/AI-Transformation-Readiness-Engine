@@ -162,42 +162,50 @@ export const PROFILES = {
 } as const;
 
 // ============================================================================
-// Stage assignments — change a stage's primary by editing the value here
+// Stage assignments — change a stage's primary by editing the value here.
+//
+// Temporary test-cost routing:
+// - Keep pipeline mechanics unchanged.
+// - Avoid Anthropic Sonnet/Opus as primary models while calibration tests run.
+// - Prefer Gemini Pro / Flash, with GPT-5.5 fallbacks only where needed.
+// - Do not introduce unverified model IDs such as GPT-5.4 here; the router
+//   forwards IDs verbatim and unknown IDs would break assessments.
 // ============================================================================
 
 export const STAGE_MODELS: Record<StageId, ModelProfile> = {
   preflight:            PROFILES.GEMINI_35_FLASH,
-  forensic_audit:       PROFILES.SONNET_46,
-  targeted_rescan:      PROFILES.OPUS_47,
-  evidence_check:       PROFILES.GEMINI_31_PRO,
+  forensic_audit:       PROFILES.GEMINI_31_PRO,
+  targeted_rescan:      PROFILES.GEMINI_31_PRO,
+  evidence_check:       PROFILES.GEMINI_25_PRO,
   evidence_adjudication: PROFILES.GPT_55_FACT_CHECK,
-  synthesis:            PROFILES.SONNET_46,
-  roadmap_synthesis:    PROFILES.OPUS_47,
-  synthesis_escalation: PROFILES.OPUS_47,
-  fact_check:           PROFILES.GPT_55_FACT_CHECK,
-  fact_check_high:      PROFILES.GPT_55_FACT_CHECK_HIGH,
-  quality_gate:         PROFILES.GPT_55_QUALITY_GATE,
+  synthesis:            PROFILES.GEMINI_31_PRO,
+  roadmap_synthesis:    PROFILES.GEMINI_31_PRO,
+  synthesis_escalation: PROFILES.GEMINI_31_PRO,
+  fact_check:           PROFILES.GEMINI_25_PRO,
+  fact_check_high:      PROFILES.GPT_55_FACT_CHECK,
+  quality_gate:         PROFILES.GEMINI_35_FLASH_MEDIUM,
 };
 
 // ============================================================================
 // Fallback chains — tried in order if primary fails
 //
-// Tiering rule: avoid lightweight fallbacks for this app. Fallback chains
-// prefer GPT-5.5, Claude Sonnet/Opus, and Gemini Pro-class models.
+// Tiering rule during temporary test-cost routing: prefer Gemini/GPT fallbacks
+// and keep Anthropic Sonnet/Opus out of the automatic chains. This reduces
+// calibration cost without touching orchestration, evidence gates, or schemas.
 // ============================================================================
 
 export const FALLBACK_CHAIN: Record<StageId, ModelProfile[]> = {
   preflight:            [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_PREFLIGHT],
-  forensic_audit:       [PROFILES.GPT_55_AUDIT, PROFILES.GEMINI_25_PRO],
-  targeted_rescan:      [PROFILES.GPT_55_ROADMAP, PROFILES.SONNET_46, PROFILES.GEMINI_25_PRO],
-  evidence_check:       [PROFILES.SONNET_46, PROFILES.GPT_55_EVIDENCE_CHECK],
-  evidence_adjudication: [PROFILES.OPUS_47],
-  synthesis:            [PROFILES.GPT_55_SYNTHESIS, PROFILES.GEMINI_25_PRO],
-  roadmap_synthesis:    [PROFILES.GPT_55_ROADMAP, PROFILES.GEMINI_31_PRO],
-  synthesis_escalation: [PROFILES.GPT_55_ESCALATION, PROFILES.GEMINI_31_PRO],
-  fact_check:           [PROFILES.SONNET_46, PROFILES.GEMINI_25_PRO],
-  fact_check_high:      [PROFILES.SONNET_46],
-  quality_gate:         [PROFILES.SONNET_46],
+  forensic_audit:       [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_AUDIT],
+  targeted_rescan:      [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ROADMAP],
+  evidence_check:       [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_EVIDENCE_CHECK],
+  evidence_adjudication: [PROFILES.GEMINI_31_PRO, PROFILES.GEMINI_25_PRO],
+  synthesis:            [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_SYNTHESIS],
+  roadmap_synthesis:    [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ROADMAP],
+  synthesis_escalation: [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ESCALATION],
+  fact_check:           [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_FACT_CHECK],
+  fact_check_high:      [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_FACT_CHECK_HIGH],
+  quality_gate:         [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_QUALITY_GATE],
 };
 
 export function modelsFor(stage: StageId): ModelProfile[] {
