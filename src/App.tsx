@@ -1286,7 +1286,7 @@ const App: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-display font-bold text-slate-200 mb-2 z-10 group-hover/drop:text-white transition-colors">Drop AI Transformation Artifacts</h3>
                         <p className="text-sm font-medium text-slate-400 z-10 group-hover/drop:text-emerald-200/70 transition-colors text-center max-w-md">
-                          Upload AI strategies, governance policies, service blueprints, data standards, platform architecture, value reviews, and operating model artifacts.
+                          DEMO - LOWERED THINKING - FULL FUNCTIONALITY -Upload AI strategies, governance policies, service blueprints, platform architecture, value reviews, and operating model artifacts.
                         </p>
                         <div className="z-10 mt-4 flex flex-wrap justify-center gap-1.5 max-w-md">
                           {['PDF', 'HTML', 'CSV', 'TSV', 'JSON', 'PNG', 'JPG'].map(fmt => (
