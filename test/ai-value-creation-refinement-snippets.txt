@@ -11,3 +11,15 @@ A service-area team selected one bounded AI value-stream pilot through a Kicksta
 <DOCUMENT name="data-as-fuel-service-context.txt">
 The Customer Service domain owns its AI-critical data product. The published contract defines semantic context, service meaning, freshness thresholds, lineage, access rules, source coverage, retrieval grounding, and the decisions and triggers each data element supports.
 </DOCUMENT>
+
+<DOCUMENT name="ai-cost-monitoring-without-readiness.txt">
+The technology team says it monitors AI costs in a monthly dashboard. The snippet does not show reports, owners, budget thresholds, model-routing decisions, quota controls, or value outcomes. This should score low because AI spend dashboards alone do not prove AI readiness.
+</DOCUMENT>
+
+<DOCUMENT name="ai-economics-with-operating-proof.txt">
+The AI platform team publishes token/model spend, latency, retrieval cost, cost-per-output, and cost per ticket resolved by service area. A model gateway routes premium models only to complex reasoning work, caches reusable prompts, enforces quotas, and triggers budget alerts. Portfolio owners compare value-vs-cost evidence and use kill, continue, pivot, or scale decisions after each Launch-and-Learn review.
+</DOCUMENT>
+
+<DOCUMENT name="ai-value-theater-antipattern.txt">
+Several pilots use premium models with large context windows and duplicate vector stores. Usage and spend are rising, but no baseline, cost per business outcome, ownership threshold, or post-release value measurement exists. This should appear as invisible token spend, premium model overuse, unbounded context growth, and AI Value Theater under existing B/C anti-patterns rather than a new domain.
+</DOCUMENT>

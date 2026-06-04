@@ -59,14 +59,14 @@
     "categories": {
       "Policy": "Written rules, standards, or formal documents that declare intent.",
       "Process": "Recurring human practices or workflows that are described as actually happening.",
-      "Operational": "Day-to-day AI delivery, review, support, or service ownership activities.",
-      "Automation": "Code, platform features, pipelines, tests, monitoring, or controls that enforce without manual effort.",
-      "Accountability": "Mechanisms that assign ownership, decision rights, obligations, or consequences.",
+      "Operational": "Day-to-day AI delivery, review, support, service ownership activities, AI usage reports, or AI spend dashboards.",
+      "Automation": "Code, platform features, pipelines, tests, monitoring, model routing, caching, quota enforcement, budget alerts, or controls that enforce without manual effort.",
+      "Accountability": "Mechanisms that assign ownership, decision rights, obligations, consequences, AI owners, application owners, or cost owners.",
       "Architecture": "Service, platform, integration, data, or business architecture evidence.",
       "Data": "Data ownership, quality, lineage, semantic context, retrieval, privacy, or access evidence.",
-      "Governance": "Risk, approval, auditability, responsible AI, security, legal, or compliance evidence.",
+      "Governance": "Risk, approval, auditability, responsible AI, security, legal, compliance, budget guardrail, model approval, or usage-policy evidence.",
       "Learning": "Pilot feedback, retrospectives, communities, playbooks, reuse, or competence flow evidence.",
-      "Value": "Impact statements, baselines, outcome measures, portfolio logic, or value realization evidence."
+      "Value": "Impact statements, baselines, outcome measures, unit economics, cost per business outcome, ROI/TVO, portfolio logic, or value realization evidence."
     },
     "tagging_rules": [
       "Every evidence_quote MUST carry exactly one allowed category.",
@@ -81,6 +81,8 @@
     "A policy does not prove governance is embedded",
     "A model registry does not prove release control",
     "A data catalog does not prove business meaning or retrieval quality",
-    "Guardrail claims require testing or operating evidence"
+    "Guardrail claims require testing or operating evidence",
+    "AI spend dashboards alone do not prove AI readiness",
+    "AI cost visibility is readiness evidence only when connected to value, ownership, routing, guardrails, and measurable outcomes"
   ]
 }

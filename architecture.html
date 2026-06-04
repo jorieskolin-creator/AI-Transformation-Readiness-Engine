@@ -261,6 +261,33 @@
   }
   .stage:last-child::after { display: none; }
 
+  .connector {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: -14px 0 0;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .why-card {
+    background: #FDFCF8;
+    border: 1px solid var(--rule-soft);
+    padding: 22px;
+  }
+
+  .why-card h4 {
+    color: var(--accent);
+  }
+
   .batch-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -304,6 +331,105 @@
   .rule-card h3 { color: var(--accent); }
   .rule-card.green h3 { color: var(--accent-2); }
   .rule-card.blue h3 { color: var(--accent-4); }
+
+  .persona {
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    padding: 30px;
+    margin-top: 24px;
+  }
+
+  .persona-head {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-bottom: 22px;
+  }
+
+  .persona-num {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .persona-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .persona-phase {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 6px;
+  }
+
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.25fr;
+    gap: 18px;
+  }
+
+  .persona-meta {
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 16px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  .persona-meta strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  dl.persona-meta {
+    margin: 0;
+  }
+
+  .persona-meta dt {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 5px;
+  }
+
+  .persona-meta dd {
+    margin: 0 0 18px;
+  }
+
+  .persona-rules {
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 16px;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+
+  .persona-rules h4 {
+    color: var(--accent);
+  }
+
+  .persona-rules ul {
+    margin: 12px 0 0;
+    padding-left: 18px;
+  }
+
+  .persona-rules li {
+    margin-bottom: 8px;
+  }
 
   .compact-list {
     margin: 18px 0 0;
@@ -352,6 +478,107 @@
   }
   .criteria-col li { margin-bottom: 9px; }
 
+  .batch-section {
+    border: 1px solid var(--rule);
+    background: #FDFCF8;
+    margin: 46px 0;
+  }
+
+  .batch-header {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 22px;
+    align-items: stretch;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .batch-letter {
+    display: grid;
+    place-items: center;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--serif);
+    font-size: 46px;
+    line-height: 1;
+  }
+
+  .batch-name {
+    padding: 24px 24px 20px 0;
+  }
+
+  .batch-name h3 {
+    margin-bottom: 4px;
+  }
+
+  .batch-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .criterion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .criterion-col {
+    padding: 24px;
+  }
+
+  .criterion-col + .criterion-col {
+    border-left: 1px solid var(--rule);
+  }
+
+  .criterion-col h4 {
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  .criterion {
+    border-top: 1px solid var(--rule-soft);
+    padding: 18px 0;
+  }
+
+  .criterion:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .criterion-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+
+  .criterion-name {
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .criterion-desc {
+    color: var(--ink-2);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .criterion-subs {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ink-3);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .criterion-subs li {
+    margin-bottom: 4px;
+  }
+
   .scale-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -373,6 +600,24 @@
   .scale-title {
     font-weight: 700;
     color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 28px 0;
+  }
+
+  .status-card {
+    background: #FDFCF8;
+    border: 1px solid var(--rule-soft);
+    padding: 18px;
+  }
+
+  .status-card strong {
+    display: block;
     margin-bottom: 8px;
   }
 
@@ -448,6 +693,64 @@
     color: var(--ink-2);
   }
 
+  .pullquote {
+    margin: 42px 0;
+    padding: 0 0 0 28px;
+    border-left: 4px solid var(--accent-2);
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.5vw, 32px);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  pre {
+    margin: 28px 0;
+    padding: 24px;
+    overflow-x: auto;
+    background: #151A22;
+    color: #F7F5F0;
+    border: 1px solid rgba(14, 27, 44, 0.45);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    background: #FDFCF8;
+    border: 1px solid var(--rule);
+    font-size: 14px;
+  }
+
+  th, td {
+    border: 1px solid var(--rule-soft);
+    padding: 12px 14px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper-2);
+  }
+
+  .tier {
+    border-top: 1px solid var(--rule-soft);
+    padding: 20px 0;
+  }
+
+  .tier strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+
   .model-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -473,8 +776,22 @@
   }
 
   @media (max-width: 900px) {
-    .intro-grid, .two-col, .criteria-pair, .metric-item, .model-grid {
+    .intro-grid, .two-col, .criteria-pair, .metric-item, .model-grid, .why-grid,
+    .persona-grid, .criterion-grid {
       grid-template-columns: 1fr;
+    }
+    .batch-header {
+      grid-template-columns: 1fr;
+    }
+    .batch-letter {
+      min-height: 72px;
+    }
+    .batch-name {
+      padding: 0 24px 24px;
+    }
+    .criterion-col + .criterion-col {
+      border-left: none;
+      border-top: 1px solid var(--rule);
     }
     .criteria-col + .criteria-col {
       border-left: none;
@@ -483,7 +800,7 @@
     .batch-grid {
       grid-template-columns: repeat(2, 1fr);
     }
-    .scale-grid {
+    .scale-grid, .status-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
@@ -494,7 +811,7 @@
     .stage, .rule-card, .criteria-col, .model-card {
       padding: 22px;
     }
-    .batch-grid, .scale-grid, .matrix {
+    .batch-grid, .scale-grid, .status-grid, .matrix {
       grid-template-columns: 1fr;
     }
     .metric-item {
@@ -508,18 +825,18 @@
 
 <section class="hero">
   <div class="container">
-    <div class="eyebrow">Vivicta · Engine Architecture · Internal Document</div>
+    <div class="eyebrow">AI Transformation Engine · Architecture Document</div>
     <h1>AI Transformation Assessment Engine — <em>Evidence-Gated Scanner Architecture</em></h1>
     <p class="lede">
-      The AI Transformation Engine is not an AI tool checklist. It is a <strong>structured analytical pipeline</strong> for testing whether an organization can sense, decide, design, deliver, govern, learn, and scale AI-enabled value creation safely. AI readiness is organizational and architectural readiness, not tool readiness.
+      This engine is not an AI tool checklist. It is a <strong>structured analytical pipeline</strong> for testing whether an organization can sense, decide, design, deliver, govern, learn, and scale AI-enabled value creation safely. AI readiness is organizational and architectural readiness, not tool readiness.
     </p>
     <div class="intro-grid">
       <div>
         <p>
-          The engine evaluates actual evidence: operating rhythm, decision rights, service-area ownership, AI lifecycle control, semantic data context, value framing, governance, safety, learning loops, and business architecture. Plans and slogans score low. Tool adoption alone does not prove readiness. Pilots become meaningful only when they are tied to value, safety, learning, and repeatable scaling.
+          The engine evaluates actual operating evidence: decision rights, service-area ownership, brownfield integration, AI lifecycle control, semantic data context, value framing, embedded governance, safety controls, learning loops, and business architecture. Plans and slogans score low. Tool adoption alone does not prove readiness. Pilots become meaningful only when they are tied to value, safety, learning, and repeatable scaling.
         </p>
         <p>
-          The design reuses the proven evidence-gated scanner mechanics: local parsing, parse-quality checks, DLP scanning, five parallel forensic audit batches, independent evidence verification, targeted rescans, deterministic metrics, confidence-gated synthesis, fact-checking, sanitation, and a GO/WARN/BLOCK quality gate.
+          The architecture is intentionally forensic. It uses local parsing, parse-quality checks, DLP scanning, five parallel audit batches, independent evidence verification, targeted rescans, deterministic metrics, confidence-gated synthesis, fact-checking, privacy-aware sanitation, and a GO/WARN/BLOCK quality gate.
         </p>
       </div>
       <div class="quote-panel">
@@ -531,30 +848,32 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">01</span> How the Engine Thinks</div>
+    <div class="section-tag"><span class="num">01</span> Pipeline</div>
     <h2>The Forensic Analysis Pipeline</h2>
     <p>
-      The pipeline is deliberately constrained. The scanner extracts candidate evidence. The verifier checks whether the source material really supports it. The mathematics layer scores only verified data. The synthesizer receives validated metrics as hard boundaries. The fact-checker and sanitation layer then remove unsupported claims before the report is shown.
+      The pipeline separates extraction, verification, scoring, synthesis, and validation. The scanner extracts candidate evidence. The verifier checks whether the source material really supports it. The mathematics layer scores only verified data. The synthesizer receives locked metrics as boundaries. The fact-checker and sanitation layer then remove unsupported or privacy-unsafe claims before the report is shown.
     </p>
 
     <div class="pipeline">
       <div class="stage" data-phase="0">
         <div class="stage-header">
-          <div class="stage-title">Phase 0 — Pre-Flight</div>
+          <div class="stage-title">Phase 0 — Pre-Flight Parsing and Safety</div>
           <div class="stage-meta">Local parsing · DLP scan · parse-quality metadata · relevance warnings</div>
         </div>
         <div class="stage-body">
-          Client-side parsers extract source material before model analysis. PDF text is extracted with page markers, sparse or visual PDF pages can be attached as visual evidence, tables are normalized into summaries, HTML is sanitized, and JSON is normalized. A DLP pass plus deterministic redaction catches secrets and sensitive identifiers. Low AI-transformation keyword signal is a warning when material is safe and parseable, not a hard rejection.
+          Client-side parsers extract source material before model analysis. PDF text is extracted with page markers, sparse or visual PDF pages can be carried as visual evidence, tables are normalized into summaries, HTML is sanitized, and JSON is normalized. A DLP pass plus deterministic redaction catches secrets and sensitive identifiers. Low AI-transformation keyword signal is a warning when material is parseable and safe, not a hard rejection.
         </div>
       </div>
 
+      <div class="connector">source pack becomes bounded assessment input</div>
+
       <div class="stage" data-phase="1">
         <div class="stage-header">
-          <div class="stage-title">Phase 1 — Forensic Audit</div>
-          <div class="stage-meta">5 parallel AI calls · claude-sonnet-4-6 primary · A-E batches</div>
+          <div class="stage-title">Phase 1 — Five-Batch Forensic Audit</div>
+          <div class="stage-meta">A-E batches · 50 criteria · 150 evidence questions</div>
         </div>
         <div class="stage-body">
-          Five batches run simultaneously. Each batch evaluates 10 criteria: 5 maturity indicators and 5 opposing anti-patterns. Each criterion has 3 evidence questions scored on a 0-3 scale. Every captured quote is tagged with one evidence category so the report can distinguish policy evidence from operational, architecture, data, governance, learning, or value evidence.
+          Five batches run across the AI Transformation domain model. Each batch evaluates 10 criteria: 5 maturity indicators and 5 opposing anti-patterns. Every criterion carries 3 evidence questions scored on a 0-3 evidence scale. Every captured quote is tagged with one evidence category so the report can distinguish policy evidence from operational, architecture, data, governance, learning, or value evidence.
           <div class="batch-grid">
             <div class="batch"><strong>Batch A</strong><span>Adaptive Operating Model</span></div>
             <div class="batch"><strong>Batch B</strong><span>Enterprise AI Architecture & Platform Readiness</span></div>
@@ -562,72 +881,94 @@
             <div class="batch"><strong>Batch D</strong><span>Data Foundations, Ownership & Accessibility</span></div>
             <div class="batch"><strong>Batch E</strong><span>Business Capability & Service Architecture</span></div>
           </div>
-          Total: 50 criteria · 150 evidence questions · 10-category evidence taxonomy · structured JSON output.
+          The forensic auditor extracts evidence; it does not write strategy. This keeps scoring independent from the desirability of a future roadmap.
         </div>
       </div>
+
+      <div class="connector">scanner output is provisional until independently checked</div>
 
       <div class="stage" data-phase="1" style="border-style: dashed;">
         <div class="stage-header">
-          <div class="stage-title">Phase 1.5 — Evidence Check</div>
-          <div class="stage-meta">gemini-3.1-pro-preview · independent verifier · targeted rescan budget</div>
+          <div class="stage-title">Phase 1.5 — Independent Evidence Check and Targeted Rescan</div>
+          <div class="stage-meta">supported · weak · unsupported · missing · tested absent</div>
         </div>
         <div class="stage-body">
-          Each completed A-E batch is checked against the raw source material before Phase 2 calculates metrics. The verifier classifies every item as supported, weak, unsupported, or missing. Anti-pattern absence is separately labeled as confirmed present, partial finding, tested absent, or not assessed. When evidence is weak, unclear, unsupported, or over-scored, the engine can independently trigger a targeted rescan and budget that second look toward the highest-value evidence gaps instead of chasing every weak signal.
+          Each completed A-E batch is checked against the raw source material before Phase 2 calculates metrics. The verifier classifies each forwarded claim as supported, weak, unsupported, or missing. Anti-pattern absence is separately labeled as confirmed present, partial finding, tested absent, or not assessed. When evidence is weak, unclear, unsupported, missing, or likely over-scored, the engine can independently trigger a targeted rescan and spend its rescan budget where a narrower second look matters most.
         </div>
       </div>
 
+      <div class="connector">verified evidence crosses the deterministic firewall</div>
+
       <div class="stage" data-phase="2">
         <div class="stage-header">
-          <div class="stage-title">Phase 2 — Mathematical Validation</div>
-          <div class="stage-meta">No AI · deterministic scoring · evidence firewall</div>
+          <div class="stage-title">Phase 2 — Deterministic Metric Firewall</div>
+          <div class="stage-meta">No generative AI · score caps · evidence density · anti-pattern semantics</div>
         </div>
         <div class="stage-body">
-          This is the firewall between evidence extraction and strategy. Evidence-checked scores are processed through deterministic arithmetic to produce readiness, maturity depth, anti-pattern burden, anti-pattern clearance, anti-pattern coverage, delivery integrity, evidence density, domain scores, confirmed findings, verified absences, not-assessable anti-patterns, and silent areas. Sparse evidence caps the result.
+          Phase 2 applies arithmetic to evidence-checked audit logs. It produces readiness, maturity depth, anti-pattern burden, anti-pattern clearance, anti-pattern coverage, delivery integrity, evidence density, domain scores, confirmed findings, verified absences, not-assessable anti-patterns, and silent areas. Sparse evidence caps the result. Missing evidence never becomes hidden optimism.
         </div>
       </div>
+
+      <div class="connector">strategy receives locked metrics, not raw model confidence</div>
 
       <div class="stage" data-phase="3">
         <div class="stage-header">
           <div class="stage-title">Phase 3 — Confidence-Gated Synthesis</div>
-          <div class="stage-meta">sonnet summary · opus roadmap · LOW-confidence fast path</div>
+          <div class="stage-meta">findings mode · roadmap mode · Kickstart · Building the System</div>
         </div>
         <div class="stage-body">
-          Outputs depend on confidence. Summary and diagnosis are separated from roadmap planning. HIGH and MEDIUM confidence can produce planning and a four-phase roadmap. LOW confidence is an autonomous stop condition: the engine deliberately returns findings mode only, with evidence-backed findings, missing evidence, validation plan, NO_GO, and an empty directive roadmap. This avoids spending time and trust on advice the evidence cannot support.
+          Output depends on confidence. HIGH and MEDIUM confidence can produce a planning decision and a four-phase roadmap. LOW confidence is an autonomous stop condition: the engine returns findings mode only, with evidence-backed findings, missing evidence, validation actions, NO_GO, and an empty directive roadmap. This avoids spending time and trust on advice the evidence cannot carry.
         </div>
       </div>
 
+      <div class="connector">draft strategy is independently challenged</div>
+
       <div class="stage" data-phase="3" style="border-style: dashed;">
         <div class="stage-header">
-          <div class="stage-title">Fact-Check, Sanitation & Quality Gate</div>
-          <div class="stage-meta">gpt-5.5 · independent validation · GO / WARN / BLOCK</div>
+          <div class="stage-title">Fact-Check, Sanitation, and Quality Gate</div>
+          <div class="stage-meta">claim support · privacy readability · tactic validation · GO / WARN / BLOCK</div>
         </div>
         <div class="stage-body">
-          GPT-5.5 checks whether claims can be traced to source evidence or validated metrics. Unsupported strategy fragments are removed, rewritten, quarantined, or surfaced in the hygiene appendix. The quality gate then aggregates delivery integrity, evidence density, grounding, fact-check status, and sanitation results into a visible GO/WARN/BLOCK decision.
+          The fact-check layer tests whether claims can be traced to source evidence or validated metrics. Unsupported strategy fragments are removed, rewritten, or quarantined. Privacy sanitation rewrites report-facing prose into fluent anonymized language. The quality gate aggregates delivery integrity, evidence density, grounding, fact-check status, tactic validity, and sanitation results into a visible GO/WARN/BLOCK decision.
         </div>
       </div>
 
       <div class="stage" data-phase="output">
         <div class="stage-header">
-          <div class="stage-title">Interactive Dashboard + Standalone HTML Export</div>
-          <div class="stage-meta">Final deliverable · persona switcher · findings mode · source coverage gaps</div>
+          <div class="stage-title">Interactive Dashboard and Standalone HTML Export</div>
+          <div class="stage-meta">persona switcher · source coverage gaps · appendix diagnostics</div>
         </div>
         <div class="stage-body">
-          The artifact includes the scorecard, domain breakdown, evidence check section, source coverage gaps, anti-pattern semantics, persona-specific summaries, roadmap or findings mode, and quality appendix. The report ships with its own audit trail attached.
+          The final artifact includes the scorecard, A-E domain diagnosis, evidence check section, source coverage gaps, anti-pattern semantics, persona-specific summaries, roadmap or findings mode, quality appendix, and report import/export data. The report carries its own audit trail.
         </div>
       </div>
     </div>
 
     <h3 style="margin-top: 64px;">Why This Order Matters</h3>
-    <div class="two-col">
-      <div>
-        <p><strong>The forensic auditor extracts evidence; it does not recommend.</strong> This prevents confirmation bias where the system scores evidence higher because a strategy would be attractive.</p>
-        <p><strong>The evidence checker treats scanner output as provisional.</strong> Unsupported claims are downgraded before deterministic scoring can see them.</p>
-        <p><strong>Phase 2 mathematics cannot be charmed by prose.</strong> Readiness is capped by evidence density and anti-pattern absence is positive only when tested.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <h4>Extraction is separated from recommendation</h4>
+        <p>The forensic auditor cannot inflate scores because a future roadmap would sound attractive.</p>
       </div>
-      <div>
-        <p><strong>The Knowledge Base is not customer evidence.</strong> It can inform rubric language and roadmap tactics, but it cannot prove the customer’s current state.</p>
-        <p><strong>The strategy writer cannot rewrite the diagnosis.</strong> It receives locked metrics and must stay inside the confidence bracket.</p>
-        <p><strong>The model that drafts the roadmap does not grade its own work.</strong> Independent validation and sanitation sit after synthesis.</p>
+      <div class="why-card">
+        <h4>Verification happens before scoring</h4>
+        <p>Unsupported claims are downgraded or rescanned before deterministic metrics can see them.</p>
+      </div>
+      <div class="why-card">
+        <h4>Mathematics caps optimism</h4>
+        <p>Readiness is bounded by evidence density, anti-pattern coverage, and delivery integrity.</p>
+      </div>
+      <div class="why-card">
+        <h4>Reference KB is not customer proof</h4>
+        <p>The Knowledge Base can shape rubric interpretation and tactics, but it cannot prove current state.</p>
+      </div>
+      <div class="why-card">
+        <h4>The synthesizer cannot rewrite diagnosis</h4>
+        <p>Phase 3 receives locked scores, gaps, and confidence bracket as hard boundaries.</p>
+      </div>
+      <div class="why-card">
+        <h4>The engine can refuse to plan</h4>
+        <p>LOW-confidence runs are routed to findings mode rather than polished but unsafe advice.</p>
       </div>
     </div>
   </div>
@@ -684,37 +1025,134 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">03</span> Roles and Guardrails</div>
-    <h2>Three Personas. One Evidence Contract.</h2>
+    <div class="section-tag"><span class="num">03</span> Scanner Personas</div>
+    <h2>Three Roles. Three Constraints.</h2>
     <p>
-      The report has three executive lenses, but the facts must agree. The Transformation Lead needs operating-model truth. The CIO/CTO or CDAO needs architecture, platform, data, and governance implications. The Business / Service Area Owner needs impact, adoption, ownership, and value-stream consequences.
+      The engine behaves like a small assessment team. Each role has a bounded mandate, a different stage responsibility, and a different failure mode. The roles are not decorative prompt personas; they are control surfaces that keep parsing, scoring, synthesis, and validation separate.
     </p>
 
-    <div class="two-col">
-      <div class="rule-card">
-        <h3>Forensic Auditor</h3>
-        <ul class="compact-list">
-          <li>Extract explicit proof of AI transformation capability from the submitted material.</li>
-          <li>Do not give the benefit of the doubt. Plans, slogans, and ambitions score 1 at most.</li>
-          <li>Tool presence is not readiness. A model, platform, chatbot, or pilot must show operating proof.</li>
-          <li>Silence is data. If a document is silent on a criterion, score the criterion 0 and name the absence.</li>
-          <li>Document-type signatures matter. A narrow policy is allowed to be silent on architecture, data, or value realization.</li>
-        </ul>
+    <div class="persona">
+      <div class="persona-head">
+        <div class="persona-num">01</div>
+        <div>
+          <div class="persona-title">Security Pre-Flight and Input Controller</div>
+          <div class="persona-phase">Phase 0 · DLP, parsing, source readiness, relevance warnings</div>
+        </div>
       </div>
-      <div class="rule-card green">
-        <h3>Transformation Strategist</h3>
-        <ul class="compact-list">
-          <li>Use Phase 2 metrics and checked findings as the source of truth.</li>
-          <li>Do not invent scores, numbers, capabilities, owners, maturity, or business impact.</li>
-          <li>Use the Knowledge Base only for roadmap mechanisms and tactic IDs, never as current-state proof.</li>
-          <li>LOW confidence means findings mode: no directive roadmap, no tactic prescriptions, and planning decision NO_GO.</li>
-          <li>Use active language for allowed roadmap actions: establish, implement, test, route, govern, integrate, measure.</li>
-        </ul>
+      <div class="persona-grid">
+        <dl class="persona-meta">
+          <dt>Role</dt>
+          <dd>DLP gatekeeper, parser supervisor, and relevance sentinel. It protects the pipeline from unsafe input while preserving usable low-signal material for evidence-gated assessment.</dd>
+          <dt>Behaviour</dt>
+          <dd>Conservative about safety, careful about relevance. Secrets, tokens, and sensitive identifiers are redacted before model analysis. Low AI-keyword density becomes a warning rather than a rejection when the material is safe and parseable.</dd>
+          <dt>Model</dt>
+          <dd><code>gemini-3.5-flash</code> primary, with <code>gemini-2.5-pro</code> and <code>gpt-5.5</code> fallback support. Local PDF.js extraction, CSV/TSV parsing, HTML/JSON handling, parse-quality checks, and deterministic redaction happen outside the model.</dd>
+          <dt>Decision</dt>
+          <dd>Hard blocks are reserved for unsafe, unreadable, unsupported, over-limit, or corrupt files. Generic IT/process material can pass into the scanner as adjacent context; the evidence pipeline later decides whether it proves AI Transformation readiness.</dd>
+        </dl>
+        <div class="persona-rules" style="grid-column: span 2;">
+          <h4>AI Transformation Signal Scan</h4>
+          <pre style="font-size: 11.5px; margin: 0;"><code><span style="color: #E8B86D; font-weight: 600;">[1] Core AI Transformation Vocabulary</span>
+AI operating model, AI governance, AI lifecycle,
+agent, agentic workflow, autonomous decision,
+human-in-the-loop, prompt, model gateway,
+evaluation, groundedness, hallucination, RAG,
+retrieval quality, red teaming, guardrail,
+AI value hypothesis, Impact Statement,
+Launch-and-Learn, service area ownership
+
+<span style="color: #E8B86D; font-weight: 600;">[2] Architecture, Data, and Safety Signals</span>
+API boundary, brownfield integration, service
+boundary, model registry, prompt registry,
+rollback, observability, drift, lineage,
+semantic context, data product, data access,
+privacy, masking, purpose limitation, Agent
+Behavioral Contract, Secure-by-Design
+
+<span style="color: #E8B86D; font-weight: 600;">[3] Value-Creation and Operating Signals</span>
+service blueprint, value stream, capability map,
+service catalog, decision rights, portfolio
+learning, kill / continue / pivot, business case,
+value realization, adoption, learning loop,
+Sense &amp; Respond, platform-as-product,
+Kickstart, Building the System</code></pre>
+          <p style="font-size: 13px; color: var(--ink-2); margin-top: 12px; font-style: italic;">
+            Keyword signal estimates likely source richness; it does not score readiness. Generic operating-model documents can still be valuable when they prove decision rights, service ownership, value streams, or governance mechanisms that directly connect to AI Transformation criteria.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="persona">
+      <div class="persona-head">
+        <div class="persona-num">02</div>
+        <div>
+          <div class="persona-title">AI Transformation Forensic Auditor</div>
+          <div class="persona-phase">Phase 1 · A-E batch scoring · maturity and anti-pattern extraction</div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <dl class="persona-meta">
+          <dt>Role</dt>
+          <dd>A forensic investigator who treats every uploaded document as an untrusted source. It extracts only what can be traced back to source text or selected visual evidence.</dd>
+          <dt>Per-Batch Behaviour</dt>
+          <dd>Receives 10 criteria definitions per batch: 5 maturity indicators and 5 anti-patterns. Each criterion has 3 evidence questions. It returns structured JSON with score, reasoning, evidence category, quote, source reference, silent-area notes, and source gaps.</dd>
+          <dt>Model · Concurrency</dt>
+          <dd><code>claude-sonnet-4-6</code> primary in the real routing. The fallback chain is <code>gpt-5.5</code> audit profile, then <code>gemini-2.5-pro</code>. Five A-E batches run concurrently; evidence check runs independently after each batch completes.</dd>
+        </dl>
+        <div class="persona-rules" style="grid-column: span 2;">
+          <h4>Behavioural Rules</h4>
+          <ul>
+            <li>You are an AI Transformation Forensic Auditor. Your job is to extract explicit proof of AI-enabled value-creation readiness from uploaded source material.</li>
+            <li>Do not give the benefit of the doubt. Plans, slogans, aspirations, and future-tense claims score 1 at most.</li>
+            <li>Tool presence is not readiness. A chatbot, model gateway, platform, RAG index, or pilot must show operating proof before it can support higher scores.</li>
+            <li>General IT/process maturity is adjacent context unless it directly proves AI operating rhythm, AI architecture, data readiness, governance, safety, value realization, or service-area AI ownership.</li>
+            <li>Silence is data. If the source is silent on a criterion, score it 0 and record the missing evidence instead of balancing the audit.</li>
+            <li>Every captured evidence quote must be tagged as Policy, Process, Operational, Automation, Accountability, Architecture, Data, Governance, Learning, or Value.</li>
+            <li>Anti-pattern absence is not automatically positive. It must be classified as confirmed present, partial finding, tested absent, or not assessed.</li>
+            <li>Scanner output is provisional. Evidence-check can downgrade scores and request targeted rescans when raw material does not support the forwarded finding.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="persona">
+      <div class="persona-head">
+        <div class="persona-num">03</div>
+        <div>
+          <div class="persona-title">Strategic Synthesizer and Roadmap Planner</div>
+          <div class="persona-phase">Phase 3 · persona summaries · findings mode · roadmap · quality narrative</div>
+        </div>
+      </div>
+      <div class="persona-grid">
+        <dl class="persona-meta">
+          <dt>Role</dt>
+          <dd>A transformation architect constrained by confidence. At high or medium confidence it can structure a roadmap; at low confidence it produces findings, missing evidence, and validation needs instead of directive advice.</dd>
+          <dt>What It Receives</dt>
+          <dd>Locked Phase 2 metrics, evidence-checked findings, source coverage gaps, anti-pattern semantics, verified absences, the AI Transformation tactic database, and persona lenses for Transformation Lead, CIO/CTO or CDAO, and Business / Service Area Owner.</dd>
+          <dt>What It Produces</dt>
+          <dd>Evidence-only persona summaries, evidence summary, A-E domain diagnosis, planning decision, visual scorecard, findings mode when needed, and a four-phase roadmap split between Kickstart and Building the System when confidence allows.</dd>
+          <dt>Model</dt>
+          <dd><code>claude-sonnet-4-6</code> writes evidence summaries and diagnosis. Escalation and roadmap planning use <code>claude-opus-4-7</code> first, with <code>gpt-5.5</code> and <code>gemini-3.1-pro-preview</code> as fallbacks.</dd>
+        </dl>
+        <div class="persona-rules" style="grid-column: span 2;">
+          <h4>Behavioural Rules</h4>
+          <ul>
+            <li>Source of truth: every diagnostic claim must trace to Phase 2 metrics, evidence-checked findings, or uploaded source material.</li>
+            <li>Do not invent owners, scores, numbers, readiness level, business value, adoption, controls, or maturity.</li>
+            <li>LOW confidence means findings mode: no directive roadmap, no tactic prescriptions, planning decision NO_GO, and explicit missing-evidence guidance.</li>
+            <li>Use the Knowledge Base only as rubric, false-positive, risk-framing, and tactic context. It must never become current-state proof, evidence quote, or visible source reference.</li>
+            <li>Write in fluent anonymized prose from the start. Do not mention company names, organization names, Knowledge Base document names, source labels, or placeholder redaction tokens.</li>
+            <li>Roadmap actions must follow Kickstart then Building the System: diagnose, select domain, run vertical slice, validate value/safety, then integrate architecture, platform, data, teams, rhythm, governance, and learning.</li>
+            <li>Every prescribed tactic action cites a valid tactic ID only when the locked finding matches the tactic pattern. Generic evidence-gathering actions may omit tactic IDs.</li>
+            <li>Persona summaries must agree on facts; they differ only in lens, vocabulary, and emphasis.</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="callout">
-      The engine is intentionally strict because AI transformation self-assessments are usually over-optimistic. Organizations often have tools, pilots, and ambition before they have ownership, data meaning, release control, service architecture, or value proof.
+      The report has three executive lenses, but the facts must agree. The Transformation Lead needs operating-model truth. The CIO/CTO or CDAO needs architecture, platform, data, and governance implications. The Business / Service Area Owner needs impact, adoption, ownership, and value-stream consequences.
     </div>
   </div>
 </section>
@@ -746,6 +1184,13 @@
       </div>
     </div>
 
+    <div class="status-grid">
+      <div class="status-card"><strong>Confirmed finding</strong>The anti-pattern is directly supported by source evidence.</div>
+      <div class="status-card"><strong>Partial finding</strong>The source shows credible symptoms but not enough proof for full severity.</div>
+      <div class="status-card"><strong>Tested absent</strong>The source meaningfully covers the risk area and shows the blocker is not present.</div>
+      <div class="status-card"><strong>Not assessed</strong>The source does not test the issue. Absence is unknown, not good.</div>
+    </div>
+
     <p>
       Anti-pattern absence is positive only when verified. A zero anti-pattern score can mean tested absent, which is useful evidence of clearance, or not assessed, where the source simply did not cover the issue. Low burden with low coverage means unknown, not excellent.
     </p>
@@ -754,134 +1199,128 @@
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">05</span> The Domain Pack</div>
+    <div class="section-tag"><span class="num">05</span> Domain Pack</div>
     <h2>The 50-Criteria AI Transformation Knowledge Base</h2>
     <p>
       Five domains. Each domain holds 5 maturity indicators paired against 5 anti-patterns. Each criterion carries 3 evidence questions. The result is a 50-criterion, 150-question scanner for whether AI can become safe, measurable, service-owned value creation.
     </p>
+    <div class="callout">
+      <strong>Embedded AI economics lens.</strong> GenAI and AI cost management is not a separate Domain F in this engine. It is treated as supporting readiness evidence inside the existing A-E model: B3/B5 cover observability, routing, quota, caching, and platform cost controls; C2/C5 cover unit economics, value-vs-cost evidence, budgeting, forecasting, and investment decisions; A/D/E add lighter checks for demand cost profile, hidden review cost, retrieval cost, and cost-to-serve traceability. AI spend dashboards alone do not prove AI readiness.
+    </div>
 
-    <div class="criteria-pair">
-      <div class="criteria-col maturity">
-        <div class="stream">Stream A · Batch A · Adaptive Operating Model</div>
-        <h3>Maturity Indicators</h3>
-        <ul>
-          <li><strong>A1 — AI Operating Rhythm & Decision Rights:</strong> strategy, demand intake, delivery, learning, and governance are connected through clear cadence and ownership.</li>
-          <li><strong>A2 — Adaptive AI Demand Routing:</strong> predictable, iterative, exploratory, and transformative work are routed through appropriate delivery paths.</li>
-          <li><strong>A3 — Evidence-Based Launch-and-Learn:</strong> Kickstart validation, bounded vertical slices, and learning loops feed Building-the-System scaling.</li>
-          <li><strong>A4 — Shared Learning Architecture:</strong> communities, chapters, guilds, incidents, and pilot lessons create reusable competence.</li>
-          <li><strong>A5 — Human-AI Work Redesign:</strong> roles, handoffs, review points, and human-in-the-loop responsibilities are redesigned around higher-value work.</li>
-        </ul>
+    <div class="batch-section">
+      <div class="batch-header">
+        <div class="batch-letter">A</div>
+        <div class="batch-name">
+          <h3>Adaptive Operating Model</h3>
+          <div class="batch-meta">Can the organization route, decide, fund, learn, and scale AI work through an adaptable operating rhythm?</div>
+        </div>
       </div>
-      <div class="criteria-col antipattern">
-        <div class="stream">Stream B · Batch A · Adaptive Operating Model</div>
-        <h3>Anti-Patterns</h3>
-        <ul>
-          <li><strong>AP-A1 — AI Decision Fog & Governance Fat:</strong> decisions stall or repeat across forums because ownership, decision rights, risk triage, and escalation boundaries are unclear.</li>
-          <li><strong>AP-A2 — One-Size-Fits-All AI Delivery:</strong> standardized automation, exploratory GenAI, and transformative service change are forced through the same project model regardless of uncertainty.</li>
-          <li><strong>AP-A3 — Pilot Purgatory:</strong> pilots remain disconnected from production, service-area ownership, safety evidence, reusable platform capabilities, and measurable value outcomes.</li>
-          <li><strong>AP-A4 — Fragmented AI Knowledge & Hero Culture:</strong> expertise sits with isolated specialists, mistakes repeat, and the organization depends on individual heroics instead of shared learning systems.</li>
-          <li><strong>AP-A5 — Digital Taylorism & Workslop:</strong> AI accelerates fragmented tasks while increasing rework, checking, coordination load, low-quality output, or activity-based management.</li>
-        </ul>
+      <div class="criterion-grid">
+        <div class="criterion-col">
+          <h4>Maturity Indicators</h4>
+          <div class="criterion"><div class="criterion-id">A1</div><div class="criterion-name">AI Operating Rhythm & Decision Rights</div><div class="criterion-desc">Strategy, demand intake, delivery, learning, and governance are connected through clear cadence and ownership.</div><ol class="criterion-subs"><li>Is there a documented AI operating rhythm?</li><li>Are decision rights assigned across business, IT, data, architecture, security, legal, and service areas?</li><li>Are decisions traceable through cadence, approval records, backlog movement, or escalation logs?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">A2</div><div class="criterion-name">Adaptive AI Demand Routing</div><div class="criterion-desc">AI demand is classified and routed according to uncertainty, risk, value profile, cost profile, capacity, competence, and service ownership.</div><ol class="criterion-subs"><li>Are demands classified as predictable, standardized, iterative, exploratory, or transformative?</li><li>Are different delivery paths used for different demand types?</li><li>Is routing connected to capacity, competence, service ownership, value, cost profile, and risk level?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">A3</div><div class="criterion-name">Evidence-Based Launch-and-Learn Model</div><div class="criterion-desc">Bounded vertical slices validate value and safety before scaling.</div><ol class="criterion-subs"><li>Does transformation start from a safe experiment or vertical slice?</li><li>Are pilot learnings used to refine operating model, architecture, data, and governance?</li><li>Is there a transition from Kickstart validation to Building-the-System scaling?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">A4</div><div class="criterion-name">Shared Learning Architecture</div><div class="criterion-desc">AI learning spreads through communities, chapters, guilds, playbooks, incidents, and reusable practices.</div><ol class="criterion-subs"><li>Are competence structures used to spread AI learning?</li><li>Are pilots, failures, red-team results, and incidents converted into practices?</li><li>Do business, AI, data, platform, and service teams learn together?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">A5</div><div class="criterion-name">Human-AI Work Redesign</div><div class="criterion-desc">AI changes work design, roles, handoffs, review points, review cost, rework cost, and human-in-the-loop responsibilities.</div><ol class="criterion-subs"><li>Are initiatives designed to reallocate human capacity toward higher-value work?</li><li>Are roles, handoffs, exception paths, and review points redesigned?</li><li>Are employee experience, cognitive load, hidden review or rework cost, quality, and customer impact measured?</li></ol></div>
+        </div>
+        <div class="criterion-col">
+          <h4>Anti-Patterns</h4>
+          <div class="criterion"><div class="criterion-id">AP-A1</div><div class="criterion-name">AI Decision Fog & Governance Fat</div><div class="criterion-desc">Decisions stall or repeat because ownership, boundaries, and escalation logic are unclear.</div><ol class="criterion-subs"><li>Are AI initiatives delayed because nobody clearly owns decisions?</li><li>Do separate forums create repeated approvals instead of flow?</li><li>Are ordinary design decisions escalated because boundaries are unclear?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-A2</div><div class="criterion-name">One-Size-Fits-All AI Delivery</div><div class="criterion-desc">Standardized automation, exploratory GenAI, and transformational service change are forced through the same project model without value, risk, or cost-profile routing.</div><ol class="criterion-subs"><li>Are all AI initiatives forced through one delivery model?</li><li>Are exploratory cases managed with rigid plans that assume known requirements?</li><li>Are predictable automation and uncertain agentic work mixed without value, risk, or cost-profile routing logic?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-A3</div><div class="criterion-name">Pilot Purgatory</div><div class="criterion-desc">Pilots remain detached from production, ownership, safety, reusable learning, and value proof.</div><ol class="criterion-subs"><li>Do pilots remain disconnected from production, ownership, or outcomes?</li><li>Are pilots called successful without integration, safety, adoption, or value proof?</li><li>Does each use case start from scratch instead of reusing patterns?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-A4</div><div class="criterion-name">Fragmented AI Knowledge & Hero Culture</div><div class="criterion-desc">AI know-how sits with isolated experts and mistakes repeat because learning is not institutionalized.</div><ol class="criterion-subs"><li>Is knowledge concentrated in a few experts or isolated teams?</li><li>Are mistakes repeated because learning is not institutionalized?</li><li>Do teams depend on individual heroics instead of shared practices?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-A5</div><div class="criterion-name">Digital Taylorism & Workslop</div><div class="criterion-desc">AI makes fragmented tasks faster while increasing hidden review cost, rework, checking, coordination, and low-quality output.</div><ol class="criterion-subs"><li>Is AI used mainly to speed fragmented tasks?</li><li>Does AI create extra checking, rework, hidden review cost, hidden coordination, or workslop?</li><li>Are people measured on activity rather than impact, learning, quality, and customer value?</li></ol></div>
+        </div>
       </div>
     </div>
 
-    <div class="criteria-pair">
-      <div class="criteria-col maturity">
-        <div class="stream">Stream A · Batch B · Enterprise AI Architecture & Platform Readiness</div>
-        <h3>Maturity Indicators</h3>
-        <ul>
-          <li><strong>B1 — Service-Boundary-Based AI Integration:</strong> brownfield systems are wrapped through stable APIs, events, connectors, and documented failure modes.</li>
-          <li><strong>B2 — AI Lifecycle & Release Control:</strong> models, prompts, agents, tools, datasets, configurations, and evaluations are versioned and releasable.</li>
-          <li><strong>B3 — AI Observability & Evaluation System:</strong> production AI is monitored for quality, safety, cost, latency, groundedness, drift, and business impact.</li>
-          <li><strong>B4 — Secure-by-Design AI Trust & Safety Layer:</strong> red teaming, guardrails, access controls, escalation, and Agent Behavioral Contracts are embedded.</li>
-          <li><strong>B5 — AI Platform as Product:</strong> shared AI services, model gateways, deployment templates, and developer experience are managed as reusable platform products.</li>
-        </ul>
-      </div>
-      <div class="criteria-col antipattern">
-        <div class="stream">Stream B · Batch B · Enterprise AI Architecture & Platform Readiness</div>
-        <h3>Anti-Patterns</h3>
-        <ul>
-          <li><strong>AP-B1 — Legacy Labyrinth & Brittle AI Connectivity:</strong> AI depends on manual exports, copied files, screen scraping, fragile connectors, unclear service boundaries, or brownfield dependencies nobody owns.</li>
-          <li><strong>AP-B2 — Notebook-to-Production / Prompt-to-Production Chaos:</strong> models, prompts, agents, datasets, or tools reach production without versioning, review, reproducibility, evaluation, or rollback.</li>
-          <li><strong>AP-B3 — Black-Box AI Operations:</strong> drift, hallucinations, retrieval degradation, value erosion, unsafe outputs, or reliability failures are discovered through complaints instead of Sense & Respond monitoring.</li>
-          <li><strong>AP-B4 — Safety Theater & Unbounded Autonomy:</strong> guardrails are trusted without red-team evidence, agents have unclear behavioral limits, and human escalation is bolted on too late.</li>
-          <li><strong>AP-B5 — Tool Fragmentation & Hidden Factory:</strong> each project assembles its own ingestion, hosting, governance, evaluation, monitoring, and maintenance stack without shared platform standards.</li>
-        </ul>
+    <div class="batch-section">
+      <div class="batch-header"><div class="batch-letter">B</div><div class="batch-name"><h3>Enterprise AI Architecture & Platform Readiness</h3><div class="batch-meta">Can AI be integrated, deployed, observed, secured, and reused through reliable technical and platform foundations?</div></div></div>
+      <div class="criterion-grid">
+        <div class="criterion-col">
+          <h4>Maturity Indicators</h4>
+          <div class="criterion"><div class="criterion-id">B1</div><div class="criterion-name">Service-Boundary-Based AI Integration</div><div class="criterion-desc">AI systems integrate through stable interfaces rather than brittle point connections.</div><ol class="criterion-subs"><li>Are integrations built through APIs, service boundaries, events, or governed connectors?</li><li>Are legacy systems wrapped before agents depend on them?</li><li>Are ownership, versioning, dependencies, and failure modes documented?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">B2</div><div class="criterion-name">AI Lifecycle & Release Control</div><div class="criterion-desc">Models, prompts, agents, tools, datasets, configurations, and evaluations are versioned and releasable.</div><ol class="criterion-subs"><li>Are models, prompts, agents, tools, datasets, configurations, and evaluations versioned?</li><li>Is there a build-test-deploy-monitor-rollback lifecycle?</li><li>Can production behavior be traced to model, prompt, data, tool, and release version?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">B3</div><div class="criterion-name">AI Observability & Evaluation System</div><div class="criterion-desc">Production AI is monitored for quality, safety, token/model spend, latency, routing performance, retrieval cost, cost-per-output, groundedness, drift, and business impact.</div><ol class="criterion-subs"><li>Are quality, safety, token/model spend, latency, routing performance, retrieval cost, cost-per-output, groundedness, drift, and business impact monitored?</li><li>Are offline and online evaluation methods defined?</li><li>Do alerts trigger when performance, data freshness, value, cost, or safety thresholds degrade?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">B4</div><div class="criterion-name">Secure-by-Design AI Trust & Safety Layer</div><div class="criterion-desc">Guardrails, access controls, red teaming, escalation, and behavioral boundaries are built into service design.</div><ol class="criterion-subs"><li>Are prompt injection, leakage, toxic content, unsafe tool use, and adversarial scenarios tested?</li><li>Are guardrails, filters, access controls, and escalation paths embedded?</li><li>Is there an Agent Behavioral Contract defining forbidden behaviors?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">B5</div><div class="criterion-name">AI Platform as Product</div><div class="criterion-desc">Shared AI capabilities include model gateways, routing, caching, quotas, budget alerts, data patterns, templates, and cost-aware developer experience.</div><ol class="criterion-subs"><li>Are shared AI services, model gateways, routing, caching, quota controls, budget alerts, data patterns, and templates offered as platform products?</li><li>Are platform teams accountable to service-area teams as internal customers?</li><li>Are adoption, flow, reliability, cost-aware developer experience, and value enablement measured?</li></ol></div>
+        </div>
+        <div class="criterion-col">
+          <h4>Anti-Patterns</h4>
+          <div class="criterion"><div class="criterion-id">AP-B1</div><div class="criterion-name">Legacy Labyrinth & Brittle AI Connectivity</div><div class="criterion-desc">AI depends on manual exports, copied files, scraping, fragile connectors, or unclear service boundaries.</div><ol class="criterion-subs"><li>Do use cases depend on manual exports, screen scraping, or fragile connectors?</li><li>Does changing one system break another because boundaries are unclear?</li><li>Are integrations created project-by-project with no reusable architecture?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-B2</div><div class="criterion-name">Notebook-to-Production / Prompt-to-Production Chaos</div><div class="criterion-desc">AI artifacts reach production without reproducible release control.</div><ol class="criterion-subs"><li>Are models, prompts, or agents moved into production without controls?</li><li>Are prompt changes made manually without review or rollback?</li><li>Is it impossible to reproduce why an AI system behaved a certain way?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-B3</div><div class="criterion-name">Black-Box AI Operations</div><div class="criterion-desc">Failures, invisible token spend, unmonitored model usage, cost surprises, and unsafe behavior are discovered through complaints or financial surprises.</div><ol class="criterion-subs"><li>Are failures discovered mainly through complaints or business damage?</li><li>Are there no baseline metrics for accuracy, token/model spend, cost-per-output, value, safety, or reliability?</li><li>Are drift, retrieval degradation, hallucinations, cost anomalies, or unsafe outputs not systematically detected?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-B4</div><div class="criterion-name">Safety Theater & Unbounded Autonomy</div><div class="criterion-desc">Guardrails exist on paper while agents lack tested behavioral limits and escalation boundaries.</div><ol class="criterion-subs"><li>Are guardrails trusted without test evidence?</li><li>Can agents access tools, systems, or data without clear boundaries?</li><li>Are safety reviews late gates instead of built into service design?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-B5</div><div class="criterion-name">Tool Fragmentation & Hidden Factory</div><div class="criterion-desc">Teams recreate ingestion, model access, embeddings, vector stores, retrieval, hosting, governance, evaluation, and monitoring stacks separately.</div><ol class="criterion-subs"><li>Does every project build its own model, embedding, vector-store, retrieval, and monitoring stack?</li><li>Are teams buying disconnected tools without standards, cost controls, budget alerts, or observability?</li><li>Does fragmentation create duplicate AI spend, maintenance debt, and reduced innovation capacity?</li></ol></div>
+        </div>
       </div>
     </div>
 
-    <div class="criteria-pair">
-      <div class="criteria-col maturity">
-        <div class="stream">Stream A · Batch C · AI Strategy, Governance & Value Realization</div>
-        <h3>Maturity Indicators</h3>
-        <ul>
-          <li><strong>C1 — Purpose-Driven AI Strategy:</strong> AI ambition is tied to strategy, customers, values, business model, and where-not-to-use boundaries.</li>
-          <li><strong>C2 — Impact-Driven AI Value Framing:</strong> initiatives start from Impact Statements, baselines, value hypotheses, and post-release measurement.</li>
-          <li><strong>C3 — Embedded AI Governance Model:</strong> governance enables safe value creation inside service, platform, security, data, and business ownership.</li>
-          <li><strong>C4 — Risk-Based Responsible AI Control:</strong> use cases are classified by risk, autonomy, data sensitivity, user impact, and regulatory exposure.</li>
-          <li><strong>C5 — Evidence-Based AI Investment Portfolio:</strong> kill, continue, pivot, and scale decisions use impact, risk, readiness, cost, and learning evidence.</li>
-        </ul>
-      </div>
-      <div class="criteria-col antipattern">
-        <div class="stream">Stream B · Batch C · AI Strategy, Governance & Value Realization</div>
-        <h3>Anti-Patterns</h3>
-        <ul>
-          <li><strong>AP-C1 — AI Slogan Strategy:</strong> AI is treated as a generic transformation theme without strategic choices, service-area focus, value boundaries, or where-not-to-use clarity.</li>
-          <li><strong>AP-C2 — Use-Case Chasing & Vanity Benefits:</strong> initiatives are chosen for fashion, visibility, tool adoption, or TCO promises without baselines, post-measurement, or enterprise impact proof.</li>
-          <li><strong>AP-C3 — Rigid Gatekeeping Governance:</strong> governance becomes a separate hurdle that slows flow without improving safety, causing bypass behavior or shadow AI.</li>
-          <li><strong>AP-C4 — Unclassified Risk & Ambiguous Accountability:</strong> AI use cases launch without risk classification, accountable owners, human override, appeal, fallback, or escalation mechanisms.</li>
-          <li><strong>AP-C5 — AI Investment Drift:</strong> the portfolio grows without capacity, architectural readiness, learning logic, value proof, or willingness to kill weak initiatives.</li>
-        </ul>
+    <div class="batch-section">
+      <div class="batch-header"><div class="batch-letter">C</div><div class="batch-name"><h3>AI Strategy, Governance & Value Realization</h3><div class="batch-meta">Is AI connected to purpose, value, governance, safety, investment logic, and measurable business outcomes?</div></div></div>
+      <div class="criterion-grid">
+        <div class="criterion-col">
+          <h4>Maturity Indicators</h4>
+          <div class="criterion"><div class="criterion-id">C1</div><div class="criterion-name">Purpose-Driven AI Strategy</div><div class="criterion-desc">AI ambition is tied to strategy, customers, values, business model, and boundaries.</div><ol class="criterion-subs"><li>Does the organization define why AI matters to strategy, customers, values, and business model?</li><li>Are ambition areas connected to service areas, value streams, or strategic domains?</li><li>Are where-not-to-use boundaries explicit?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">C2</div><div class="criterion-name">Impact-Driven AI Value Framing</div><div class="criterion-desc">Initiatives start from Impact Statements, baselines, value hypotheses, unit economics, and post-release measurement.</div><ol class="criterion-subs"><li>Are initiatives started from explicit Impact Statements rather than tool ideas?</li><li>Are outcomes defined through customer value, profitability, quality, flow, experience, or cost per workflow, proposal, ticket, conversation, document, assessment, or decision?</li><li>Are value hypotheses tested and updated after pilots or releases?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">C3</div><div class="criterion-name">Embedded AI Governance Model</div><div class="criterion-desc">Governance enables safe value creation inside service, platform, security, data, and business ownership.</div><ol class="criterion-subs"><li>Are governance responsibilities embedded into service areas, platform, security, data, and business ownership?</li><li>Does governance enable safe value creation rather than only blocking risk?</li><li>Are exceptions, approvals, risks, and controls auditable?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">C4</div><div class="criterion-name">Risk-Based Responsible AI Control</div><div class="criterion-desc">Use cases are classified by risk, autonomy, user impact, data sensitivity, and regulatory exposure.</div><ol class="criterion-subs"><li>Are use cases classified by risk, autonomy, user impact, data sensitivity, and regulation?</li><li>Are oversight, escalation, disclosure, logging, and accountability tied to risk?</li><li>Are high-risk or autonomous scenarios blocked unless minimum controls are proven?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">C5</div><div class="criterion-name">Evidence-Based AI Investment Portfolio</div><div class="criterion-desc">Portfolio decisions use impact, risk, readiness, budgeting, forecasting, spend guardrails, value-vs-cost, and learning evidence.</div><ol class="criterion-subs"><li>Are investments managed through impact, risk, readiness, budgeting, forecasting, spend guardrails, cost, and learning logic?</li><li>Are kill, continue, scale, and pivot decisions based on value-vs-cost evidence?</li><li>Does pilot learning reprioritize the portfolio?</li></ol></div>
+        </div>
+        <div class="criterion-col">
+          <h4>Anti-Patterns</h4>
+          <div class="criterion"><div class="criterion-id">AP-C1</div><div class="criterion-name">AI Slogan Strategy</div><div class="criterion-desc">AI is a generic transformation theme without choices, boundaries, or value logic.</div><ol class="criterion-subs"><li>Is AI described generically without strategic choices?</li><li>Is everything labeled an AI priority without prioritization logic?</li><li>Are tools adopted before value is defined?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-C2</div><div class="criterion-name">Use-Case Chasing & Vanity Benefits</div><div class="criterion-desc">AI Value Theater: initiatives are selected for fashion, visibility, tool adoption, token/model spend, or cost claims rather than measured impact.</div><ol class="criterion-subs"><li>Are initiatives selected because they are visible or technically interesting?</li><li>Are savings, ROI, TCO, token/model spend, or efficiency claims made without baseline and post-measurement?</li><li>Are spend, usage, or successful pilots celebrated without enterprise-level impact?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-C3</div><div class="criterion-name">Rigid Gatekeeping Governance</div><div class="criterion-desc">Governance slows flow without improving safety, causing bypass behavior or shadow AI.</div><ol class="criterion-subs"><li>Does governance slow flow without improving safety?</li><li>Are teams unclear how to proceed safely, causing bypass or shadow AI?</li><li>Are governance decisions disconnected from impact, architecture, and operations?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-C4</div><div class="criterion-name">Unclassified Risk & Ambiguous Accountability</div><div class="criterion-desc">AI is launched without risk classification, accountable owner, override, appeal, fallback, or escalation.</div><ol class="criterion-subs"><li>Are use cases launched without risk classification?</li><li>Is accountability unclear when AI-assisted decisions cause harm or failure?</li><li>Are override, appeal, fallback, or escalation mechanisms missing?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-C5</div><div class="criterion-name">AI Investment Drift</div><div class="criterion-desc">The backlog, platform usage, pilot estate, and AI spend grow without capacity, readiness, value proof, guardrails, or willingness to stop weak work.</div><ol class="criterion-subs"><li>Does the backlog, platform usage, or AI spend grow without capacity, readiness, or value proof?</li><li>Are weak initiatives kept alive by sunk cost, politics, or enthusiasm?</li><li>Are investments focused on platform build-out, premium model usage, or tool expansion without near-term capability validation?</li></ol></div>
+        </div>
       </div>
     </div>
 
-    <div class="criteria-pair">
-      <div class="criteria-col maturity">
-        <div class="stream">Stream A · Batch D · Data Foundations, Ownership & Accessibility</div>
-        <h3>Maturity Indicators</h3>
-        <ul>
-          <li><strong>D1 — Domain-Owned AI Data Products:</strong> service areas or domains own AI-critical data quality, meaning, lifecycle, and usability.</li>
-          <li><strong>D2 — Context-Rich AI-Ready Data:</strong> data includes semantic context, service meaning, process linkage, and decision relevance.</li>
-          <li><strong>D3 — Data Quality & Lineage Control:</strong> training, retrieval, inference, and decision data are cataloged, versioned, freshness-monitored, and traceable.</li>
-          <li><strong>D4 — Governed AI Data Access:</strong> classification, purpose limitation, privacy, masking, retention, and boundaries are built into AI data flows.</li>
-          <li><strong>D5 — Reusable AI Data Access Patterns:</strong> RAG, embeddings, search, feature, batch, real-time, and event-stream patterns are governed and reusable.</li>
-        </ul>
-      </div>
-      <div class="criteria-col antipattern">
-        <div class="stream">Stream B · Batch D · Data Foundations, Ownership & Accessibility</div>
-        <h3>Anti-Patterns</h3>
-        <ul>
-          <li><strong>AP-D1 — Ownerless Data & Context Loss:</strong> ownership is centralized, undefined, or detached from the domain, leaving AI teams to guess meaning, quality, lifecycle, and correction paths.</li>
-          <li><strong>AP-D2 — Raw Data Without Meaning:</strong> AI receives available signals without semantic richness, service context, process linkage, operating conditions, or decision relevance.</li>
-          <li><strong>AP-D3 — Data Swamp & Broken Lineage:</strong> outputs rely on stale copies, manual files, undocumented transformations, unknown origin, or unprovable quality and freshness.</li>
-          <li><strong>AP-D4 — Data Leakage & Over-Broad Access:</strong> AI tools access sensitive data without clear purpose, logging, approval, retention, masking, or boundary controls.</li>
-          <li><strong>AP-D5 — Ad Hoc Retrieval & Duplicate Knowledge Stores:</strong> teams create unowned RAG indexes, embeddings, feature stores, or knowledge bases that become stale, incomplete, or inconsistent.</li>
-        </ul>
+    <div class="batch-section">
+      <div class="batch-header"><div class="batch-letter">D</div><div class="batch-name"><h3>Data Foundations, Ownership & Accessibility</h3><div class="batch-meta">Is data usable as contextual, governed, service-owned fuel for AI decisions and workflows?</div></div></div>
+      <div class="criterion-grid">
+        <div class="criterion-col">
+          <h4>Maturity Indicators</h4>
+          <div class="criterion"><div class="criterion-id">D1</div><div class="criterion-name">Domain-Owned AI Data Products</div><div class="criterion-desc">AI-critical datasets have owners accountable for quality, meaning, lifecycle, and usability.</div><ol class="criterion-subs"><li>Are critical AI datasets owned by the service area or domain that understands context?</li><li>Are owners accountable for quality, meaning, lifecycle, and usability?</li><li>Are data products published with context, definitions, access rules, and usage expectations?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">D2</div><div class="criterion-name">Context-Rich AI-Ready Data</div><div class="criterion-desc">Data carries semantic meaning, source context, process linkage, and decision relevance.</div><ol class="criterion-subs"><li>Does data include semantic context, source meaning, process linkage, and operating conditions?</li><li>Can AI systems understand what values mean in service context?</li><li>Are critical data elements mapped to decisions, triggers, workflows, or outcomes?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">D3</div><div class="criterion-name">Data Quality & Lineage Control</div><div class="criterion-desc">Training, retrieval, inference, and decision data are traceable, quality-checked, and freshness-monitored.</div><ol class="criterion-subs"><li>Are critical datasets cataloged, versioned, quality-checked, and traceable?</li><li>Are freshness, completeness, correctness, and drift monitored?</li><li>Can training, retrieval, inference, and decision data be traced after the fact?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">D4</div><div class="criterion-name">Governed AI Data Access</div><div class="criterion-desc">Classification, purpose limitation, access rights, privacy, masking, minimization, and retention are designed into data flows.</div><ol class="criterion-subs"><li>Are classification, purpose limitation, access rights, and privacy controls documented?</li><li>Is access role-based, auditable, and aligned with ownership?</li><li>Are masking, anonymization, minimization, retention, and boundary controls used where required?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">D5</div><div class="criterion-name">Reusable AI Data Access Patterns</div><div class="criterion-desc">Retrieval, feature, search, embedding, vector-store, batch, real-time, and event patterns are governed, reusable, and observable for context growth and retrieval cost.</div><ol class="criterion-subs"><li>Are structured, unstructured, real-time, batch, feature, and retrieval patterns defined?</li><li>Are RAG, embedding, search, feature-store, vector-store, and event patterns governed and reusable?</li><li>Is retrieval quality, coverage, freshness, grounding, context growth, duplication, and retrieval cost measured?</li></ol></div>
+        </div>
+        <div class="criterion-col">
+          <h4>Anti-Patterns</h4>
+          <div class="criterion"><div class="criterion-id">AP-D1</div><div class="criterion-name">Ownerless Data & Context Loss</div><div class="criterion-desc">Data ownership is centralized, undefined, or detached from domain meaning.</div><ol class="criterion-subs"><li>Is data ownership centralized in IT or undefined, causing context loss?</li><li>Are AI teams forced to interpret datasets without domain meaning?</li><li>Do data issues stall AI because nobody owns correction or interpretation?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-D2</div><div class="criterion-name">Raw Data Without Meaning</div><div class="criterion-desc">AI receives available signals without the “why this data matters” layer.</div><ol class="criterion-subs"><li>Is data collected because available rather than because it drives decisions?</li><li>Do models receive raw signals without business, process, or operational context?</li><li>Are outputs unreliable because the model lacks meaning and decision context?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-D3</div><div class="criterion-name">Data Swamp & Broken Lineage</div><div class="criterion-desc">AI uses data whose origin, version, freshness, or quality cannot be proven.</div><ol class="criterion-subs"><li>Are outputs based on data whose origin, version, or quality cannot be proven?</li><li>Are stale copies, manual files, or undocumented transformations used?</li><li>Are quality failures found only after model failure or escalation?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-D4</div><div class="criterion-name">Data Leakage & Over-Broad Access</div><div class="criterion-desc">Sensitive data can be accessed or copied without purpose, logging, approval, or lifecycle control.</div><ol class="criterion-subs"><li>Can tools access sensitive data without purpose, logging, or approval?</li><li>Are copies moved into experimentation without lifecycle control?</li><li>Are privacy and security controls added late?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-D5</div><div class="criterion-name">Ad Hoc Retrieval & Duplicate Knowledge Stores</div><div class="criterion-desc">Teams build unowned indexes, embeddings, vector stores, and knowledge bases that become stale, inconsistent, duplicated, or costly.</div><ol class="criterion-subs"><li>Does each team create separate embeddings, vector stores, or knowledge bases without ownership or cost visibility?</li><li>Do RAG systems use stale, incomplete, or unverified sources?</li><li>Are retrieval failures, unbounded context growth, and duplicated retrieval costs treated only as model failures?</li></ol></div>
+        </div>
       </div>
     </div>
 
-    <div class="criteria-pair">
-      <div class="criteria-col maturity">
-        <div class="stream">Stream A · Batch E · Business Capability & Service Architecture</div>
-        <h3>Maturity Indicators</h3>
-        <ul>
-          <li><strong>E1 — AI-Anchored Service & Capability Architecture:</strong> AI opportunities connect to service catalogs, capability maps, customer paths, and value streams.</li>
-          <li><strong>E2 — AI-Ready Service Blueprinting:</strong> services are mapped end-to-end across customer journey, frontstage, backstage, systems, data, and handoffs.</li>
-          <li><strong>E3 — Traceable AI Solution Structure:</strong> AI features trace from customer need to capability, component, data, platform, and work package.</li>
-          <li><strong>E4 — Service Area Ownership of AI Value Creation:</strong> integrated teams own business, application, data, AI outcomes, and continuous improvement.</li>
-          <li><strong>E5 — Phased AI Scaling Through Service Areas:</strong> rollout is sequenced by readiness, architecture, data, risk, and reusable learning patterns.</li>
-        </ul>
-      </div>
-      <div class="criteria-col antipattern">
-        <div class="stream">Stream B · Batch E · Business Capability & Service Architecture</div>
-        <h3>Anti-Patterns</h3>
-        <ul>
-          <li><strong>AP-E1 — AI Ideas Detached from Business Architecture:</strong> use cases are listed without linkage to service catalogs, capability maps, value streams, ownership, data domains, or dependency structures.</li>
-          <li><strong>AP-E2 — Spot Optimization & Silo Automation:</strong> AI speeds isolated tasks while increasing downstream rework, coordination, customer friction, or end-to-end flow problems.</li>
-          <li><strong>AP-E3 — Untraceable AI Build Logic:</strong> teams build AI components without traceability from customer need to capability, data source, platform dependency, requirement, and value outcome.</li>
-          <li><strong>AP-E4 — Disconnected AI Project Teams:</strong> business, data science, application, and platform work split into sequential handoffs, and ownership disappears after pilots, vendors, or temporary projects.</li>
-          <li><strong>AP-E5 — Big-Bang AI Transformation:</strong> rollout scales before Kickstart learning proves service readiness, architecture, data ownership, safety, operating rhythm, and absorption capacity.</li>
-        </ul>
+    <div class="batch-section">
+      <div class="batch-header"><div class="batch-letter">E</div><div class="batch-name"><h3>Business Capability & Service Architecture</h3><div class="batch-meta">Are AI opportunities anchored in customer needs, service blueprints, value streams, business capabilities, and end-to-end ownership?</div></div></div>
+      <div class="criterion-grid">
+        <div class="criterion-col">
+          <h4>Maturity Indicators</h4>
+          <div class="criterion"><div class="criterion-id">E1</div><div class="criterion-name">AI-Anchored Service & Capability Architecture</div><div class="criterion-desc">AI opportunities link to service catalogs, capability maps, customer paths, or value streams.</div><ol class="criterion-subs"><li>Is there a current service catalog, capability map, or equivalent model?</li><li>Are opportunities linked to services, capabilities, customer paths, or value streams?</li><li>Are dependencies between capabilities, platforms, data, and outcomes visible?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">E2</div><div class="criterion-name">AI-Ready Service Blueprinting</div><div class="criterion-desc">Services are mapped end-to-end before AI interventions are placed.</div><ol class="criterion-subs"><li>Are target services mapped across customer journey, frontstage, backstage, systems, data, and handoffs?</li><li>Are bottlenecks, decisions, failure modes, and automation candidates visible?</li><li>Are interventions placed where they improve the whole value stream?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">E3</div><div class="criterion-name">Traceable AI Solution Structure</div><div class="criterion-desc">Features trace from business need, outcome, and cost-to-serve to capability, component, data, platform, and work package.</div><ol class="criterion-subs"><li>Are features decomposed into need, capability, component, data, platform, and work packages?</li><li>Can each use case be traced to customer need, outcome, cost-to-serve where evidence exists, and service architecture?</li><li>Are requirements, acceptance criteria, risks, and dependencies explicit before build?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">E4</div><div class="criterion-name">Service Area Ownership of AI Value Creation</div><div class="criterion-desc">Integrated service-area teams own business, application, data, and AI outcomes as living products.</div><ol class="criterion-subs"><li>Are integrated teams accountable for business, application, data, and AI outcomes?</li><li>Are platform teams positioned as enablers for service-area teams?</li><li>Are AI solutions owned as living products rather than temporary projects?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">E5</div><div class="criterion-name">Phased AI Scaling Through Service Areas</div><div class="criterion-desc">Scaling is sequenced by service-area readiness, architecture, data, risk, cost-to-serve awareness, and learning evidence.</div><ol class="criterion-subs"><li>Is scaling sequenced by readiness, architecture, data, risk, and cost-to-serve readiness where evidence exists?</li><li>Are pilot patterns converted into playbooks, templates, platform capabilities, and guardrails?</li><li>Is continuous improvement built into rollout through feedback and reassessment?</li></ol></div>
+        </div>
+        <div class="criterion-col">
+          <h4>Anti-Patterns</h4>
+          <div class="criterion"><div class="criterion-id">AP-E1</div><div class="criterion-name">AI Ideas Detached from Business Architecture</div><div class="criterion-desc">Use cases are not tied to service catalog, capability map, owner, dependencies, or value stream.</div><ol class="criterion-subs"><li>Are use cases listed without connection to service catalog or capability map?</li><li>Is it unclear which service area owns the change?</li><li>Are dependencies discovered only during implementation?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-E2</div><div class="criterion-name">Spot Optimization & Silo Automation</div><div class="criterion-desc">AI speeds one task while increasing downstream rework, coordination, or customer friction.</div><ol class="criterion-subs"><li>Is AI applied to isolated tasks without surrounding flow?</li><li>Does automation speed one step while increasing downstream work?</li><li>Are customer experience and end-to-end flow ignored?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-E3</div><div class="criterion-name">Untraceable AI Build Logic</div><div class="criterion-desc">Teams build components without traceability to need, capability, data, platform, outcome, or cost-to-serve where evidence exists.</div><ol class="criterion-subs"><li>Are teams building AI components without linkage to capability or need?</li><li>Are requirements vague, unstable, or tool-led?</li><li>Is traceability between feature, data source, platform dependency, value outcome, and cost-to-serve missing?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-E4</div><div class="criterion-name">Disconnected AI Project Teams</div><div class="criterion-desc">Temporary AI teams remain detached from service areas that must own outcomes.</div><ol class="criterion-subs"><li>Are AI teams separate from the service areas that need to own outcomes?</li><li>Are business, data science, application, and platform work sequential handoffs?</li><li>Does ownership disappear after pilot completion or vendor delivery?</li></ol></div>
+          <div class="criterion"><div class="criterion-id">AP-E5</div><div class="criterion-name">Big-Bang AI Transformation</div><div class="criterion-desc">AI scales before readiness, architecture, data ownership, cost-to-serve readiness, operating model, and safety evidence are proven.</div><ol class="criterion-subs"><li>Is rollout scaled before architecture, data ownership, cost-to-serve readiness, and operating model are ready?</li><li>Are pilot learnings not converted into reusable patterns?</li><li>Does every service area repeat mistakes independently?</li></ol></div>
+        </div>
       </div>
     </div>
   </div>
@@ -896,50 +1335,27 @@
     </p>
 
     <div class="scale-grid">
-      <div class="scale">
-        <div class="scale-num">0</div>
-        <div class="scale-title">Absent</div>
-        <p>No evidence found. The source is silent or not assessable for that criterion.</p>
-      </div>
-      <div class="scale">
-        <div class="scale-num">1</div>
-        <div class="scale-title">Aspirational</div>
-        <p>Intent, buzzwords, plans, pilots being explored, or future-tense claims without operating proof.</p>
-      </div>
-      <div class="scale">
-        <div class="scale-num">2</div>
-        <div class="scale-title">Operational</div>
-        <p>Functioning behavior, process, ownership, review, or delivery practice is described.</p>
-      </div>
-      <div class="scale">
-        <div class="scale-num">3</div>
-        <div class="scale-title">Embedded</div>
-        <p>Mechanisms, enforcement, automation, measurement, release control, and learning loops are visible.</p>
-      </div>
+      <div class="scale"><div class="scale-num">0</div><div class="scale-title">Insufficient evidence</div><p>No evidence found, or the source is not assessable for that criterion.</p></div>
+      <div class="scale"><div class="scale-num">1</div><div class="scale-title">Emerging</div><p>Intent, plans, pilots, future-tense claims, or isolated examples without operating proof.</p></div>
+      <div class="scale"><div class="scale-num">2</div><div class="scale-title">Structured</div><p>Functioning mechanism, ownership, process, control, or delivery practice is described.</p></div>
+      <div class="scale"><div class="scale-num">3</div><div class="scale-title">Adaptive / value-creating</div><p>Mechanisms, measurement, enforcement, learning loops, and repeatable production behavior are visible.</p></div>
+    </div>
+
+    <h3 style="margin-top: 56px;">Evidence Check Statuses</h3>
+    <div class="status-grid">
+      <div class="status-card"><strong>Supported</strong>The quote and surrounding context directly support the forwarded score or finding.</div>
+      <div class="status-card"><strong>Weak</strong>The source is relevant but too indirect, generic, partial, or ambiguous for the score claimed.</div>
+      <div class="status-card"><strong>Unsupported</strong>The scanner overreached, inferred beyond the source, or mapped the evidence to the wrong criterion.</div>
+      <div class="status-card"><strong>Missing</strong>The criterion may matter, but the submitted material does not provide assessable evidence.</div>
     </div>
 
     <h3 style="margin-top: 56px;">Readiness Classification</h3>
     <div class="metrics-list">
-      <div class="metric-item">
-        <div class="metric-name">Insufficient evidence<span>blocked classification</span></div>
-        <div class="metric-interp">The source material does not support a directive maturity conclusion. The report should name missing evidence and return findings mode.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Emerging<span>early capability</span></div>
-        <div class="metric-interp">The organization shows intent, early pilots, or isolated mechanisms, but lacks enough operating proof to show repeatable AI value creation.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Structured<span>defined mechanisms</span></div>
-        <div class="metric-interp">Core structures exist: ownership, governance, platform, data practices, and service framing are visible but not yet fluid or scaled.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Scaling with friction<span>capability plus blockers</span></div>
-        <div class="metric-interp">The organization has meaningful AI transformation capability, but anti-pattern burden or uneven service-area absorption blocks smooth scaling.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Adaptive / Value-creating<span>high evidence, low tested burden</span></div>
-        <div class="metric-interp">AI-enabled value creation is service-owned, architecturally integrated, data-grounded, governed, measured, and continuously improved.</div>
-      </div>
+      <div class="metric-item"><div class="metric-name">Insufficient evidence<span>blocked classification</span></div><div class="metric-interp">The source material does not support a directive maturity conclusion. The report returns findings mode and source gaps.</div></div>
+      <div class="metric-item"><div class="metric-name">Emerging<span>early capability</span></div><div class="metric-interp">The organization shows intent, early pilots, or isolated mechanisms, but lacks enough operating proof to show repeatable AI value creation.</div></div>
+      <div class="metric-item"><div class="metric-name">Structured<span>defined mechanisms</span></div><div class="metric-interp">Core structures exist: ownership, governance, platform, data practices, and service framing are visible but not yet fluid or scaled.</div></div>
+      <div class="metric-item"><div class="metric-name">Scaling with friction<span>capability plus blockers</span></div><div class="metric-interp">Meaningful AI transformation capability is visible, but anti-pattern burden or uneven service-area absorption blocks smooth scaling.</div></div>
+      <div class="metric-item"><div class="metric-name">Adaptive / Value-creating<span>high evidence, low tested burden</span></div><div class="metric-interp">AI-enabled value creation is service-owned, architecturally integrated, data-grounded, governed, measured, and continuously improved.</div></div>
     </div>
 
     <h3 style="margin-top: 56px;">Evidence Categories</h3>
@@ -947,227 +1363,180 @@
       The score asks how strong the evidence is. The category tag asks what kind of evidence it is. Every evidence quote is tagged with exactly one category: Policy, Process, Operational, Automation, Accountability, Architecture, Data, Governance, Learning, or Value.
     </p>
     <div class="callout">
-      This matters because a company can have extensive policy evidence and almost no operating evidence. Another can have platform automation but no service ownership. The category footprint makes those differences visible.
+      This matters because the assessed organization can have extensive policy evidence and almost no operating evidence. Another can have platform automation but no service ownership. AI cost signals are mapped into existing categories rather than a separate finance category: spend dashboards are Operational, routing and quotas are Automation, budget guardrails are Governance, owners are Accountability, and unit economics are Value.
     </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">07</span> Submission Guidance</div>
-    <h2>What to Submit</h2>
+    <div class="section-tag"><span class="num">07</span> Clean-Room Protocol</div>
+    <h2>Source Rules and Knowledge Base Guardrails</h2>
     <p>
-      The assessment accepts any combination of documents. More document types provide richer signal across all five domains. Absence of entire document categories is itself a maturity signal. Do not manufacture missing documents for the assessment; the absence is part of the diagnosis.
+      The engine treats the uploaded source pack as untrusted customer evidence and the remote Knowledge Base as internal methodology context. Those two sources are never allowed to collapse into one another.
     </p>
 
-    <div class="metrics-list" style="margin: 28px 0 36px;">
-      <div class="metric-item">
-        <div class="metric-name">Accepted Set<span>source material</span></div>
-        <div class="metric-interp">Strategy documents, AI governance standards, architecture diagrams, data ownership models, platform lifecycle standards, pilot reviews, service blueprints, value stream maps, risk registers, model/prompt release records, red-team reports, and AI value realization reviews.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Local Parsing<span>not model parsing</span></div>
-        <div class="metric-interp">PDF, HTML, CSV/TSV, JSON, and image inputs are parsed or encoded locally before analysis. Models analyze extracted material; they are not the primary parsers.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Visual Evidence<span>selected pages</span></div>
-        <div class="metric-interp">Sparse-text or dashboard-like PDF pages can be included as images so visible diagrams, tables, operating models, service maps, and evidence screenshots are not lost.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Reference Knowledge Base<span>rubric and tactics context</span></div>
-        <div class="metric-interp">The remote Knowledge Base can provide methodology context and approved tactics. It is never treated as proof of the assessed organization’s current state.</div>
-      </div>
-    </div>
+<pre>{
+  "source_evidence": "Only uploaded assessment material can prove current state.",
+  "reference_kb": "Rubric context, validation questions, false-positive checks, risk framing, and tactics only.",
+  "forbidden_kb_uses": [
+    "customer_current_state_claim",
+    "audited_finding",
+    "evidence_quote",
+    "score_justification_without_uploaded_source",
+    "visible_document_name",
+    "visible_company_or_organization_name"
+  ],
+  "general_process_boundary": "Generic IT/process maturity is adjacent context unless it directly proves an AI Transformation criterion.",
+  "privacy_output_rule": "Write fluent anonymized prose from the start. Do not emit company names or placeholder tokens."
+}</pre>
 
-    <h3>Useful Evidence Types</h3>
-    <div class="two-col">
-      <div>
-        <ul class="compact-list">
-          <li>AI operating model, decision-rights map, or governance cadence.</li>
-          <li>AI strategy with explicit value hypotheses and where-not-to-use boundaries.</li>
-          <li>Portfolio review materials showing kill, continue, pivot, or scale decisions.</li>
-          <li>Service blueprints, value-stream maps, or capability maps tied to AI opportunities.</li>
-          <li>Service-area ownership model for business, application, data, and AI outcomes.</li>
-        </ul>
-      </div>
-      <div>
-        <ul class="compact-list">
-          <li>AI platform lifecycle, model/prompt registry, evaluation, rollback, or observability records.</li>
-          <li>Data product ownership, semantic definitions, lineage, access, privacy, and retrieval-quality evidence.</li>
-          <li>Responsible AI risk classification, human escalation, red-team, and Agent Behavioral Contract artifacts.</li>
-          <li>Pilot retrospectives showing Launch-and-Learn feedback converted into reusable playbooks.</li>
-          <li>Value realization dashboards showing impact, quality, flow, adoption, safety, and learning outcomes.</li>
-        </ul>
-      </div>
+    <div class="pullquote">
+      The Knowledge Base is a sparring partner for interpretation and tactics. It is not witness testimony about the assessed organization.
     </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">08</span> Deterministic Metrics</div>
+    <div class="section-tag"><span class="num">08</span> Submission Guidance</div>
+    <h2>What to Submit</h2>
+    <p>
+      The assessment accepts any combination of documents. More document types provide richer signal across all five domains. Absence of entire document categories is itself a maturity signal. Do not manufacture missing documents for the assessment; absence is part of the diagnosis.
+    </p>
+
+    <div class="tier"><strong>Tier 1 · Direct AI Transformation Evidence</strong>AI operating model, AI governance standards, service-area AI ownership model, model/prompt lifecycle records, AI architecture diagrams, data product ownership, semantic data models, AI observability/evaluation records, red-team results, Agent Behavioral Contracts, pilot retrospectives with value and safety evidence.</div>
+    <div class="tier"><strong>Tier 2 · Strong Supporting Evidence</strong>Decision-rights maps, service blueprints, value-stream maps, capability maps, portfolio reviews, risk registers, platform operating model, security and data access controls, impact dashboards, release records, learning loops, and operating cadence artifacts.</div>
+    <div class="tier"><strong>Tier 3 · Adjacent Context</strong>General project delivery, process governance, capacity management, sales/service operating models, role descriptions, scorecards, and business planning. These can support interpretation but do not prove AI readiness unless they directly connect to AI-specific operating, architecture, data, safety, value, or service-area evidence.</div>
+
+    <div class="metrics-list" style="margin: 34px 0;">
+      <div class="metric-item"><div class="metric-name">Local Parsing<span>not model parsing</span></div><div class="metric-interp">PDF, HTML, CSV/TSV, JSON, and image inputs are parsed or encoded locally before analysis. Models analyze extracted material; they are not the primary parsers.</div></div>
+      <div class="metric-item"><div class="metric-name">Visual Evidence<span>selected pages</span></div><div class="metric-interp">Sparse-text or dashboard-like PDF pages can be included as images so visible diagrams, tables, operating models, service maps, and evidence screenshots are not lost.</div></div>
+      <div class="metric-item"><div class="metric-name">Reference Knowledge Base<span>rubric and tactics context</span></div><div class="metric-interp">The remote Knowledge Base can provide methodology context and approved tactics. It is never treated as proof of the assessed organization’s current state.</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">09</span> Deterministic Metrics</div>
     <h2>The Firewall Between AI and Roadmap</h2>
     <p>
       Phase 2 contains no generative AI. It applies deterministic arithmetic to evidence-checked audit logs. Unsupported scanner output has already been rescanned or downgraded before this layer runs.
     </p>
 
     <div class="metrics-list">
-      <div class="metric-item">
-        <div class="metric-name">Evidence-Gated Readiness<span>0-100, capped</span></div>
-        <div>
-          <div class="metric-formula">readiness = maturity_depth - anti_pattern_penalty + tested_clearance_bonus
-then capped by evidence density and delivery integrity</div>
-          <div class="metric-interp">The headline score starts from validated maturity, subtracts confirmed anti-pattern burden, rewards only tested clearance, and caps optimistic scores when source evidence is sparse.</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Maturity Depth<span>0-100</span></div>
-        <div>
-          <div class="metric-formula">maturity_depth = (sum of 25 maturity scores / 75) * 100</div>
-          <div class="metric-interp">Average maturity across all five domains. Captures partial progress that a simple “fully mature criteria” count would miss.</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Anti-Pattern Burden<span>0-100</span></div>
-        <div>
-          <div class="metric-formula">burden = (sum of confirmed or partial anti-pattern scores / 75) * 100</div>
-          <div class="metric-interp">Average severity across harmful evidence. Higher means more friction blocking safe AI-enabled value creation.</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Anti-Pattern Clearance<span>0-100</span></div>
-        <div>
-          <div class="metric-formula">clearance = (tested absent anti-pattern criteria / 25) * 100</div>
-          <div class="metric-interp">How much of the anti-pattern surface was meaningfully tested and found absent. This is the only way absence becomes positive evidence.</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Anti-Pattern Coverage<span>0-100</span></div>
-        <div>
-          <div class="metric-formula">coverage = (tested_absent + confirmed_present + partial_finding) / 25 * 100</div>
-          <div class="metric-interp">Separates “we found no problems” from “the submitted material did not test the problems.”</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Evidence Density<span>0-100</span></div>
-        <div>
-          <div class="metric-formula">evidence_density = criteria with source evidence or verified absence / 50 * 100</div>
-          <div class="metric-interp">Measures whether the source actually supports the assessment, not merely whether the pipeline returned data.</div>
-        </div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Domain Breakdown<span>A-E scores</span></div>
-        <div>
-          <div class="metric-formula">domain_score[batch] = sum of 5 maturity scores in that domain (0-15)</div>
-          <div class="metric-interp">Shows whether readiness is concentrated in governance, platform, data, operating model, or service architecture.</div>
-        </div>
-      </div>
+      <div class="metric-item"><div class="metric-name">Evidence-Gated Readiness<span>0-100, capped</span></div><div><div class="metric-formula">readiness = maturity_depth - anti_pattern_penalty + tested_clearance_bonus
+then capped by evidence density and delivery integrity</div><div class="metric-interp">The headline score starts from validated maturity, subtracts confirmed anti-pattern burden, rewards only tested clearance, and caps optimistic scores when source evidence is sparse.</div></div></div>
+      <div class="metric-item"><div class="metric-name">Maturity Depth<span>0-100</span></div><div><div class="metric-formula">maturity_depth = (sum of 25 maturity scores / 75) * 100</div><div class="metric-interp">Average maturity across all five domains. Captures partial progress that a simple “fully mature criteria” count would miss.</div></div></div>
+      <div class="metric-item"><div class="metric-name">Anti-Pattern Burden<span>0-100</span></div><div><div class="metric-formula">burden = (sum of confirmed or partial anti-pattern scores / 75) * 100</div><div class="metric-interp">Average severity across harmful evidence. Higher means more friction blocking safe AI-enabled value creation.</div></div></div>
+      <div class="metric-item"><div class="metric-name">Anti-Pattern Clearance<span>0-100</span></div><div><div class="metric-formula">clearance = (tested absent anti-pattern criteria / 25) * 100</div><div class="metric-interp">How much of the anti-pattern surface was meaningfully tested and found absent. This is the only way absence becomes positive evidence.</div></div></div>
+      <div class="metric-item"><div class="metric-name">Anti-Pattern Coverage<span>0-100</span></div><div><div class="metric-formula">coverage = (tested_absent + confirmed_present + partial_finding) / 25 * 100</div><div class="metric-interp">Separates “we found no problems” from “the submitted material did not test the problems.”</div></div></div>
+      <div class="metric-item"><div class="metric-name">Evidence Density<span>0-100</span></div><div><div class="metric-formula">evidence_density = criteria with source evidence or verified absence / 50 * 100</div><div class="metric-interp">Measures whether the source actually supports the assessment, not merely whether the pipeline returned data.</div></div></div>
+      <div class="metric-item"><div class="metric-name">Domain Breakdown<span>A-E scores</span></div><div><div class="metric-formula">domain_score[batch] = sum of 5 maturity scores in that domain (0-15)</div><div class="metric-interp">Shows whether readiness is concentrated in operating model, platform, governance/value, data, or service architecture.</div></div></div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">09</span> Strategy and Roadmap</div>
-    <h2>Strategy Synthesis Output</h2>
+    <div class="section-tag"><span class="num">10</span> Strategy and Roadmap</div>
+    <h2>Phase 3 Output Contract</h2>
     <p>
       Phase 3 produces structured JSON consumed by the dashboard. It cannot fabricate optimism because the visual scorecard, classification, evidence density, domain scores, anti-pattern findings, and source gaps are locked by deterministic validation.
     </p>
 
-    <div class="two-col">
-      <div class="rule-card green">
-        <h3>Kickstart</h3>
-        <p>
-          Early roadmap phases diagnose readiness, select a service-area domain, validate a bounded vertical slice, test value and safety, and convert pilot learning into a playbook. This is where Impact Statements, Launch-and-Learn, Secure-by-Design, and evidence-backed business cases become practical.
-        </p>
-      </div>
-      <div class="rule-card blue">
-        <h3>Building the System</h3>
-        <p>
-          Later roadmap phases integrate architecture, platform, data products, service teams, operating rhythm, embedded governance, AI lifecycle management, Sense & Respond loops, and scaled learning across value streams.
-        </p>
-      </div>
-    </div>
+<pre>{
+  "phase_3_strategy": {
+    "executive_summaries": {
+      "transformation_lead": "operating model, decision rhythm, learning, portfolio, and adoption lens",
+      "technology_lead": "architecture, platform, lifecycle, observability, safety, and data lens",
+      "business_service_owner": "value stream, service ownership, customer impact, and capability lens"
+    },
+    "evidence_summary": "supported findings only, with adjacent context clearly labeled",
+    "domain_diagnosis": {
+      "A": "Adaptive Operating Model",
+      "B": "Enterprise AI Architecture & Platform Readiness",
+      "C": "AI Strategy, Governance & Value Realization",
+      "D": "Data Foundations, Ownership & Accessibility",
+      "E": "Business Capability & Service Architecture"
+    },
+    "planning_decision": "GO | WARN | BLOCK | NO_GO",
+    "findings_mode": "used when confidence is LOW",
+    "remediation_roadmap": [
+      "Kickstart: diagnose, select domain, run vertical slice, validate value and safety",
+      "Building the System: integrate architecture, platform, data, teams, rhythm, governance, and learning"
+    ]
+  }
+}</pre>
 
-    <h3 style="margin-top: 56px;">What Makes Phase 3 Trustworthy</h3>
-    <ul class="compact-list">
-      <li>The visual scorecard and readiness classification come from Phase 2. The synthesizer cannot change them.</li>
-      <li>Persona summaries differ by lens, not facts.</li>
-      <li>Evidence summary and diagnosis are separate from roadmap synthesis.</li>
-      <li>Roadmap actions must cite valid tactics only when the Knowledge Base problem pattern matches the locked finding.</li>
-      <li>Generic evidence-gathering or validation actions may omit tactic IDs; no tactic ID is better than a wrong tactic ID.</li>
-      <li>LOW-confidence reports return findings mode and an empty roadmap.</li>
-      <li>No fabricated numbers: any percentage in prose must correspond to Phase 2 metrics.</li>
-    </ul>
+    <div class="two-col">
+      <div class="rule-card green"><h3>Kickstart</h3><p>Early roadmap phases diagnose readiness, select a service-area domain, validate a bounded vertical slice, test value and safety, and convert pilot learning into a playbook. This is where Impact Statements, Launch-and-Learn, Secure-by-Design, and evidence-backed business cases become practical.</p></div>
+      <div class="rule-card blue"><h3>Building the System</h3><p>Later roadmap phases integrate architecture, platform, data products, service teams, operating rhythm, embedded governance, AI lifecycle management, Sense & Respond loops, and scaled learning across value streams.</p></div>
+    </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">10</span> Model Routing</div>
-    <h2>Model Roles and Fallback Chains</h2>
+    <div class="section-tag"><span class="num">11</span> Post-Synthesis Verification</div>
+    <h2>The Report Is Checked After It Is Written</h2>
     <p>
-      Model routing is centralized in <code>src/models.ts</code>. Each stage has a primary model and an ordered fallback chain. The design avoids lightweight fallbacks for this engine and prefers GPT-5.5, Claude Sonnet/Opus, and Gemini Pro-class models when fallback is needed.
+      The engine treats generated strategy as another artifact to verify. The first complete report draft can still be rejected, rewritten, or blocked if it exceeds the evidence, leaks internal reference material, misuses a tactic, or turns uncertainty into advice.
     </p>
 
-    <div class="model-grid">
-      <div class="model-card">
-        <div class="stage-meta">Pre-flight</div>
-        <p><strong>Primary:</strong> gemini-3.5-flash. <strong>Fallback:</strong> gemini-2.5-pro, then gpt-5.5 low reasoning.</p>
-      </div>
-      <div class="model-card">
-        <div class="stage-meta">Forensic audit</div>
-        <p><strong>Primary:</strong> claude-sonnet-4-6. <strong>Fallback:</strong> gpt-5.5 audit profile, then gemini-2.5-pro.</p>
-      </div>
-      <div class="model-card">
-        <div class="stage-meta">Targeted rescan</div>
-        <p><strong>Primary:</strong> claude-opus-4-7. <strong>Fallback:</strong> gpt-5.5 roadmap profile, claude-sonnet-4-6, then gemini-2.5-pro.</p>
-      </div>
-      <div class="model-card">
-        <div class="stage-meta">Evidence check</div>
-        <p><strong>Primary:</strong> gemini-3.1-pro-preview. <strong>Fallback:</strong> claude-sonnet-4-6, then gpt-5.5 evidence-check profile.</p>
-      </div>
-      <div class="model-card">
-        <div class="stage-meta">Synthesis and roadmap</div>
-        <p><strong>Summary primary:</strong> claude-sonnet-4-6. <strong>Roadmap primary:</strong> claude-opus-4-7. <strong>Fallbacks:</strong> gpt-5.5 profiles and Gemini Pro-class models.</p>
-      </div>
-      <div class="model-card">
-        <div class="stage-meta">Fact-check and quality gate</div>
-        <p><strong>Primary:</strong> gpt-5.5. <strong>Fallback:</strong> claude-sonnet-4-6 for fact-check and quality-gate explanation; high fact-check uses gpt-5.5 high reasoning first.</p>
-      </div>
+    <div class="metrics-list">
+      <div class="metric-item"><div class="metric-name">Fact-check split<span>summary and roadmap</span></div><div class="metric-interp">Narrative claims and roadmap actions are checked separately so a good summary cannot hide an unsupported plan.</div></div>
+      <div class="metric-item"><div class="metric-name">Regeneration loop<span>bounded retry</span></div><div class="metric-interp">Unsupported claims can trigger a narrower regeneration pass. Repeated weak grounding escalates to sanitation or quality-gate blocking.</div></div>
+      <div class="metric-item"><div class="metric-name">Tactic validation<span>valid IDs only</span></div><div class="metric-interp">Roadmap actions cite tactic IDs only when the validated finding matches an approved pattern. Generic validation work may intentionally have no tactic ID.</div></div>
+      <div class="metric-item"><div class="metric-name">Strategy sanitation<span>claim hygiene</span></div><div class="metric-interp">Unsupported fragments are rewritten, removed, or quarantined. The hygiene appendix keeps the decision visible without promoting unsafe advice.</div></div>
+      <div class="metric-item"><div class="metric-name">Privacy readability<span>fluent anonymization</span></div><div class="metric-interp">Customer-facing prose is rewritten into neutral language such as “the assessed organization” and “the service area” instead of leaking names or filling the report with placeholders.</div></div>
+      <div class="metric-item"><div class="metric-name">Quality gate<span>GO / WARN / BLOCK</span></div><div class="metric-interp">The final gate considers evidence density, delivery integrity, confidence bracket, fact-check support, sanitation state, and source coverage gaps.</div></div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="section-tag"><span class="num">11</span> Why It Matters</div>
+    <div class="section-tag"><span class="num">12</span> Model Routing</div>
+    <h2>Real Model Roles and Fallback Chains</h2>
+    <p>
+      Model routing is centralized in <code>src/models.ts</code>. The production configuration uses stronger reasoning models for forensic audit, targeted rescan, synthesis escalation, roadmap creation, fact-checking, and quality-gate explanation. Fallbacks are ordered by task shape: fast safety checks can start with Gemini Flash, independent verification uses Gemini Pro-class models, and high-stakes synthesis routes through Claude Sonnet/Opus and GPT-5.5 profiles.
+    </p>
+
+    <table>
+      <thead><tr><th>Step / Task</th><th>Primary Model</th><th>Fallback Chain</th></tr></thead>
+      <tbody>
+        <tr><td>Security pre-flight / DLP scan</td><td><code>gemini-3.5-flash</code></td><td><code>gemini-2.5-pro</code> → <code>gpt-5.5</code></td></tr>
+        <tr><td>Phase 1 forensic audit, batches A-E</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> audit profile → <code>gemini-2.5-pro</code></td></tr>
+        <tr><td>Targeted rescan for weak evidence</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>claude-sonnet-4-6</code> → <code>gemini-2.5-pro</code></td></tr>
+        <tr><td>Independent evidence check</td><td><code>gemini-3.1-pro-preview</code></td><td><code>claude-sonnet-4-6</code> → <code>gpt-5.5</code> evidence-check profile</td></tr>
+        <tr><td>Anti-pattern adjudication</td><td><code>gpt-5.5</code> fact-check profile</td><td><code>claude-opus-4-7</code></td></tr>
+        <tr><td>Evidence summary / diagnosis</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> synthesis profile → <code>gemini-2.5-pro</code></td></tr>
+        <tr><td>Phase 3 escalation mode</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> escalation profile → <code>gemini-3.1-pro-preview</code></td></tr>
+        <tr><td>Roadmap synthesis</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>gemini-3.1-pro-preview</code></td></tr>
+        <tr><td>Fact-check</td><td><code>gpt-5.5</code></td><td><code>claude-sonnet-4-6</code> → <code>gemini-2.5-pro</code></td></tr>
+        <tr><td>High fact-check retry</td><td><code>gpt-5.5</code> high reasoning</td><td><code>claude-sonnet-4-6</code></td></tr>
+        <tr><td>Quality Gate explanation</td><td><code>gpt-5.5</code> quality-gate profile</td><td><code>claude-sonnet-4-6</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-tag"><span class="num">13</span> Why It Matters</div>
     <h2>The Difference Between Tool Adoption and Value Creation</h2>
     <p>
       A generic AI-readiness survey asks whether the organization has a strategy, tools, pilots, data, and governance. The AI Transformation Engine asks whether the documents prove that those things operate together as a value-creation system.
     </p>
 
     <div class="metrics-list" style="margin-top: 30px;">
-      <div class="metric-item">
-        <div class="metric-name">Tool Adoption Without Readiness<span>false positive</span></div>
-        <div class="metric-interp">A chatbot rollout, model gateway, or pilot portfolio can look advanced while decision rights, data context, release control, service ownership, and value measurement are still missing.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Governance Without Enablement<span>control theater</span></div>
-        <div class="metric-interp">Policies and approvals do not prove safe value creation unless controls are embedded into workflows, architecture, data access, release lifecycle, and escalation paths.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Pilots Without Absorption<span>pilot purgatory</span></div>
-        <div class="metric-interp">A pilot is useful only when it tests value, safety, integration, adoption, learning, and the transition from Kickstart to Building the System.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Data Without Meaning<span>context failure</span></div>
-        <div class="metric-interp">Data becomes fuel only when it carries semantic and service context. Raw availability is not the same as usable AI grounding.</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-name">Architecture Without Ownership<span>scaling friction</span></div>
-        <div class="metric-interp">AI cannot scale safely when service boundaries, ownership, platform capabilities, and human accountability are unclear.</div>
-      </div>
+      <div class="metric-item"><div class="metric-name">Tool Adoption Without Readiness<span>false positive</span></div><div class="metric-interp">A chatbot rollout, model gateway, or pilot portfolio can look advanced while decision rights, data context, release control, service ownership, and value measurement are still missing.</div></div>
+      <div class="metric-item"><div class="metric-name">Governance Without Enablement<span>control theater</span></div><div class="metric-interp">Policies and approvals do not prove safe value creation unless controls are embedded into workflows, architecture, data access, release lifecycle, and escalation paths.</div></div>
+      <div class="metric-item"><div class="metric-name">Pilots Without Absorption<span>pilot purgatory</span></div><div class="metric-interp">A pilot is useful only when it tests value, safety, integration, adoption, learning, and the transition from Kickstart to Building the System.</div></div>
+      <div class="metric-item"><div class="metric-name">Data Without Meaning<span>context failure</span></div><div class="metric-interp">Data becomes fuel only when it carries semantic and service context. Raw availability is not the same as usable AI grounding.</div></div>
+      <div class="metric-item"><div class="metric-name">Architecture Without Ownership<span>scaling friction</span></div><div class="metric-interp">AI cannot scale safely when service boundaries, ownership, platform capabilities, and human accountability are unclear.</div></div>
     </div>
 
     <div class="callout">

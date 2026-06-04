@@ -21,11 +21,11 @@
       "batch": "A",
       "domain": "Adaptive Operating Model",
       "title": "One-Size-Fits-All AI Delivery",
-      "description": "All AI initiatives are forced through the same delivery model regardless of uncertainty, risk, demand type, or learning need.",
+      "description": "All AI initiatives are forced through the same delivery model regardless of uncertainty, risk, demand type, value profile, cost profile, or learning need.",
       "sub_criteria": [
         "Are all AI initiatives forced through the same project model regardless of uncertainty?",
         "Are exploratory AI cases managed with rigid delivery plans that assume known requirements?",
-        "Are predictable automation cases mixed with uncertain GenAI or agentic work in the same backlog without routing logic?"
+        "Are predictable automation cases mixed with uncertain GenAI or agentic work in the same backlog without value, risk, or cost-profile routing logic?"
       ]
     },
     {
@@ -57,10 +57,10 @@
       "batch": "A",
       "domain": "Adaptive Operating Model",
       "title": "Digital Taylorism & Workslop",
-      "description": "AI accelerates fragmented tasks but increases rework, checking, coordination, cognitive load, or low-quality output.",
+      "description": "AI accelerates fragmented tasks but increases hidden review cost, rework cost, checking, coordination, cognitive load, or low-quality output.",
       "sub_criteria": [
         "Is AI used mainly to make fragmented tasks faster without improving the whole system?",
-        "Does AI create extra checking, rework, hidden coordination, or low-quality workslop?",
+        "Does AI create extra checking, rework, hidden review cost, hidden coordination, or low-quality workslop?",
         "Are people measured on activity and utilization rather than impact, learning, quality, and customer value?"
       ]
     },
@@ -93,11 +93,11 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "Black-Box AI Operations",
-      "description": "AI failures, static-model drift, hallucinations, retrieval degradation, value erosion, and unsafe outputs are found through complaints rather than Sense & Respond monitoring.",
+      "description": "AI failures, invisible token spend, unmonitored model usage, static-model drift, hallucinations, retrieval degradation, cost surprises, value erosion, and unsafe outputs are found through complaints or financial surprises rather than Sense & Respond monitoring.",
       "sub_criteria": [
         "Are AI failures discovered mainly through user complaints or business damage?",
-        "Are there no baseline metrics for accuracy, first-time-right, value, safety, or operational reliability?",
-        "Are model drift, retrieval degradation, hallucinations, unsafe outputs, or value degradation not systematically detected?"
+        "Are there no baseline metrics for accuracy, first-time-right, token/model spend, cost-per-output, value, safety, or operational reliability?",
+        "Are model drift, retrieval degradation, hallucinations, unsafe outputs, cost anomalies, or value degradation not systematically detected?"
       ]
     },
     {
@@ -117,11 +117,11 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "Tool Fragmentation & Hidden Factory",
-      "description": "Every AI project assembles its own stack, tools, governance, monitoring, and maintenance burden without shared standards.",
+      "description": "Every AI project assembles its own stack, tools, model access, embeddings, vector stores, retrieval patterns, governance, monitoring, cost controls, and maintenance burden without shared standards.",
       "sub_criteria": [
-        "Does every AI project build its own ingestion, governance, hosting, evaluation, and monitoring stack?",
-        "Are teams buying disconnected tools without common standards, cost controls, or observability?",
-        "Does platform fragmentation create maintenance debt and reduce innovation capacity?"
+        "Does every AI project build its own ingestion, model access, embedding, vector-store, retrieval, governance, hosting, evaluation, and monitoring stack?",
+        "Are teams buying disconnected tools without common standards, cost controls, budget alerts, or observability?",
+        "Does platform fragmentation create duplicate AI spend, maintenance debt, and reduced innovation capacity?"
       ]
     },
     {
@@ -141,11 +141,11 @@
       "batch": "C",
       "domain": "AI Strategy, Governance & Value Realization",
       "title": "Use-Case Chasing & Vanity Benefits",
-      "description": "AI initiatives are selected for visibility, fashion, tool adoption, or cost/TCO claims, with benefits asserted without baselines, measurement, or enterprise impact.",
+      "description": "AI initiatives are selected for visibility, fashion, tool adoption, token/model spend, or cost/TCO claims, with benefits asserted without baselines, measurement, unit economics, or enterprise impact.",
       "sub_criteria": [
         "Are AI initiatives selected because they are fashionable, visible, or technically interesting?",
-        "Are savings, productivity, ROI, TCO, or efficiency claims made without baseline and post-measurement?",
-        "Are successful pilots celebrated without enterprise-level impact?"
+        "Are savings, productivity, ROI, TCO, token/model spend, or efficiency claims made without baseline and post-measurement?",
+        "Are spend, usage, or successful pilots celebrated without enterprise-level impact or measured value?"
       ]
     },
     {
@@ -177,11 +177,11 @@
       "batch": "C",
       "domain": "AI Strategy, Governance & Value Realization",
       "title": "AI Investment Drift",
-      "description": "The AI portfolio grows without capacity, readiness, value proof, learning logic, or willingness to stop weak initiatives.",
+      "description": "The AI portfolio, platform usage, pilot estate, and AI spend grow without capacity, readiness, value proof, learning logic, budget guardrails, or willingness to stop weak initiatives.",
       "sub_criteria": [
-        "Does the AI backlog grow without capacity, architectural readiness, or value proof?",
+        "Does the AI backlog, platform usage, or AI spend grow without capacity, architectural readiness, or value proof?",
         "Are weak initiatives kept alive because of sunk cost, politics, or executive enthusiasm?",
-        "Are investments focused on platform build-out without near-term capability validation?"
+        "Are investments focused on platform build-out, premium model usage, or tool expansion without near-term capability validation?"
       ]
     },
     {
@@ -237,11 +237,11 @@
       "batch": "D",
       "domain": "Data Foundations, Ownership & Accessibility",
       "title": "Ad Hoc Retrieval & Duplicate Knowledge Stores",
-      "description": "Teams create stale, incomplete, duplicate, or unowned RAG, embedding, feature, and knowledge stores.",
+      "description": "Teams create stale, incomplete, duplicate, costly, or unowned RAG, embedding, vector-store, feature, and knowledge stores.",
       "sub_criteria": [
-        "Does each AI team create its own embeddings, indexes, or knowledge base without ownership?",
+        "Does each AI team create its own embeddings, indexes, vector stores, or knowledge base without ownership or cost visibility?",
         "Are RAG systems using stale, incomplete, or unverified source material?",
-        "Are retrieval failures treated as model failures instead of data-access architecture failures?"
+        "Are retrieval failures, unbounded context growth, and duplicated retrieval costs treated as model failures instead of data-access architecture failures?"
       ]
     },
     {
@@ -273,11 +273,11 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "Untraceable AI Build Logic",
-      "description": "AI components are built without clear linkage to capability, customer need, data source, platform dependency, or value outcome.",
+      "description": "AI components are built without clear linkage to capability, customer need, data source, platform dependency, value outcome, or cost-to-serve where evidence exists.",
       "sub_criteria": [
         "Are teams building AI components without clear linkage to business capability or customer need?",
         "Are requirements vague, unstable, or tool-led?",
-        "Is there no traceability between AI feature, data source, platform dependency, and value outcome?"
+        "Is there no traceability between AI feature, data source, platform dependency, value outcome, and cost-to-serve where evidence exists?"
       ]
     },
     {
@@ -297,9 +297,9 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "Big-Bang AI Transformation",
-      "description": "AI is scaled broadly before Kickstart learning proves service readiness, architecture, data ownership, safety, and operating model patterns.",
+      "description": "AI is scaled broadly before Kickstart learning proves service readiness, architecture, data ownership, safety, cost-to-serve readiness, and operating model patterns.",
       "sub_criteria": [
-        "Is AI rollout scaled broadly before business architecture, data ownership, and operating model are ready?",
+        "Is AI rollout scaled broadly before business architecture, data ownership, cost-to-serve readiness, and operating model are ready?",
         "Are pilot learnings not converted into reusable patterns, playbooks, guardrails, or absorption-readiness evidence?",
         "Does every service area repeat the same mistakes independently?"
       ]
