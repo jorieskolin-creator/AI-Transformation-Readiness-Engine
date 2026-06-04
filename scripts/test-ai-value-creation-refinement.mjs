@@ -6,6 +6,7 @@ const readText = async (path) => readFile(new URL(path, import.meta.url), 'utf8'
 
 const criteria = await readJson('../src/knowledge_base/aiTransformation_criteria.json');
 const antipatterns = await readJson('../src/knowledge_base/aiTransformation_antipatterns.json');
+const taxonomy = await readJson('../src/knowledge_base/aiTransformation_evidence_taxonomy.json');
 const tactics = await readJson('../src/knowledge_base/aiTransformation_tactics_database.json');
 const playbook = await readJson('../src/knowledge_base/aiTransformation_tactic_activity_playbook.json');
 const constants = await readText('../src/constants.ts');
@@ -33,6 +34,7 @@ assert.deepEqual(antipatternIds, [
 const corpus = [
   JSON.stringify(criteria),
   JSON.stringify(antipatterns),
+  JSON.stringify(taxonomy),
   JSON.stringify(tactics),
   JSON.stringify(playbook),
   constants,
@@ -54,18 +56,43 @@ for (const phrase of [
   'brownfield',
   'platform-as-product',
   'service blueprint',
+  'ai cost visibility is readiness evidence only when connected to value, ownership, routing, guardrails, and measurable outcomes',
+  'ai spend dashboards alone do not prove ai readiness',
+  'token/model spend',
+  'cost per workflow',
+  'cost per ticket',
+  'cost-per-output',
+  'model routing',
+  'budget alerts',
+  'quota',
+  'premium model overuse',
+  'invisible token spend',
+  'unbounded context growth',
+  'value-vs-cost',
+  'cost-to-serve',
 ]) {
   assert.ok(corpus.includes(phrase), `refinement corpus should include ${phrase}`);
 }
 
+assert.equal(
+  Object.prototype.hasOwnProperty.call(taxonomy.evidence_categories.categories, 'Financial Integration'),
+  false,
+  'AI economics must use existing evidence categories, not add Financial Integration'
+);
+
 assert.ok(constants.includes('AI_DOMAIN_AXIOMS'), 'domain axioms must be injected into prompts');
 assert.ok(constants.includes('Tool adoption, platform build-out, strategy slogans, and pilots are not readiness evidence by themselves.'), 'tool adoption axiom must be explicit');
 assert.ok(constants.includes('Predictable AI work and uncertain AI value creation must be routed differently'), 'dual-path routing axiom must be explicit');
+assert.ok(constants.includes('AI cost visibility is readiness evidence only when connected to value, ownership, routing, guardrails, and measurable outcomes.'), 'AI economics axiom must be explicit');
+assert.ok(constants.includes('AI spend dashboards alone do not prove AI readiness'), 'AI spend dashboard false positive guard must be explicit');
 assert.ok(constants.includes('internal sparring material only'), 'Reference KB must be framed as internal sparring material');
 assert.ok(constants.includes('Do not cite, quote, name, summarize, or disclose'), 'Reference KB confidentiality must be explicit in prompts');
 assert.ok(constants.includes('Convert any Knowledge Base influence into generic methodology language'), 'Reference KB influence must be genericized');
 assert.ok(fixture.includes('This snippet should not prove AI readiness.'), 'synthetic fixture must lock tool adoption without readiness');
 assert.ok(fixture.includes('pilot AI playbook'), 'synthetic fixture must include Kickstart-to-Building proof');
+assert.ok(fixture.includes('AI spend dashboards alone do not prove AI readiness'), 'synthetic fixture must lock AI cost monitoring without readiness');
+assert.ok(fixture.includes('value-vs-cost evidence'), 'synthetic fixture must include AI economics operating proof');
+assert.ok(fixture.includes('AI Value Theater'), 'synthetic fixture must include AI economics anti-pattern proof');
 
 const tacticIds = new Set(tactics.tactics.map(t => t.id));
 for (const entry of playbook.entries) {

@@ -21,11 +21,11 @@
       "batch": "A",
       "domain": "Adaptive Operating Model",
       "title": "Adaptive AI Demand Routing",
-      "description": "AI work is routed through the operating model by work nature, value, uncertainty, risk, capacity, competence, and service ownership instead of using one delivery model for every initiative.",
+      "description": "AI work is routed through the operating model by work nature, value, uncertainty, risk, cost profile, capacity, competence, and service ownership instead of using one delivery model for every initiative.",
       "sub_criteria": [
         "Are AI demands classified by nature of work: predictable, standardized, iterative, exploratory, or transformative?",
         "Are standardized or predictable AI demands routed through repeatable delivery paths while uncertain or impact-driven AI demands use Launch-and-Learn?",
-        "Is demand routing connected to capacity, competence, service-area ownership, value hypothesis, and risk level?"
+        "Is demand routing connected to capacity, competence, service-area ownership, value hypothesis, cost profile, and risk level?"
       ]
     },
     {
@@ -57,11 +57,11 @@
       "batch": "A",
       "domain": "Adaptive Operating Model",
       "title": "Human-AI Work Redesign",
-      "description": "AI initiatives redesign work, handoffs, roles, and feedback loops so human capacity moves toward higher-value contribution.",
+      "description": "AI initiatives redesign work, handoffs, roles, review cost, rework cost, and feedback loops so human capacity moves toward higher-value contribution.",
       "sub_criteria": [
         "Are AI initiatives explicitly designed to reallocate human capacity toward higher-value work, not only reduce task time?",
         "Are roles, handoffs, review points, exception paths, and human-in-the-loop responsibilities redesigned?",
-        "Are employee experience, cognitive load, quality, and customer impact measured after AI introduction?"
+        "Are employee experience, cognitive load, hidden review or rework cost, quality, and customer impact measured after AI introduction?"
       ]
     },
     {
@@ -93,9 +93,9 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "AI Observability & Evaluation System",
-      "description": "Production AI behavior is monitored through a Sense & Respond loop for quality, safety, cost, latency, groundedness, drift, and business impact.",
+      "description": "Production AI behavior is monitored through a Sense & Respond loop for quality, safety, token/model spend, latency, routing performance, retrieval cost, cost-per-output, groundedness, drift, and business impact.",
       "sub_criteria": [
-        "Are quality, safety, cost, latency, groundedness, drift, and business impact monitored in production?",
+        "Are quality, safety, token/model spend, latency, routing performance, retrieval cost, cost-per-output, groundedness, drift, and business impact monitored in production?",
         "Are offline and online evaluation methods defined for key AI use cases?",
         "Do alerts, retraining triggers, intervention workflows, or service-owner reviews activate when AI performance, data freshness, value, or safety thresholds degrade?"
       ]
@@ -117,11 +117,11 @@
       "batch": "B",
       "domain": "Enterprise AI Architecture & Platform Readiness",
       "title": "AI Platform as Product",
-      "description": "Reusable AI platform products provide shared model access, data patterns, deployment templates, observability, evaluation, and developer experience.",
+      "description": "Reusable AI platform products provide shared model access, model routing, caching, quotas, budget alerts, data patterns, deployment templates, observability, evaluation, and cost-aware developer experience.",
       "sub_criteria": [
-        "Are shared AI services, model gateways, data access patterns, MLOps/LLMOps capabilities, and deployment templates offered as internal platform products?",
+        "Are shared AI services, model gateways, model routing, caching, quota controls, budget alerts, data access patterns, MLOps/LLMOps capabilities, and deployment templates offered as internal platform products?",
         "Are platform teams accountable to service-area teams as internal customers?",
-        "Are platform capabilities measured through adoption, flow, reliability, developer experience, and value enablement?"
+        "Are platform capabilities measured through adoption, flow, reliability, cost-aware developer experience, and value enablement?"
       ]
     },
     {
@@ -141,10 +141,10 @@
       "batch": "C",
       "domain": "AI Strategy, Governance & Value Realization",
       "title": "Impact-Driven AI Value Framing",
-      "description": "AI initiatives start from impact statements and value hypotheses, with evidence-based business cases, baseline and post-release measurement, and value metrics beyond cost reduction.",
+      "description": "AI initiatives start from impact statements and value hypotheses, with evidence-based business cases, baseline and post-release measurement, unit economics, and value metrics beyond cost reduction.",
       "sub_criteria": [
         "Are AI initiatives started from explicit Impact Statements rather than tool ideas?",
-        "Are expected outcomes defined through customer value, profitability, ROCE/TVO, quality, first-time-right, flow, experience, or adaptability metrics?",
+        "Are expected outcomes defined through customer value, profitability, ROCE/TVO, quality, first-time-right, flow, experience, adaptability metrics, or unit economics such as cost per workflow, proposal, ticket, conversation, document, assessment, or decision?",
         "Are value hypotheses tested and updated after pilots or production releases to support kill, continue, pivot, or scale decisions?"
       ]
     },
@@ -177,10 +177,10 @@
       "batch": "C",
       "domain": "AI Strategy, Governance & Value Realization",
       "title": "Evidence-Based AI Investment Portfolio",
-      "description": "AI investment decisions use evidence about impact, risk, readiness, cost, and learning value to kill, continue, scale, or pivot.",
+      "description": "AI investment decisions use evidence about impact, risk, readiness, AI budgeting, forecasting, spend guardrails, value-vs-cost, and learning value to kill, continue, scale, or pivot.",
       "sub_criteria": [
-        "Are AI investments managed through portfolio logic using impact, risk, readiness, cost, and learning value?",
-        "Are kill, continue, scale, and pivot decisions based on evidence?",
+        "Are AI investments managed through portfolio logic using impact, risk, readiness, budgeting, forecasting, spend guardrails, cost, and learning value?",
+        "Are kill, continue, scale, and pivot decisions based on value-vs-cost evidence?",
         "Does learning from pilots reprioritize the AI portfolio?"
       ]
     },
@@ -237,11 +237,11 @@
       "batch": "D",
       "domain": "Data Foundations, Ownership & Accessibility",
       "title": "Reusable AI Data Access Patterns",
-      "description": "Structured, unstructured, real-time, batch, feature, retrieval, embedding, and event-stream patterns are governed and reusable.",
+      "description": "Structured, unstructured, real-time, batch, feature, retrieval, embedding, vector-store, and event-stream patterns are governed, reusable, and observable for context growth and retrieval cost.",
       "sub_criteria": [
         "Are structured, unstructured, real-time, batch, feature, and retrieval patterns defined for AI use?",
         "Are RAG, embedding, search, feature-store, and event-stream patterns governed and reusable?",
-        "Is retrieval quality, source coverage, freshness, and grounding measured?"
+        "Is retrieval quality, source coverage, freshness, grounding, context growth, embedding or vector-store duplication, and retrieval cost measured?"
       ]
     },
     {
@@ -273,10 +273,10 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "Traceable AI Solution Structure",
-      "description": "AI-enabled features are traceable from impact statement, customer need, and business outcome to capability, cognitive model, component, data, platform, risk, and work package.",
+      "description": "AI-enabled features are traceable from impact statement, customer need, business outcome, and cost-to-serve to capability, cognitive model, component, data, platform, risk, and work package.",
       "sub_criteria": [
         "Are AI-enabled features decomposed into impact statement, business need, capability, cognitive model, component, data, platform, and work-package layers?",
-        "Can each AI use case be traced back to customer need, business outcome, and service architecture?",
+        "Can each AI use case be traced back to customer need, business outcome, cost-to-serve where evidence exists, and service architecture?",
         "Are requirements, acceptance criteria, risks, and dependencies explicit before build?"
       ]
     },
@@ -297,9 +297,9 @@
       "batch": "E",
       "domain": "Business Capability & Service Architecture",
       "title": "Phased AI Scaling Through Service Areas",
-      "description": "AI scales from Kickstart learning into Building-the-System rollout through service-area readiness, reusable patterns, platform capabilities, guardrails, feedback loops, and reassessment.",
+      "description": "AI scales from Kickstart learning into Building-the-System rollout through service-area readiness, reusable patterns, platform capabilities, guardrails, feedback loops, cost-to-serve awareness, and reassessment.",
       "sub_criteria": [
-        "Is scaling sequenced by service-area readiness, architectural clarity, data readiness, and risk level?",
+        "Is scaling sequenced by service-area readiness, architectural clarity, data readiness, risk level, and cost-to-serve readiness where evidence exists?",
         "Are reusable patterns from pilots converted into playbooks, templates, platform capabilities, guardrails, and absorption-readiness evidence?",
         "Is continuous improvement built into the rollout through Sense & Respond loops, retrospectives, readiness reassessment, and value realization review?"
       ]

@@ -32,6 +32,8 @@ export const AI_DOMAIN_AXIOMS = `
 6. Autonomous or agentic AI requires Secure-by-Design controls, red teaming, Agent Behavioral Contracts, tool boundaries, and Human-in-the-Loop escalation.
 7. Predictable AI work and uncertain AI value creation must be routed differently: standardized work through repeatable delivery, iterative work through Launch-and-Learn.
 8. The engine must distinguish efficiency-only narratives from AI-driven value creation: customer value, quality, first-time-right, ROCE/TVO, learning, adaptability, and safe scale.
+9. AI cost visibility is readiness evidence only when connected to value, ownership, routing, guardrails, and measurable outcomes.
+10. AI spend dashboards alone do not prove AI readiness; they support B3/C5 only when tied to usage, ownership, thresholds, decisions, or value outcomes.
 </domain_axioms>
 `;
 
@@ -158,6 +160,7 @@ ${STRATEGY_PERSONAS_BLOCK}
    - **DO NOT** use large headers (###) for the main sections of the evidence summary.
    - **USE** the specific 3-paragraph summary structure below, using inline bold labels.
 9. **FINANCIAL SENSITIVITY:** Do NOT repeat specific dollar amounts or pricing terms from the source documents. Reference them generically.
+9a. **AI ECONOMICS BOUNDARY:** Treat AI cost visibility as supporting readiness evidence only when tied to value, ownership, routing, guardrails, thresholds, decisions, or measured outcomes. AI spend dashboards, token reports, or model usage reports alone do not prove AI readiness.
 10. **PRIVACY LANGUAGE:** Write fluent anonymized prose from the start. Do not name individuals, companies, organizations, legal entities, customers, vendors, brands, or source-origin organization labels from the input material. Do not output placeholder tokens such as [ORGANIZATION_REDACTED]. Use neutral labels such as "the assessed organization", "the service area", "the business team", "the technology team", "the data team", "the AI governance process", "the operating model", or "the AI Transformation team". Focus on what the evidence shows, not on the named owner of the evidence.
 11. **CONFIDENTIAL REFERENCE USE:** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. Use Reference KB influence only as generic methodology language.
 </strict_constraints>
