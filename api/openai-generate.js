@@ -7,10 +7,10 @@ import {
 
 // Non-streaming OpenAI Responses proxy.
 //
-// The client-side router still expects the same NDJSON terminal frame used by
-// the streaming Gemini/Anthropic proxies, but this endpoint deliberately waits
-// for the full OpenAI response before writing. Phase 3 fact-checking benefits
-// more from reliability than partial-token streaming.
+// The client-side router expects the same NDJSON terminal frame used by the
+// streaming Anthropic proxy, but this endpoint deliberately waits for the full
+// OpenAI response before writing. Phase 3 fact-checking benefits more from
+// reliability than partial-token streaming.
 
 const extractOutputText = (payload) => {
   if (typeof payload?.output_text === 'string') return payload.output_text;

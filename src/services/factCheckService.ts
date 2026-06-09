@@ -83,7 +83,7 @@ const compactMetrics = (phase2: Phase2Validation): string => {
 
 export const buildFactCheckPrompt = (inputs: FactCheckInputs): string => `
 <role>
-You are a fact-checker for a AI Transformation maturity assessment.
+You are a fact-checker for an AI Transformation maturity assessment.
 Your job: extract every distinct factual claim from the STRATEGY OUTPUT below, then classify each claim against the source material the strategy was generated from.
 </role>
 
@@ -285,7 +285,7 @@ Regenerate the evidence summaries (all three personas), diagnosis, planning deci
 
 export const buildSummaryFactCheckPrompt = (inputs: FactCheckInputs): string => `
 <role>
-You are the evidence-summary fact-checker for a AI Transformation maturity assessment.
+You are the evidence-summary fact-checker for an AI Transformation maturity assessment.
 Your job: verify ONLY the evidence summaries and diagnosis. The tactics database is intentionally absent because summaries must be grounded only in source evidence and Phase 1/2 findings.
 </role>
 
@@ -343,7 +343,7 @@ ${inputs.contentToCheck}
 
 export const buildRoadmapFactCheckPrompt = (inputs: RoadmapFactCheckInputs): string => `
 <role>
-You are the roadmap-grounding reviewer for a AI Transformation maturity assessment.
+You are the roadmap-grounding reviewer for an AI Transformation maturity assessment.
 Your job: verify that the planning decision and roadmap are logical, grounded responses to the LOCKED FINDINGS, and that any tactic references are valid in the Verified Tactics Database.
 </role>
 

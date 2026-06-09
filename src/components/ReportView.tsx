@@ -505,6 +505,44 @@ const EvidenceCheckSummaryBlock: React.FC<{ result: DiagnosticResult }> = ({ res
   );
 };
 
+const SourceRegistrySummaryBlock: React.FC<{ result: DiagnosticResult }> = ({ result }) => {
+  const registry = result.meta.source_registry;
+  if (!registry) return null;
+  const packetEntries = Object.entries(registry.packets || {}).sort(([a], [b]) => a.localeCompare(b));
+  return (
+    <div className="mb-8 p-6 rounded-xl border border-slate-200 bg-white">
+      <h2 className="text-xl font-display font-bold text-slate-900 mb-2">Source Registry &amp; Domain Packets</h2>
+      <p className="text-sm text-slate-600 mb-4">
+        Parsed source material was split into deterministic chunks and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+        {[
+          ['Sources', registry.source_count],
+          ['Chunks', registry.chunk_count],
+          ['DLP review chunks', registry.dlp_review_chunk_count],
+          ['DLP caution hits', registry.dlp_caution_hits],
+          ['DLP high-risk hits', registry.dlp_high_risk_hits],
+        ].map(([label, value]) => (
+          <div key={label} className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
+            <p className="text-2xl font-bold text-slate-800">{value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        {packetEntries.map(([domain, packet]) => (
+          <div key={domain} className={`p-3 rounded-lg border ${packet.weak_coverage ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
+            <p className="text-xs font-bold text-slate-800">{domain} — {BATCH_TITLES[domain]}</p>
+            <p className="text-xs text-slate-600 mt-1">
+              {packet.included_chunk_count}/{packet.total_candidate_chunks} chunks · {packet.weak_coverage ? 'weak coverage' : 'packet coverage'}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 interface ReportViewProps {
   result: DiagnosticResult;
   onBack: () => void;
@@ -569,6 +607,7 @@ export const ReportView: React.FC<ReportViewProps> = ({ result, onBack, onDownlo
           effective={result.phase_3_strategy.effective_bracket ?? result.phase_3_strategy.confidence_bracket}
         />
         <EvidenceCheckSummaryBlock result={result} />
+        <SourceRegistrySummaryBlock result={result} />
 
         <div className="mb-12 p-8 bg-slate-50 rounded-2xl border border-slate-200">
           <div className="flex items-center gap-4 mb-6">

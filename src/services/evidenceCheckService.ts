@@ -96,7 +96,8 @@ const buildEvidenceCheckPrompt = (
   definitions: any,
   batch: BatchAuditResult,
   text: string,
-  referenceKbContext: string
+  referenceKbContext: string,
+  fallbackText?: string
 ): string => `
 <role>
 You are an independent AI Transformation evidence verifier. Your job is NOT to rescan the whole document. Your job is to verify whether the scanner's forwarded findings and scores are actually supported by the raw source material.
@@ -111,6 +112,10 @@ ${referenceKbContext}
 <source_material>
 ${text.substring(0, 50000)}
 </source_material>
+
+${fallbackText ? `<fallback_source_material use="only_if_chunk_or_quote_location_is_unclear">
+${fallbackText.substring(0, 50000)}
+</fallback_source_material>` : ''}
 
 <batch_definitions>
 === MATURITY ===
@@ -132,6 +137,9 @@ ${summarizeBatch(batch)}
 - "missing": the scanner scored >0 but did not provide usable traceable evidence, or the evidence cannot be located.
 - For text evidence, quoted text must be a real substring or clearly faithful excerpt from the source.
 - For image evidence, the description must be something visible in the attached image content.
+- When source material contains <CHUNK ...> markers, verify the exact chunk text before supporting a finding. Refer to chunk IDs/source IDs/page markers in rationale when useful.
+- Source packets control attention, not truth. If the packet says coverage is weak or a broad-source fallback was used, do not treat missing packet evidence as positive absence.
+- Use fallback_source_material only when a quote, source location, or absence decision cannot be verified from the packet.
 - The REFERENCE_KNOWLEDGE_BASE is confidential rubric/reference material only. It can clarify what good evidence looks like, false positives, and coverage expectations, but it is never source evidence for this customer.
 - Do not cite, quote, name, summarize, or reuse Reference Knowledge Base document names, filenames, source labels, companies, organizations, or provenance. Convert reference influence into generic validation logic.
 - Do not invent stronger scores. If unsure, recommend the lower score.
@@ -179,7 +187,8 @@ const buildAntiPatternAdjudicationPrompt = (
   batchId: string,
   text: string,
   items: EvidenceCheckItem[],
-  batch: BatchAuditResult
+  batch: BatchAuditResult,
+  fallbackText?: string
 ): string => `
 <role>
 You are a senior AI Transformation evidence adjudicator. A first evidence-check found disputed anti-pattern signals. Your job is only to decide whether each disputed item is a weak/partial harmful anti-pattern finding or not assessable from source coverage.
@@ -200,6 +209,10 @@ You are a senior AI Transformation evidence adjudicator. A first evidence-check 
 <source_material>
 ${text.substring(0, 50000)}
 </source_material>
+
+${fallbackText ? `<fallback_source_material use="only_if_packet_or_quote_location_is_unclear">
+${fallbackText.substring(0, 50000)}
+</fallback_source_material>` : ''}
 
 <scanner_output>
 ${summarizeBatch(batch)}
@@ -230,14 +243,15 @@ const applyAntiPatternAdjudication = async (
   text: string,
   images: ImageInput[],
   ctx: RunContext,
-  items: EvidenceCheckItem[]
+  items: EvidenceCheckItem[],
+  fallbackText?: string
 ): Promise<{ items: EvidenceCheckItem[]; model_used?: string }> => {
   const candidates = items.filter(needsAntiPatternAdjudication);
   if (candidates.length === 0) return { items };
 
   try {
     const resp = await runStage('evidence_adjudication', {
-      userText: buildAntiPatternAdjudicationPrompt(batchId, text, candidates, batch),
+      userText: buildAntiPatternAdjudicationPrompt(batchId, text, candidates, batch, fallbackText),
       images,
     }, ctx);
     const parsed = parseAiResponse(resp.text);
@@ -289,7 +303,8 @@ export const runEvidenceCheck = async (
   batch: BatchAuditResult,
   text: string,
   images: ImageInput[],
-  ctx: RunContext
+  ctx: RunContext,
+  fallbackText?: string
 ): Promise<EvidenceCheckResult> => {
   const definitions = BATCH_DEFINITIONS[batchId];
   const expectedIds = idsForBatch(batchId);
@@ -302,7 +317,7 @@ export const runEvidenceCheck = async (
       label: 'evidence_check',
     });
     const resp = await runStage('evidence_check', {
-      userText: buildEvidenceCheckPrompt(batchId, definitions, batch, text, referenceKbContext),
+      userText: buildEvidenceCheckPrompt(batchId, definitions, batch, text, referenceKbContext, fallbackText),
       images,
     }, ctx);
     const parsed = parseAiResponse(resp.text);
@@ -321,7 +336,8 @@ export const runEvidenceCheck = async (
         const original = clampScore((batch as any)[stream]?.[id]?.count);
         const raw = byKey.get(`${stream}.${id}`);
         const scannerItem = (batch as any)[stream]?.[id] as Partial<AuditItem> | undefined;
-        const localStatus = verifyTextEvidenceSupport(scannerItem, text);
+        const verificationText = fallbackText ? `${text}\n\n${fallbackText}` : text;
+        const localStatus = verifyTextEvidenceSupport(scannerItem, verificationText);
         let status = original === 0
           ? (raw && statusFor(raw?.status) !== 'missing' ? statusFor(raw?.status) : 'supported')
           : statusFor(raw?.status);
@@ -393,7 +409,7 @@ export const runEvidenceCheck = async (
       }
     }
 
-    const adjudicated = await applyAntiPatternAdjudication(batchId, batch, text, images, ctx, items);
+    const adjudicated = await applyAntiPatternAdjudication(batchId, batch, text, images, ctx, items, fallbackText);
     return {
       ...summarizeEvidenceCheck(batchId, adjudicated.items, []),
       model_used: resp.modelUsed.id,

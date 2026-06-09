@@ -158,6 +158,32 @@ const renderEvidenceCheckSummary = (result: DiagnosticResult): string => {
   </div>`;
 };
 
+const renderSourceRegistrySummary = (result: DiagnosticResult): string => {
+  const registry = result.meta.source_registry;
+  if (!registry) return '';
+  const packetRows = Object.entries(registry.packets || {})
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([domain, packet]) => `
+      <div class="source-packet ${packet.weak_coverage ? 'source-packet-weak' : 'source-packet-covered'}">
+        <strong>${escapeHtml(domain)} · ${escapeHtml(BATCH_TITLES[domain] || domain)}</strong>
+        <span>${packet.included_chunk_count}/${packet.total_candidate_chunks} chunks · ${packet.weak_coverage ? 'weak coverage' : 'packet coverage'}</span>
+      </div>`)
+    .join('');
+  return `
+  <h2>Source Registry &amp; Domain Packets</h2>
+  <div class="source-registry-summary">
+    <p>Parsed source material was split into deterministic chunks and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.</p>
+    <div class="evidence-check-grid">
+      <div class="evidence-check-stat"><span>Sources</span><strong>${registry.source_count}</strong></div>
+      <div class="evidence-check-stat"><span>Chunks</span><strong>${registry.chunk_count}</strong></div>
+      <div class="evidence-check-stat"><span>DLP review chunks</span><strong>${registry.dlp_review_chunk_count}</strong></div>
+      <div class="evidence-check-stat"><span>DLP caution hits</span><strong>${registry.dlp_caution_hits}</strong></div>
+      <div class="evidence-check-stat"><span>DLP high-risk hits</span><strong>${registry.dlp_high_risk_hits}</strong></div>
+    </div>
+    <div class="source-packet-grid">${packetRows}</div>
+  </div>`;
+};
+
 const renderFindingsMode = (result: DiagnosticResult): string => {
   const findings = result.phase_3_strategy.findings_mode;
   if (!findings) return '';
@@ -499,6 +525,14 @@ const generateSummaryReportHtml = (result: DiagnosticResult): string => {
     .section-lead { margin-top: -0.5rem; color: #64748b; }
     .source-note { margin: 16px 0 0; color: #fcd34d; font-size: 0.85rem; }
     .summary-card, .exec-lens, .decision-card, .withheld-card, .heatmap-panel, .chart-card, .summary-roadmap-phase { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; box-shadow: 0 12px 35px rgba(15,23,42,0.05); }
+    .source-registry-summary { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; box-shadow: 0 12px 35px rgba(15,23,42,0.05); margin: 16px 0 28px; }
+    .source-registry-summary > p { margin: 0 0 1rem; color: #64748b; font-size: 0.9rem; }
+    .source-packet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .source-packet { border-radius: 0.75rem; padding: 0.8rem; border: 1px solid; }
+    .source-packet strong { display: block; font-size: 0.78rem; color: #0f172a; }
+    .source-packet span { display: block; color: #475569; font-size: 0.78rem; margin-top: 0.25rem; }
+    .source-packet-covered { background: #ecfdf5; border-color: #a7f3d0; }
+    .source-packet-weak { background: #fffbeb; border-color: #fde68a; }
     .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .summary-sub h3 { color: #047857; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.72rem; margin-bottom: 0.5rem; }
     .summary-sub li { color: #334155; }
@@ -629,6 +663,7 @@ const generateSummaryReportHtml = (result: DiagnosticResult): string => {
 
     ${renderSummaryDiagnosis(result)}
     ${renderAssessmentHeatmapSummary(result)}
+    ${renderSourceRegistrySummary(result)}
     ${renderSummaryPlanningDecision(result)}
     ${renderSummaryRoadmap(result)}
 
@@ -747,6 +782,14 @@ const generateReportHtml = (result: DiagnosticResult): string => {
     .badge-nok { background: #ffe4e6; color: #be123c; }
     .badge-none { background: #f1f5f9; color: #64748b; }
     .evidence-check-summary { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; margin: 1.5rem 0 2rem; }
+    .source-registry-summary { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; margin: 1.5rem 0 2rem; }
+    .source-registry-summary > p { margin: 0 0 1rem; color: #64748b; font-size: 0.9rem; }
+    .source-packet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .source-packet { border-radius: 0.75rem; padding: 0.8rem; border: 1px solid; }
+    .source-packet strong { display: block; font-size: 0.78rem; color: #0f172a; }
+    .source-packet span { display: block; color: #475569; font-size: 0.78rem; margin-top: 0.25rem; }
+    .source-packet-covered { background: #ecfdf5; border-color: #a7f3d0; }
+    .source-packet-weak { background: #fffbeb; border-color: #fde68a; }
     .qg-status { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-radius: 0.75rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid; }
     .qg-status p { margin: 0.2rem 0 0 0; font-size: 0.85rem; }
     .qg-status-label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
@@ -814,6 +857,7 @@ const generateReportHtml = (result: DiagnosticResult): string => {
   </div>
 
   ${renderEvidenceCheckSummary(result)}
+  ${renderSourceRegistrySummary(result)}
 
   <div class="classification-panel">
     <div class="classification-row">

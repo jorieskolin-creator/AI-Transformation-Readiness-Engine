@@ -1,138 +1,88 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import ts from '../node_modules/typescript/lib/typescript.js';
+import { readFile } from 'node:fs/promises';
 
-const compile = (source) => ts.transpileModule(source, {
-  compilerOptions: {
-    module: ts.ModuleKind.ES2022,
-    target: ts.ScriptTarget.ES2020,
-    importsNotUsedAsValues: ts.ImportsNotUsedAsValues.Remove,
-  },
-}).outputText;
-
-const dir = await mkdtemp(join(tmpdir(), 'aiTransformation-model-routing-'));
 const source = await readFile(new URL('../src/models.ts', import.meta.url), 'utf8');
-const modulePath = join(dir, 'models.mjs');
-await writeFile(modulePath, compile(source), 'utf8');
+const { STAGE_MODELS, modelsFor } = await import('../src/models.ts');
 
-const { STAGE_MODELS, modelsFor } = await import(`file://${modulePath}`);
+assert.equal(source.includes('gemini'), false, 'Gemini must not be present in the active model registry');
+assert.equal(source.includes('haiku'), false, 'Haiku must not be present in the active model registry');
 
-const forbiddenClaudeLightweight = ['claude', 'h' + 'aiku', '4', '5', '20251001'].join('-');
-const forbiddenGeminiLightweight = ['gemini', '2.5', 'fl' + 'ash'].join('-');
-assert.equal(source.includes(forbiddenClaudeLightweight), false);
-assert.equal(source.includes(forbiddenGeminiLightweight), false);
+for (const stage of Object.keys(STAGE_MODELS)) {
+  const chain = modelsFor(stage);
+  assert.ok(chain.length >= 2, `${stage} should have at least one fallback`);
+  assert.equal(chain.some((profile) => profile.provider === 'gemini'), false, `${stage} should not use Gemini`);
+  assert.equal(chain.some((profile) => /gemini/i.test(profile.id)), false, `${stage} should not reference Gemini IDs`);
+  assert.equal(chain.some((profile) => /haiku/i.test(profile.id)), false, `${stage} should not reference Haiku IDs`);
+}
 
-assert.equal(STAGE_MODELS.preflight.provider, 'gemini');
-assert.equal(STAGE_MODELS.preflight.id, 'gemini-3.5-flash');
-assert.deepEqual(STAGE_MODELS.preflight.thinkingConfig, { thinkingLevel: 'low' });
+assert.equal(STAGE_MODELS.preflight.provider, 'openai');
+assert.equal(STAGE_MODELS.preflight.id, 'gpt-5.5');
+assert.deepEqual(STAGE_MODELS.preflight.openaiReasoning, { effort: 'low' });
+
+assert.equal(STAGE_MODELS.forensic_audit.provider, 'anthropic');
+assert.equal(STAGE_MODELS.forensic_audit.id, 'claude-sonnet-4-6');
+assert.equal(modelsFor('forensic_audit')[1].id, 'gpt-5.5');
+assert.equal(modelsFor('forensic_audit')[2].id, 'claude-opus-4-7');
+
+assert.equal(STAGE_MODELS.targeted_rescan.provider, 'anthropic');
+assert.equal(STAGE_MODELS.targeted_rescan.id, 'claude-opus-4-7');
+assert.equal(modelsFor('targeted_rescan')[1].id, 'gpt-5.5');
+assert.equal(modelsFor('targeted_rescan')[2].id, 'claude-sonnet-4-6');
+
+assert.equal(STAGE_MODELS.evidence_check.provider, 'openai');
+assert.equal(STAGE_MODELS.evidence_check.id, 'gpt-5.5');
+assert.equal(modelsFor('evidence_check')[1].id, 'claude-sonnet-4-6');
+
+assert.equal(STAGE_MODELS.evidence_adjudication.provider, 'openai');
+assert.equal(modelsFor('evidence_adjudication')[1].id, 'claude-opus-4-7');
+
+assert.equal(STAGE_MODELS.synthesis.provider, 'anthropic');
+assert.equal(STAGE_MODELS.synthesis.id, 'claude-sonnet-4-6');
+assert.equal(modelsFor('synthesis')[1].id, 'gpt-5.5');
+
+assert.equal(STAGE_MODELS.synthesis_escalation.id, 'claude-opus-4-7');
+assert.equal(modelsFor('synthesis_escalation')[1].id, 'gpt-5.5');
+assert.deepEqual(modelsFor('synthesis_escalation')[1].openaiReasoning, { effort: 'high' });
+
+assert.equal(STAGE_MODELS.roadmap_synthesis.id, 'claude-opus-4-7');
+assert.equal(modelsFor('roadmap_synthesis')[1].id, 'gpt-5.5');
+assert.equal(modelsFor('roadmap_synthesis')[2].id, 'claude-sonnet-4-6');
+
 assert.equal(STAGE_MODELS.fact_check.provider, 'openai');
 assert.equal(STAGE_MODELS.fact_check.id, 'gpt-5.5');
 assert.deepEqual(STAGE_MODELS.fact_check.openaiReasoning, { effort: 'medium' });
-assert.equal(STAGE_MODELS.fact_check.maxTokens, 12000);
 assert.equal(STAGE_MODELS.fact_check_high.provider, 'openai');
-assert.equal(STAGE_MODELS.fact_check_high.id, 'gpt-5.5');
 assert.deepEqual(STAGE_MODELS.fact_check_high.openaiReasoning, { effort: 'high' });
-assert.equal(STAGE_MODELS.targeted_rescan.provider, 'anthropic');
-assert.equal(STAGE_MODELS.targeted_rescan.id, 'claude-opus-4-7');
-assert.equal(STAGE_MODELS.evidence_adjudication.provider, 'openai');
-assert.equal(STAGE_MODELS.evidence_adjudication.id, 'gpt-5.5');
 assert.equal(STAGE_MODELS.quality_gate.provider, 'openai');
-assert.equal(STAGE_MODELS.quality_gate.id, 'gpt-5.5');
-assert.equal(STAGE_MODELS.quality_gate.maxTokens, 8192);
-assert.equal(STAGE_MODELS.roadmap_synthesis.provider, 'anthropic');
-assert.equal(STAGE_MODELS.roadmap_synthesis.id, 'claude-opus-4-7');
 
-const factCheckChain = modelsFor('fact_check');
-assert.equal(factCheckChain[0].provider, 'openai');
-assert.equal(factCheckChain[0].id, 'gpt-5.5');
-assert.equal(factCheckChain[1].provider, 'anthropic');
-assert.equal(factCheckChain[1].id, 'claude-sonnet-4-6');
-assert.equal(factCheckChain[2].provider, 'gemini');
-assert.equal(factCheckChain[2].id, 'gemini-2.5-pro');
+const routerSource = await readFile(new URL('../src/services/modelRouter.ts', import.meta.url), 'utf8');
+assert.equal(routerSource.includes('/api/generate'), false, 'router must not call the Gemini proxy');
+assert.equal(routerSource.includes('callGemini'), false, 'router must not include Gemini dispatch code');
 
-const highFactCheckChain = modelsFor('fact_check_high');
-assert.equal(highFactCheckChain[0].provider, 'openai');
-assert.deepEqual(highFactCheckChain[0].openaiReasoning, { effort: 'high' });
-assert.equal(highFactCheckChain[1].id, 'claude-sonnet-4-6');
-assert.equal(highFactCheckChain.some((profile) => profile.provider === 'gemini'), false);
-
-const preflightChain = modelsFor('preflight');
-assert.equal(preflightChain[0].id, 'gemini-3.5-flash');
-assert.equal(preflightChain[1].id, 'gemini-2.5-pro');
-assert.equal(preflightChain[2].provider, 'openai');
-assert.equal(preflightChain[2].id, 'gpt-5.5');
-
-const forensicAuditChain = modelsFor('forensic_audit');
-assert.equal(forensicAuditChain[0].id, 'claude-sonnet-4-6');
-assert.equal(forensicAuditChain[1].provider, 'openai');
-assert.equal(forensicAuditChain[1].id, 'gpt-5.5');
-assert.equal(forensicAuditChain[2].id, 'gemini-2.5-pro');
-
-const targetedRescanChain = modelsFor('targeted_rescan');
-assert.equal(targetedRescanChain[0].id, 'claude-opus-4-7');
-assert.equal(targetedRescanChain[1].id, 'gpt-5.5');
-assert.equal(targetedRescanChain[2].id, 'claude-sonnet-4-6');
-assert.equal(targetedRescanChain[3].id, 'gemini-2.5-pro');
-
-const evidenceCheckChain = modelsFor('evidence_check');
-assert.equal(evidenceCheckChain[0].id, 'gemini-3.1-pro-preview');
-assert.equal(evidenceCheckChain[1].id, 'claude-sonnet-4-6');
-assert.equal(evidenceCheckChain[2].provider, 'openai');
-assert.equal(evidenceCheckChain[2].id, 'gpt-5.5');
-
-const adjudicationChain = modelsFor('evidence_adjudication');
-assert.equal(adjudicationChain[0].provider, 'openai');
-assert.equal(adjudicationChain[1].id, 'claude-opus-4-7');
-
-const synthesisChain = modelsFor('synthesis');
-assert.equal(synthesisChain[0].id, 'claude-sonnet-4-6');
-assert.equal(synthesisChain[1].provider, 'openai');
-assert.equal(synthesisChain[1].id, 'gpt-5.5');
-assert.equal(synthesisChain[2].id, 'gemini-2.5-pro');
-
-const escalationChain = modelsFor('synthesis_escalation');
-assert.equal(escalationChain[0].id, 'claude-opus-4-7');
-assert.equal(escalationChain[1].provider, 'openai');
-assert.deepEqual(escalationChain[1].openaiReasoning, { effort: 'high' });
-assert.equal(escalationChain[2].id, 'gemini-3.1-pro-preview');
-
-const qualityGateChain = modelsFor('quality_gate');
-assert.equal(qualityGateChain[0].provider, 'openai');
-assert.equal(qualityGateChain[1].id, 'claude-sonnet-4-6');
-
-const roadmapChain = modelsFor('roadmap_synthesis');
-assert.equal(roadmapChain[0].provider, 'anthropic');
-assert.equal(roadmapChain[0].id, 'claude-opus-4-7');
-assert.equal(roadmapChain[1].provider, 'openai');
-assert.equal(roadmapChain[1].id, 'gpt-5.5');
-assert.equal(roadmapChain[2].provider, 'gemini');
-assert.equal(roadmapChain[2].id, 'gemini-3.1-pro-preview');
-
-const geminiServiceSource = await readFile(new URL('../src/services/geminiService.ts', import.meta.url), 'utf8');
+const analysisSource = await readFile(new URL('../src/services/analysisService.ts', import.meta.url), 'utf8');
 assert.match(
-  geminiServiceSource,
+  analysisSource,
   /substage: 'evidence_summary'[\s\S]*?actuals\.synthesis = resp\.modelUsed\.id|actuals\.synthesis = resp\.modelUsed\.id[\s\S]*?substage: 'evidence_summary'/,
   'evidence summary model should be recorded as synthesis metadata'
 );
 assert.match(
-  geminiServiceSource,
+  analysisSource,
   /runStage\('roadmap_synthesis'[\s\S]*?actuals\.roadmap_synthesis = resp\.modelUsed\.id/,
   'roadmap model should be recorded as roadmap_synthesis metadata'
+);
+assert.match(
+  analysisSource,
+  /runFactCheck\(strategyData, factCheck\.attempts \+ 1, 'fact_check_high'\)/,
+  'fact-check should have a high-reasoning escalation path'
 );
 
 const orchestratorSource = await readFile(new URL('../src/orchestrator.ts', import.meta.url), 'utf8');
 assert.match(
   orchestratorSource,
-  /runSingleBatch\(batchId, text, images, ctx, prompt, 'targeted_rescan'\)/,
-  'targeted rescans should use the dedicated targeted_rescan stage'
+  /runTargetedRescan\(batchId, packetInput\.text \|\| text,[\s\S]*rescanItems\)/,
+  'targeted rescans should use the dedicated targeted_rescan stage with packet input'
 );
-
-assert.match(
-  geminiServiceSource,
-  /runFactCheck\(strategyData, factCheck\.attempts \+ 1, 'fact_check_high'\)/,
-  'fact-check should have a high-reasoning escalation path'
-);
+assert.match(orchestratorSource, /sourcePackets\?: Phase1SourcePackets/);
+assert.match(orchestratorSource, /packetInput\.usedFallback \? undefined : sourcePackets\?\.fullText/);
 
 console.log('model routing unit tests passed');

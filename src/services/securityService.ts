@@ -10,12 +10,14 @@ export const forensicSanitizeImport = (dirtyHtml: string): string => {
   });
 };
 
-export const generateSafetyAuditPrompt = (textSample: string, images?: ImageInput[]) => {
+export const generateSafetyAuditPrompt = (reviewPacket: string, images?: ImageInput[]) => {
   const imageCount = images?.length ?? 0;
   return `
 <task>
-You are a **Data Loss Prevention (DLP) Officer** for a AI Transformation Assessment Engine.
-Scan the following text sample (first 1500 chars)${imageCount > 0 ? ` AND the ${imageCount} attached image part(s)` : ''} for High-Risk Content.
+You are a **Data Loss Prevention (DLP) Officer** for an AI Transformation Assessment Engine.
+Scan the following distributed review packet${imageCount > 0 ? ` AND the ${imageCount} attached image part(s)` : ''} for High-Risk Content.
+
+The deterministic scanner has already inspected the full parsed source registry. Your role is to review representative chunks from the beginning, middle, end, table/profile areas, parse-warning areas, and any regex-risk areas. Do not assume this packet is the whole customer source; use it as a safety review sample.
 
 **HIGH-RISK CATEGORIES:**
 1. **PII:** Social Security Numbers, Passport Numbers, Home Addresses, Personal Financial Data${imageCount > 0 ? ', faces of individuals in screenshots with names visible, employee photos' : ''}.
@@ -37,7 +39,7 @@ Return a JSON object ONLY:
 </task>
 
 <text_sample>
-${textSample.substring(0, 1500)}...
+${reviewPacket.substring(0, 40000)}
 </text_sample>
 `;
 };

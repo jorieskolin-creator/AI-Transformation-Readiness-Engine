@@ -28,6 +28,13 @@ import { sanitizeRoadmapTacticGrounding } from "./tacticGroundingService";
 import { buildReferenceLeakTerms, sanitizeStrategyAfterFactCheck, sanitizeStrategyReferenceLeaks } from "./strategySanitationService";
 import { normalizeDomainDiagnosis } from "./domainDiagnosisService";
 import { collectSourceOrganizationNames, scrubDiagnosticResultForPrivacy } from "./privacyService";
+import {
+  buildDlpReviewPacket,
+  buildDomainPackets,
+  buildSourceRegistry,
+  scanRegistryDlp,
+  sourceRegistryRuntimeStatus
+} from "./sourceRegistryService";
 
 const FACT_CHECK_MAX_RETRIES = 2;
 const ID_VALIDATION_MAX_REGENS = 2;
@@ -114,9 +121,9 @@ const parseAiResponse = (text: string): any => {
   }
 };
 
-// Direct model calls now flow through modelRouter (`runStage`). The router
-// resolves stage → primary+fallbacks from src/models.ts and dispatches to the
-// right provider endpoint.
+// Direct model calls flow through modelRouter (`runStage`). The router resolves
+// stage → primary+fallbacks from src/models.ts and dispatches to the active
+// provider endpoint.
 
 const validateAndSanitizeLogs = (rawData: any): Phase1AuditLogs => {
   const safeLog: Phase1AuditLogs = { maturity: {}, antipattern: {} };
@@ -160,7 +167,12 @@ const validateAndSanitizeLogs = (rawData: any): Phase1AuditLogs => {
           section: typeof q.section === 'string' ? q.section : undefined,
           category: EVIDENCE_CATEGORIES.includes(q.category) ? q.category as EvidenceCategory : undefined,
           evidence_source: q.evidence_source === 'image' ? 'image' : 'text',
-          page_number: typeof q.page_number === 'number' && q.page_number > 0 ? q.page_number : undefined
+          page_number: typeof q.page_number === 'number' && q.page_number > 0 ? q.page_number : undefined,
+          source_id: typeof q.source_id === 'string' ? q.source_id : undefined,
+          page_id: typeof q.page_id === 'string' ? q.page_id : undefined,
+          chunk_id: typeof q.chunk_id === 'string' ? q.chunk_id : undefined,
+          sheet_name: typeof q.sheet_name === 'string' ? q.sheet_name : undefined,
+          row_number: typeof q.row_number === 'number' && q.row_number > 0 ? q.row_number : undefined
         }));
     }
 
@@ -233,14 +245,37 @@ export const analyzeDocument = async (
       console.log(`[AI Transformation] Multimodal: ${images.length} image(s), ~${Math.round(imagePayloadBytes / 1024)} KB base64 payload.`);
     }
 
-    console.log(`[AI Transformation] [${runId}] Running Security Pre-Flight (DLP)...`);
+    console.log(`[AI Transformation] [${runId}] Building source registry and running Security Pre-Flight (DLP)...`);
     onProgress('audit', 1);
-    const dlpPrompt = generateSafetyAuditPrompt(text, images);
+    const sourceRegistry = buildSourceRegistry(text, images);
+    const sourcePackets = buildDomainPackets(sourceRegistry);
+    const deterministicDlp = scanRegistryDlp(sourceRegistry);
+    const dlpReviewPacket = buildDlpReviewPacket(sourceRegistry);
+    const sourceRegistryStatus = sourceRegistryRuntimeStatus(
+      sourceRegistry,
+      sourcePackets,
+      dlpReviewPacket.selected_chunk_count,
+      deterministicDlp
+    );
+    serverLog(runId, deterministicDlp.blocked ? 'error' : deterministicDlp.caution_hits.length > 0 ? 'warn' : 'info', 'source_registry_built', {
+      sources: sourceRegistryStatus.source_count,
+      chunks: sourceRegistryStatus.chunk_count,
+      dlp_review_chunks: sourceRegistryStatus.dlp_review_chunk_count,
+      dlp_high_risk_hits: sourceRegistryStatus.dlp_high_risk_hits,
+      dlp_caution_hits: sourceRegistryStatus.dlp_caution_hits,
+      weak_packets: Object.entries(sourceRegistryStatus.packets).filter(([, p]) => p.weak_coverage).map(([domain]) => domain).join(',') || 'none',
+    });
+
+    if (deterministicDlp.blocked) {
+      throw new Error(`Security Alert: Document rejected by deterministic DLP scan. (${deterministicDlp.warnings.join(' ')})`);
+    }
+
+    const dlpPrompt = generateSafetyAuditPrompt(dlpReviewPacket.text, dlpReviewPacket.images);
 
     const dlpStarted = Date.now();
     const dlpResponse = await runStage('preflight', {
       userText: dlpPrompt,
-      images,
+      images: dlpReviewPacket.images,
     }, { runId });
     actuals.preflight = dlpResponse.modelUsed.id;
     serverLog(runId, 'info', 'stage_complete', {
@@ -271,7 +306,11 @@ export const analyzeDocument = async (
     const phase1Started = Date.now();
     const aggregatedRawData = await runPhase1Audit(text, images, (completed, total) => {
       onProgress('audit', Math.round((completed / total) * 100));
-    }, { runId });
+    }, { runId }, {
+      packets: sourcePackets,
+      fullText: text,
+      fullImages: images,
+    });
     if (aggregatedRawData.models_used.length > 0) {
       actuals.forensic_audit = aggregatedRawData.models_used.join(',');
     }
@@ -981,6 +1020,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
         document_analyzed: "Uploaded Text",
         timestamp: new Date().toISOString(),
         engine_version: "ai-transformation-readiness-1.0.0",
+        source_registry: sourceRegistryStatus,
         knowledge_base: referenceKbIndex.status,
         model_config: {
           preflight: actuals.preflight,
