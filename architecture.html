@@ -1046,7 +1046,7 @@
           <dt>Behaviour</dt>
           <dd>Conservative about safety, careful about relevance. Secrets, tokens, and sensitive identifiers are redacted before model analysis. Low AI-keyword density becomes a warning rather than a rejection when the material is safe and parseable.</dd>
           <dt>Model</dt>
-          <dd><code>gemini-3.5-flash</code> primary, with <code>gemini-2.5-pro</code> and <code>gpt-5.5</code> fallback support. Local PDF.js extraction, CSV/TSV parsing, HTML/JSON handling, parse-quality checks, and deterministic redaction happen outside the model.</dd>
+          <dd><code>gpt-5.5</code> pre-flight profile primary, with <code>claude-sonnet-4-6</code> fallback support. Local PDF.js extraction, CSV/TSV parsing, HTML/JSON handling, source-registry packetization, parse-quality checks, and deterministic redaction happen outside the model.</dd>
           <dt>Decision</dt>
           <dd>Hard blocks are reserved for unsafe, unreadable, unsupported, over-limit, or corrupt files. Generic IT/process material can pass into the scanner as adjacent context; the evidence pipeline later decides whether it proves AI Transformation readiness.</dd>
         </dl>
@@ -1098,7 +1098,7 @@ Kickstart, Building the System</code></pre>
           <dt>Per-Batch Behaviour</dt>
           <dd>Receives 10 criteria definitions per batch: 5 maturity indicators and 5 anti-patterns. Each criterion has 3 evidence questions. It returns structured JSON with score, reasoning, evidence category, quote, source reference, silent-area notes, and source gaps.</dd>
           <dt>Model · Concurrency</dt>
-          <dd><code>claude-sonnet-4-6</code> primary in the real routing. The fallback chain is <code>gpt-5.5</code> audit profile, then <code>gemini-2.5-pro</code>. Five A-E batches run concurrently; evidence check runs independently after each batch completes.</dd>
+          <dd><code>claude-sonnet-4-6</code> primary in the real routing. The fallback chain is <code>gpt-5.5</code> audit profile, then <code>claude-opus-4-7</code>. Five A-E batches run concurrently; each batch receives its domain source packet, and evidence check runs independently after each batch completes.</dd>
         </dl>
         <div class="persona-rules" style="grid-column: span 2;">
           <h4>Behavioural Rules</h4>
@@ -1133,7 +1133,7 @@ Kickstart, Building the System</code></pre>
           <dt>What It Produces</dt>
           <dd>Evidence-only persona summaries, evidence summary, A-E domain diagnosis, planning decision, visual scorecard, findings mode when needed, and a four-phase roadmap split between Kickstart and Building the System when confidence allows.</dd>
           <dt>Model</dt>
-          <dd><code>claude-sonnet-4-6</code> writes evidence summaries and diagnosis. Escalation and roadmap planning use <code>claude-opus-4-7</code> first, with <code>gpt-5.5</code> and <code>gemini-3.1-pro-preview</code> as fallbacks.</dd>
+          <dd><code>claude-sonnet-4-6</code> writes evidence summaries and diagnosis, with <code>gpt-5.5</code> and <code>claude-opus-4-7</code> fallbacks. Escalation and roadmap planning use <code>claude-opus-4-7</code> first, with <code>gpt-5.5</code> and <code>claude-sonnet-4-6</code> as fallbacks.</dd>
         </dl>
         <div class="persona-rules" style="grid-column: span 2;">
           <h4>Behavioural Rules</h4>
@@ -1501,21 +1501,21 @@ then capped by evidence density and delivery integrity</div><div class="metric-i
     <div class="section-tag"><span class="num">12</span> Model Routing</div>
     <h2>Real Model Roles and Fallback Chains</h2>
     <p>
-      Model routing is centralized in <code>src/models.ts</code>. The production configuration uses stronger reasoning models for forensic audit, targeted rescan, synthesis escalation, roadmap creation, fact-checking, and quality-gate explanation. Fallbacks are ordered by task shape: fast safety checks can start with Gemini Flash, independent verification uses Gemini Pro-class models, and high-stakes synthesis routes through Claude Sonnet/Opus and GPT-5.5 profiles.
+      Model routing is centralized in <code>src/models.ts</code>. The production configuration uses only OpenAI and Anthropic runtime providers. Fallbacks are ordered by task shape: deterministic source-registry and DLP checks reduce model load before pre-flight review; forensic audit and synthesis route through Claude Sonnet/Opus and GPT-5.5 profiles; fact-checking, adjudication, and quality-gate explanation use GPT-5.5 with Anthropic fallbacks.
     </p>
 
     <table>
       <thead><tr><th>Step / Task</th><th>Primary Model</th><th>Fallback Chain</th></tr></thead>
       <tbody>
-        <tr><td>Security pre-flight / DLP scan</td><td><code>gemini-3.5-flash</code></td><td><code>gemini-2.5-pro</code> → <code>gpt-5.5</code></td></tr>
-        <tr><td>Phase 1 forensic audit, batches A-E</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> audit profile → <code>gemini-2.5-pro</code></td></tr>
-        <tr><td>Targeted rescan for weak evidence</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>claude-sonnet-4-6</code> → <code>gemini-2.5-pro</code></td></tr>
-        <tr><td>Independent evidence check</td><td><code>gemini-3.1-pro-preview</code></td><td><code>claude-sonnet-4-6</code> → <code>gpt-5.5</code> evidence-check profile</td></tr>
+        <tr><td>Security pre-flight / DLP scan</td><td><code>gpt-5.5</code> pre-flight profile</td><td><code>claude-sonnet-4-6</code></td></tr>
+        <tr><td>Phase 1 forensic audit, batches A-E</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> audit profile → <code>claude-opus-4-7</code></td></tr>
+        <tr><td>Targeted rescan for weak evidence</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>claude-sonnet-4-6</code></td></tr>
+        <tr><td>Independent evidence check</td><td><code>gpt-5.5</code> evidence-check profile</td><td><code>claude-sonnet-4-6</code> → <code>claude-opus-4-7</code></td></tr>
         <tr><td>Anti-pattern adjudication</td><td><code>gpt-5.5</code> fact-check profile</td><td><code>claude-opus-4-7</code></td></tr>
-        <tr><td>Evidence summary / diagnosis</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> synthesis profile → <code>gemini-2.5-pro</code></td></tr>
-        <tr><td>Phase 3 escalation mode</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> escalation profile → <code>gemini-3.1-pro-preview</code></td></tr>
-        <tr><td>Roadmap synthesis</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>gemini-3.1-pro-preview</code></td></tr>
-        <tr><td>Fact-check</td><td><code>gpt-5.5</code></td><td><code>claude-sonnet-4-6</code> → <code>gemini-2.5-pro</code></td></tr>
+        <tr><td>Evidence summary / diagnosis</td><td><code>claude-sonnet-4-6</code></td><td><code>gpt-5.5</code> synthesis profile → <code>claude-opus-4-7</code></td></tr>
+        <tr><td>Phase 3 escalation mode</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> escalation profile → <code>claude-sonnet-4-6</code></td></tr>
+        <tr><td>Roadmap synthesis</td><td><code>claude-opus-4-7</code></td><td><code>gpt-5.5</code> roadmap profile → <code>claude-sonnet-4-6</code></td></tr>
+        <tr><td>Fact-check</td><td><code>gpt-5.5</code></td><td><code>claude-sonnet-4-6</code></td></tr>
         <tr><td>High fact-check retry</td><td><code>gpt-5.5</code> high reasoning</td><td><code>claude-sonnet-4-6</code></td></tr>
         <tr><td>Quality Gate explanation</td><td><code>gpt-5.5</code> quality-gate profile</td><td><code>claude-sonnet-4-6</code></td></tr>
       </tbody>

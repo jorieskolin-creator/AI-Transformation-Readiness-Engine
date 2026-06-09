@@ -31,6 +31,11 @@ export interface EvidenceQuote {
   category?: EvidenceCategory;
   evidence_source?: 'text' | 'image';
   page_number?: number;
+  source_id?: string;
+  page_id?: string;
+  chunk_id?: string;
+  sheet_name?: string;
+  row_number?: number;
 }
 
 export type ImageMimeType = 'image/png' | 'image/jpeg' | 'image/webp';
@@ -40,6 +45,9 @@ export interface ImageInput {
   data: string;
   source_name: string;
   page_number?: number;
+  source_id?: string;
+  page_id?: string;
+  chunk_id?: string;
 }
 
 export interface AuditItem {
@@ -248,6 +256,7 @@ export interface AnalysisMeta {
   timestamp: string;
   engine_version: string;
   source_parse_warnings?: string[];
+  source_registry?: SourceRegistryRuntimeStatus;
   knowledge_base?: KnowledgeBaseRuntimeStatus;
   model_config: {
     preflight: string;
@@ -261,6 +270,100 @@ export interface AnalysisMeta {
     fact_check_high?: string;
     validators: string;
   };
+}
+
+export type SourceChunkType =
+  | 'text'
+  | 'pdf_page'
+  | 'table_profile'
+  | 'table_row'
+  | 'metadata'
+  | 'image';
+
+export type SourceRelevanceTier = 'high' | 'medium' | 'low' | 'unknown';
+
+export interface SourceChunkRoutingHint {
+  domain: string;
+  score: number;
+  tier: SourceRelevanceTier;
+  reasons: string[];
+}
+
+export interface SourceChunk {
+  chunk_id: string;
+  source_id: string;
+  source_name: string;
+  type: SourceChunkType;
+  text: string;
+  page_id?: string;
+  page_number?: number;
+  sheet_name?: string;
+  row_number?: number;
+  char_start?: number;
+  char_end?: number;
+  parse_warnings?: string[];
+  routing: SourceChunkRoutingHint[];
+  image?: ImageInput;
+}
+
+export interface SourceRegistry {
+  source_count: number;
+  chunk_count: number;
+  chunks: SourceChunk[];
+  warnings: string[];
+}
+
+export interface SourcePacketManifestItem {
+  chunk_id: string;
+  source_id: string;
+  source_name: string;
+  page_id?: string;
+  page_number?: number;
+  type: SourceChunkType;
+  relevance: SourceRelevanceTier;
+  routed_domains: string[];
+}
+
+export interface RoutedSourcePacket {
+  domain_id: string;
+  title: string;
+  text: string;
+  images: ImageInput[];
+  manifest: SourcePacketManifestItem[];
+  included_chunk_count: number;
+  total_candidate_chunks: number;
+  weak_coverage: boolean;
+  coverage_notes: string[];
+  char_count: number;
+}
+
+export interface DlpPatternHit {
+  kind: string;
+  severity: 'block' | 'caution';
+  count: number;
+  chunk_ids: string[];
+}
+
+export interface DlpScanResult {
+  scanned_chunk_count: number;
+  high_risk_hits: DlpPatternHit[];
+  caution_hits: DlpPatternHit[];
+  blocked: boolean;
+  warnings: string[];
+}
+
+export interface SourceRegistryRuntimeStatus {
+  source_count: number;
+  chunk_count: number;
+  dlp_review_chunk_count: number;
+  dlp_high_risk_hits: number;
+  dlp_caution_hits: number;
+  packets: Record<string, {
+    included_chunk_count: number;
+    total_candidate_chunks: number;
+    weak_coverage: boolean;
+    char_count: number;
+  }>;
 }
 
 export interface KnowledgeBaseRuntimeStatus {
@@ -360,7 +463,7 @@ export interface FactCheckResult {
   failure_reason?: string;
   partial_failure_reason?: string;
   // Per-pass trajectory accumulated across the fact-check + regen loop.
-  // Populated by the orchestrator (geminiService), not by parseFactCheckResponse.
+  // Populated by the orchestrator, not by parseFactCheckResponse.
   trajectory?: FactCheckPassSnapshot[];
 }
 

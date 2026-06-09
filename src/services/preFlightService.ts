@@ -91,7 +91,7 @@ export const scanInputText = (text: string): ScanResult => {
     message = hasCoreTerm ? "Weak AI Transformation Signal" : "Partial Relevance Detected";
     details.push("Some relevant keywords found, but AI Transformation-specific context may be thin.");
     if (!hasCoreTerm) {
-      confidence_warning = "No core AI Transformation terms detected. Document may be tangentially relevant (cloud strategy, IT governance) but not a AI Transformation artifact.";
+      confidence_warning = "No core AI Transformation terms detected. Document may be tangentially relevant (cloud strategy, IT governance) but not an AI Transformation artifact.";
       details.push(confidence_warning);
     }
     canRun = true;

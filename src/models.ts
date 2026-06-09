@@ -1,25 +1,8 @@
-// Central model registry. EDIT THIS FILE to retune the pipeline — no other
-// code changes required. Each stage of the assessment maps to a named model
-// profile and an ordered fallback chain. The router (src/services/modelRouter.ts)
-// resolves a stage to its profile chain and dispatches to the correct provider.
-//
-// Provider-specific notes
-// -----------------------
-// Gemini 3 (flash/pro):   thinkingConfig.thinkingLevel: 'low' | 'medium' | 'high'
-// Gemini 2.5 (flash/pro): thinkingConfig.thinkingBudget: number
-//                         (-1 dynamic, 0 disables on Flash only, positive = budget)
-// Anthropic (Sonnet/Opus): maxTokens, optional extended thinking budget
-// OpenAI (GPT-5.x): reasoning.effort, maxTokens
-//
-// Model IDs may need adjustment as providers rename previews → GA. The router
-// reads `id` verbatim and forwards it to the provider, so a typo here is the
-// only thing that breaks a swap.
+// Central model registry. EDIT THIS FILE to retune the pipeline. Each stage of
+// the assessment maps to a named model profile and an ordered fallback chain.
+// Runtime routing is intentionally OpenAI + Anthropic only.
 
-export type Provider = 'gemini' | 'anthropic' | 'openai';
-
-export type GeminiThinkingConfig =
-  | { thinkingLevel: 'low' | 'medium' | 'high' }
-  | { thinkingBudget: number };
+export type Provider = 'anthropic' | 'openai';
 
 export interface AnthropicThinkingConfig {
   type: 'enabled';
@@ -33,57 +16,25 @@ export interface OpenAIReasoningConfig {
 export interface ModelProfile {
   id: string;
   provider: Provider;
-  thinkingConfig?: GeminiThinkingConfig;
   anthropicThinking?: AnthropicThinkingConfig;
   openaiReasoning?: OpenAIReasoningConfig;
   maxTokens?: number;
 }
 
-// Stage IDs — every LLM call in the pipeline belongs to exactly one stage.
 export type StageId =
-  | 'preflight'           // Phase 0: DLP / safety scan
-  | 'forensic_audit'      // Phase 1: 5 parallel batch audits
-  | 'targeted_rescan'     // Phase 1 repair: high-value second-opinion rescans
-  | 'evidence_check'      // Phase 1.5: verify batch evidence before scoring
-  | 'evidence_adjudication'// Phase 1.6: resolve disputed anti-pattern semantics
-  | 'synthesis'           // Phase 3: strategy + roadmap (default)
-  | 'roadmap_synthesis'   // Phase 3: deeper planning/roadmap substage
-  | 'synthesis_escalation'// Phase 3: high-stakes / complex orgs
-  | 'fact_check'          // Phase 3.5: claim verification
-  | 'fact_check_high'     // Phase 3.5: high-reasoning retry for fact-check BLOCKs
-  | 'quality_gate';       // Phase 2.5: reserved for future LLM-driven QG
-
-// ============================================================================
-// Profiles — named, reusable model configurations
-// ============================================================================
+  | 'preflight'
+  | 'forensic_audit'
+  | 'targeted_rescan'
+  | 'evidence_check'
+  | 'evidence_adjudication'
+  | 'synthesis'
+  | 'roadmap_synthesis'
+  | 'synthesis_escalation'
+  | 'fact_check'
+  | 'fact_check_high'
+  | 'quality_gate';
 
 export const PROFILES = {
-  // Gemini family
-  GEMINI_35_FLASH: {
-    id: 'gemini-3.5-flash',
-    provider: 'gemini',
-    thinkingConfig: { thinkingLevel: 'low' },
-  } satisfies ModelProfile,
-
-  GEMINI_35_FLASH_MEDIUM: {
-    id: 'gemini-3.5-flash',
-    provider: 'gemini',
-    thinkingConfig: { thinkingLevel: 'medium' },
-  } satisfies ModelProfile,
-
-  GEMINI_31_PRO: {
-    id: 'gemini-3.1-pro-preview',
-    provider: 'gemini',
-    thinkingConfig: { thinkingLevel: 'high' },
-  } satisfies ModelProfile,
-
-  GEMINI_25_PRO: {
-    id: 'gemini-2.5-pro',
-    provider: 'gemini',
-    thinkingConfig: { thinkingBudget: -1 },
-  } satisfies ModelProfile,
-
-  // Anthropic family
   SONNET_46: {
     id: 'claude-sonnet-4-6',
     provider: 'anthropic',
@@ -96,7 +47,6 @@ export const PROFILES = {
     maxTokens: 8192,
   } satisfies ModelProfile,
 
-  // OpenAI family
   GPT_55_PREFLIGHT: {
     id: 'gpt-5.5',
     provider: 'openai',
@@ -161,61 +111,37 @@ export const PROFILES = {
   } satisfies ModelProfile,
 } as const;
 
-// ============================================================================
-// Stage assignments — change a stage's primary by editing the value here.
-//
-// Temporary test-cost routing:
-// - Keep pipeline mechanics unchanged.
-// - Avoid Anthropic Sonnet/Opus as primary models while calibration tests run.
-// - Prefer Gemini Pro / Flash, with GPT-5.5 fallbacks only where needed.
-// - Do not introduce unverified model IDs such as GPT-5.4 here; the router
-//   forwards IDs verbatim and unknown IDs would break assessments.
-// ============================================================================
-
 export const STAGE_MODELS: Record<StageId, ModelProfile> = {
-  preflight:            PROFILES.GEMINI_35_FLASH,
-  forensic_audit:       PROFILES.GEMINI_31_PRO,
-  targeted_rescan:      PROFILES.GEMINI_31_PRO,
-  evidence_check:       PROFILES.GEMINI_25_PRO,
+  preflight:             PROFILES.GPT_55_PREFLIGHT,
+  forensic_audit:        PROFILES.SONNET_46,
+  targeted_rescan:       PROFILES.OPUS_47,
+  evidence_check:        PROFILES.GPT_55_EVIDENCE_CHECK,
   evidence_adjudication: PROFILES.GPT_55_FACT_CHECK,
-  synthesis:            PROFILES.GEMINI_31_PRO,
-  roadmap_synthesis:    PROFILES.GEMINI_31_PRO,
-  synthesis_escalation: PROFILES.GEMINI_31_PRO,
-  fact_check:           PROFILES.GEMINI_25_PRO,
-  fact_check_high:      PROFILES.GPT_55_FACT_CHECK,
-  quality_gate:         PROFILES.GEMINI_35_FLASH_MEDIUM,
+  synthesis:             PROFILES.SONNET_46,
+  roadmap_synthesis:     PROFILES.OPUS_47,
+  synthesis_escalation:  PROFILES.OPUS_47,
+  fact_check:            PROFILES.GPT_55_FACT_CHECK,
+  fact_check_high:       PROFILES.GPT_55_FACT_CHECK_HIGH,
+  quality_gate:          PROFILES.GPT_55_QUALITY_GATE,
 };
 
-// ============================================================================
-// Fallback chains — tried in order if primary fails
-//
-// Tiering rule during temporary test-cost routing: prefer Gemini/GPT fallbacks
-// and keep Anthropic Sonnet/Opus out of the automatic chains. This reduces
-// calibration cost without touching orchestration, evidence gates, or schemas.
-// ============================================================================
-
 export const FALLBACK_CHAIN: Record<StageId, ModelProfile[]> = {
-  preflight:            [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_PREFLIGHT],
-  forensic_audit:       [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_AUDIT],
-  targeted_rescan:      [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ROADMAP],
-  evidence_check:       [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_EVIDENCE_CHECK],
-  evidence_adjudication: [PROFILES.GEMINI_31_PRO, PROFILES.GEMINI_25_PRO],
-  synthesis:            [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_SYNTHESIS],
-  roadmap_synthesis:    [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ROADMAP],
-  synthesis_escalation: [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_ESCALATION],
-  fact_check:           [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_FACT_CHECK],
-  fact_check_high:      [PROFILES.GEMINI_31_PRO, PROFILES.GPT_55_FACT_CHECK_HIGH],
-  quality_gate:         [PROFILES.GEMINI_25_PRO, PROFILES.GPT_55_QUALITY_GATE],
+  preflight:             [PROFILES.SONNET_46],
+  forensic_audit:        [PROFILES.GPT_55_AUDIT, PROFILES.OPUS_47],
+  targeted_rescan:       [PROFILES.GPT_55_ROADMAP, PROFILES.SONNET_46],
+  evidence_check:        [PROFILES.SONNET_46, PROFILES.OPUS_47],
+  evidence_adjudication: [PROFILES.OPUS_47],
+  synthesis:             [PROFILES.GPT_55_SYNTHESIS, PROFILES.OPUS_47],
+  roadmap_synthesis:     [PROFILES.GPT_55_ROADMAP, PROFILES.SONNET_46],
+  synthesis_escalation:  [PROFILES.GPT_55_ESCALATION, PROFILES.SONNET_46],
+  fact_check:            [PROFILES.SONNET_46],
+  fact_check_high:       [PROFILES.SONNET_46],
+  quality_gate:          [PROFILES.SONNET_46],
 };
 
 export function modelsFor(stage: StageId): ModelProfile[] {
   return [STAGE_MODELS[stage], ...FALLBACK_CHAIN[stage]];
 }
-
-// ============================================================================
-// Backward-compat aliases — existing callers reference these directly.
-// New code should call `modelsFor(stage)` via the router instead.
-// ============================================================================
 
 export const MODEL_PHASE1: ModelProfile = STAGE_MODELS.forensic_audit;
 export const MODEL_PHASE3: ModelProfile = STAGE_MODELS.synthesis;

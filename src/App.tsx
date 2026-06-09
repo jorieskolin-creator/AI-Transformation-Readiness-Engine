@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { analyzeDocument } from './services/geminiService';
+import { analyzeDocument } from './services/analysisService';
 import { scanInputText, sanitizeInput } from './services/preFlightService';
 import { extractPagesFromPdf, imageFileToInput } from './services/pdfService';
 import type { PdfParseQuality } from './services/pdfService';
@@ -619,7 +619,7 @@ const App: React.FC = () => {
       `Visual pages included: ${parseQuality.visualPagesIncluded}; visual candidates skipped: ${parseQuality.visualPagesSkipped}.`,
       `Likely scanned PDF: ${parseQuality.likelyScannedPdf ? 'yes' : 'no'}.`,
       `Warning: ${warnings}`,
-      'Use source evidence cautiously where PDF text extraction may be incomplete; do not treat this parse-quality note as a AI Transformation maturity finding.',
+      'Use source evidence cautiously where PDF text extraction may be incomplete; do not treat this parse-quality note as an AI Transformation maturity finding.',
       '[/SOURCE_PARSE_QUALITY]'
     ].join('\n');
   };
@@ -1645,7 +1645,7 @@ const App: React.FC = () => {
               <span className="font-display font-bold text-slate-300">AI Transformation Assessment Engine</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto md:mx-0">
-              Assessment Suite v1.0<br />Multi-Model Architecture (Gemini Pro + Claude Opus)
+              Assessment Suite v1.0<br />Multi-Model Architecture (OpenAI + Claude)
             </p>
           </div>
 

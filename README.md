@@ -1,10 +1,10 @@
 # AI Transformation Readiness Engine
 
-Evidence-gated assessment scanner for AI-driven value creation readiness. React + TypeScript + Vite frontend; Gemini, Anthropic, and OpenAI providers are proxied through serverless functions under `api/`.
+Evidence-gated assessment scanner for AI-driven value creation readiness. React + TypeScript + Vite frontend; Anthropic and OpenAI providers are proxied through serverless functions under `api/`.
 
 ## Local Development
 
-The client calls `/api/generate`, `/api/anthropic-generate`, and `/api/openai-generate`, so local development needs the serverless functions running too. Use `vercel dev` when testing live assessment runs:
+The client calls `/api/anthropic-generate` and `/api/openai-generate`, so local development needs the serverless functions running too. Use `vercel dev` when testing live assessment runs:
 
 ```bash
 npm install
@@ -38,7 +38,6 @@ The remote Vercel Blob knowledge base is a simple set of PDF documents. The defa
 
 Set environment variables in the hosting platform:
 
-- `GEMINI_API_KEY`
 - `ANTHROPIC_API_KEY`
 - `GPT_API_KEY` (or `OPENAI_API_KEY` as a fallback alias)
 - `SECRET_KEY`

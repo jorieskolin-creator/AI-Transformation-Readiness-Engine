@@ -44,11 +44,11 @@ const {
 }
 
 {
-  const scrubbed = scrubGeneratedText('HUS has a AI Transformation process. HUS needs evidence.', {
+  const scrubbed = scrubGeneratedText('HUS has an AI Transformation process. HUS needs evidence.', {
     redactOrganizationName: 'HUS',
     redactPersonNames: false,
   });
-  assert.equal(scrubbed.text, 'the assessed organization has a AI Transformation process. the assessed organization needs evidence.');
+  assert.equal(scrubbed.text, 'the assessed organization has an AI Transformation process. the assessed organization needs evidence.');
 }
 
 {
