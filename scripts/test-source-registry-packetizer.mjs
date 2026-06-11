@@ -90,6 +90,16 @@ assert.ok(reviewPacket.selected_chunk_count >= 2);
 assert.match(reviewPacket.text, /DLP_REVIEW_PACKET/);
 assert.match(reviewPacket.text, /Full deterministic DLP scanned/);
 
+const manyImages = Array.from({ length: 12 }, (_, idx) => ({
+  mimeType: 'image/png',
+  data: 'iVBORw0KGgo=',
+  source_name: 'operating-model.pdf',
+  page_number: idx + 1,
+}));
+const imageHeavyRegistry = buildSourceRegistry(sourceText, manyImages);
+const imageHeavyReviewPacket = buildDlpReviewPacket(imageHeavyRegistry);
+assert.equal(imageHeavyReviewPacket.images.length, 10, 'DLP model review should cap visual samples at 10 images');
+
 const status = sourceRegistryRuntimeStatus(registry, packets, reviewPacket.selected_chunk_count, scanRegistryDlp(registry));
 assert.equal(status.source_count, registry.source_count);
 assert.equal(status.chunk_count, registry.chunk_count);

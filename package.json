@@ -18,6 +18,7 @@
     "test:privacy": "node scripts/test-privacy-service.mjs",
     "test:quality-gate": "node scripts/test-quality-gate-severity.mjs",
     "test:model-routing": "node scripts/test-model-routing.mjs",
+    "test:image-normalization": "node scripts/test-image-normalization.mjs",
     "test:source-registry": "node scripts/test-source-registry-packetizer.mjs",
     "test:dlp-sampling": "node scripts/test-dlp-distributed-sampling.mjs",
     "test:internal-call-protection": "node scripts/test-internal-call-protection.mjs",

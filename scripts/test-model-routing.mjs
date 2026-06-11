@@ -58,6 +58,8 @@ assert.equal(STAGE_MODELS.quality_gate.provider, 'openai');
 const routerSource = await readFile(new URL('../src/services/modelRouter.ts', import.meta.url), 'utf8');
 assert.equal(routerSource.includes('/api/generate'), false, 'router must not call the Gemini proxy');
 assert.equal(routerSource.includes('callGemini'), false, 'router must not include Gemini dispatch code');
+assert.match(routerSource, /ANTHROPIC_IMAGE_MAX_LONG_EDGE/, 'Anthropic routing should apply image dimension guard');
+assert.match(routerSource, /openai_rate_limit_retry/, 'OpenAI 429s should use a retry path');
 
 const analysisSource = await readFile(new URL('../src/services/analysisService.ts', import.meta.url), 'utf8');
 assert.match(
@@ -84,5 +86,7 @@ assert.match(
 );
 assert.match(orchestratorSource, /sourcePackets\?: Phase1SourcePackets/);
 assert.match(orchestratorSource, /packetInput\.usedFallback \? undefined : sourcePackets\?\.fullText/);
+assert.match(orchestratorSource, /images: packet\.images/, 'weak packet fallback should not attach the full original image set');
+assert.doesNotMatch(orchestratorSource, /slice\(0,\s*[68]\)/, 'Phase 1 should not impose a fixed 6-8 image cap');
 
 console.log('model routing unit tests passed');
