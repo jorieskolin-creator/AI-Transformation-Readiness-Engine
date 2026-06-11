@@ -9,7 +9,7 @@ import { forensicSanitizeImport } from './services/securityService';
 import { extractDiagnosticResultFromHtmlReport, isDiagnosticResultPayload, parseDiagnosticResultJson, serializeDiagnosticResultForHtml } from './services/reportImportService';
 import { findGeneratedReportPrivacyFindings, scrubDiagnosticResultForPrivacy } from './services/privacyService';
 import { PerformanceMonitor } from './services/debugService';
-import { DiagnosticResult, ScanResult, PersonaId, PERSONA_IDS, PERSONA_LABELS, ImageInput } from './types';
+import { DiagnosticResult, ScanResult, PersonaId, PERSONA_IDS, PERSONA_LABELS, ImageInput, SourceUsabilitySummary, SourceUsabilityStatus } from './types';
 import { METRIC_DESCRIPTIONS } from './constants';
 import { GaugeCard, AuditGrid, StrategicRoadmap, ComparisonChart, ReferenceLibrary, QualityGateBanner, BenchmarkingChart, TransferProtocol, MarkdownRenderer, NeuralLoadingGrid } from './components/DashboardComponents';
 import { ReportView } from './components/ReportView';
@@ -608,6 +608,12 @@ const App: React.FC = () => {
   const buildParseQualitySourceNote = (file: UploadedFile): string => {
     const parseQuality = file.parseMetadata?.parseQuality;
     if (!parseQuality || parseQuality.quality === 'good') return '';
+    const visualAvailability = parseQuality.visualPagesIncluded > 0
+      ? 'Rendered page images are available and may be used as visual evidence.'
+      : 'No rendered page images are available for this source.';
+    const zeroTextBoundary = parseQuality.textCoverageRatio === 0
+      ? 'The source has no extractable text layer; do not describe it as ignored or as contributing no assessable evidence if rendered page images are available.'
+      : 'Text extraction is partial; combine text evidence with rendered visual evidence where available.';
     const warnings = parseQuality.warnings.length > 0
       ? parseQuality.warnings.join(' ')
       : 'PDF text extraction may be incomplete.';
@@ -618,22 +624,75 @@ const App: React.FC = () => {
       `Sparse text pages: ${parseQuality.sparseTextPages}.`,
       `Visual pages included: ${parseQuality.visualPagesIncluded}; visual candidates skipped: ${parseQuality.visualPagesSkipped}.`,
       `Likely scanned PDF: ${parseQuality.likelyScannedPdf ? 'yes' : 'no'}.`,
+      `Visual evidence status: ${visualAvailability}`,
       `Warning: ${warnings}`,
-      'Use source evidence cautiously where PDF text extraction may be incomplete; do not treat this parse-quality note as an AI Transformation maturity finding.',
+      zeroTextBoundary,
+      'Use source evidence cautiously where PDF text extraction may be incomplete. Treat visual-only sources as lower-confidence visual evidence, not as text evidence and not as proof of absence. Do not treat this parse-quality note as an AI Transformation maturity finding.',
       '[/SOURCE_PARSE_QUALITY]'
     ].join('\n');
   };
 
   const sourceParseWarningsForFiles = (sourceFiles: UploadedFile[]): string[] => {
     return sourceFiles
-      .filter(file => file.parseMetadata?.parseQuality && file.parseMetadata.parseQuality.quality !== 'good')
-      .flatMap(file => {
+      .flatMap((file, index) => {
+        if (!file.parseMetadata?.parseQuality || file.parseMetadata.parseQuality.quality === 'good') return [];
         const parseQuality = file.parseMetadata!.parseQuality!;
         const warnings = parseQuality.warnings.length > 0
           ? parseQuality.warnings
           : ['PDF text extraction may be incomplete.'];
-        return warnings.map(warning => `${file.name}: ${warning}`);
+        const sourceLabel = `Source ${index + 1}`;
+        return warnings.map(warning => `${sourceLabel}: ${warning}`);
       });
+  };
+
+  const sourceUsabilityForFiles = (sourceFiles: UploadedFile[]): SourceUsabilitySummary => {
+    const items = sourceFiles.map((file, index) => {
+      const source_label = `Source ${index + 1}`;
+      let status: SourceUsabilityStatus = 'text_extracted';
+      let note = 'Text was extracted and can support evidence checks when content is relevant.';
+
+      if (file.kind === 'image') {
+        status = 'visual_only';
+        note = 'Image-only source; evidence depends on visual interpretation.';
+      } else if (file.kind === 'pdf') {
+        const parseQuality = file.parseMetadata?.parseQuality;
+        const visualPages = file.parseMetadata?.renderedImagePages ?? parseQuality?.visualPagesIncluded ?? 0;
+        const coverage = parseQuality?.textCoverageRatio ?? 1;
+        if (coverage === 0 && visualPages > 0) {
+          status = 'visual_only';
+          note = 'No extractable text layer; rendered page images were included and may support lower-confidence visual evidence.';
+        } else if (coverage === 0 && visualPages === 0) {
+          status = 'not_usable';
+          note = 'No extractable text layer and no rendered visual pages were available.';
+        } else if ((parseQuality?.quality === 'mixed' || parseQuality?.quality === 'poor') && visualPages > 0) {
+          status = 'mixed_text_visual';
+          note = 'Partial/sparse text plus rendered page images; source coverage depends on both text and visual interpretation.';
+        }
+      }
+
+      return {
+        source_label,
+        kind: file.kind,
+        status,
+        total_pages: file.parseMetadata?.totalPages,
+        parsed_text_pages: file.parseMetadata?.parsedTextPages,
+        visual_pages_included: file.parseMetadata?.renderedImagePages,
+        text_coverage_percent: file.parseMetadata?.parseQuality
+          ? Math.round(file.parseMetadata.parseQuality.textCoverageRatio * 100)
+          : undefined,
+        note
+      };
+    });
+
+    const count = (status: SourceUsabilityStatus) => items.filter(item => item.status === status).length;
+    return {
+      source_count: items.length,
+      text_extracted_count: count('text_extracted'),
+      mixed_text_visual_count: count('mixed_text_visual'),
+      visual_only_count: count('visual_only'),
+      not_usable_count: count('not_usable'),
+      items
+    };
   };
 
   useEffect(() => {
@@ -854,6 +913,7 @@ const App: React.FC = () => {
         data.meta = { ...data.meta, document_analyzed: opts.label };
       }
       const source_parse_warnings = sourceParseWarningsForFiles(files);
+      data.meta = { ...data.meta, source_usability: sourceUsabilityForFiles(files) };
       if (source_parse_warnings.length > 0) {
         data.meta = { ...data.meta, source_parse_warnings };
       }

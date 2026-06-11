@@ -160,8 +160,9 @@ const renderEvidenceCheckSummary = (result: DiagnosticResult): string => {
 
 const renderSourceRegistrySummary = (result: DiagnosticResult): string => {
   const registry = result.meta.source_registry;
-  if (!registry) return '';
-  const packetRows = Object.entries(registry.packets || {})
+  const usability = result.meta.source_usability;
+  if (!registry && !usability) return '';
+  const packetRows = Object.entries(registry?.packets || {})
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([domain, packet]) => `
       <div class="source-packet ${packet.weak_coverage ? 'source-packet-weak' : 'source-packet-covered'}">
@@ -169,18 +170,44 @@ const renderSourceRegistrySummary = (result: DiagnosticResult): string => {
         <span>${packet.included_chunk_count}/${packet.total_candidate_chunks} chunks · ${packet.weak_coverage ? 'weak coverage' : 'packet coverage'}</span>
       </div>`)
     .join('');
+  const usabilityLabels: Record<string, string> = {
+    text_extracted: 'Text extracted',
+    mixed_text_visual: 'Mixed text + visual',
+    visual_only: 'Visual-only',
+    not_usable: 'Not usable'
+  };
+  const usabilityRows = usability
+    ? usability.items.slice(0, 8).map(item => `
+      <div class="source-packet source-packet-neutral">
+        <strong>${escapeHtml(item.source_label)} · ${escapeHtml(usabilityLabels[item.status] || item.status)}</strong>
+        <span>${typeof item.text_coverage_percent === 'number' ? `${item.text_coverage_percent}% text coverage · ` : ''}${typeof item.visual_pages_included === 'number' ? `${item.visual_pages_included} visual pages · ` : ''}${escapeHtml(item.note)}</span>
+      </div>`)
+      .join('')
+    : '';
   return `
-  <h2>Source Registry &amp; Domain Packets</h2>
+  <h2>Source Registry, Usability &amp; Domain Packets</h2>
   <div class="source-registry-summary">
-    <p>Parsed source material was split into deterministic chunks and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.</p>
-    <div class="evidence-check-grid">
-      <div class="evidence-check-stat"><span>Sources</span><strong>${registry.source_count}</strong></div>
-      <div class="evidence-check-stat"><span>Chunks</span><strong>${registry.chunk_count}</strong></div>
-      <div class="evidence-check-stat"><span>DLP review chunks</span><strong>${registry.dlp_review_chunk_count}</strong></div>
-      <div class="evidence-check-stat"><span>DLP caution hits</span><strong>${registry.dlp_caution_hits}</strong></div>
-      <div class="evidence-check-stat"><span>DLP high-risk hits</span><strong>${registry.dlp_high_risk_hits}</strong></div>
-    </div>
-    <div class="source-packet-grid">${packetRows}</div>
+    <p>Parsed source material was classified by usability, split into deterministic chunks, and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.</p>
+    ${usability ? `
+      <div class="evidence-check-grid">
+        <div class="evidence-check-stat"><span>Sources</span><strong>${usability.source_count}</strong></div>
+        <div class="evidence-check-stat"><span>Text extracted</span><strong>${usability.text_extracted_count}</strong></div>
+        <div class="evidence-check-stat"><span>Mixed</span><strong>${usability.mixed_text_visual_count}</strong></div>
+        <div class="evidence-check-stat"><span>Visual-only</span><strong>${usability.visual_only_count}</strong></div>
+        <div class="evidence-check-stat"><span>Not usable</span><strong>${usability.not_usable_count}</strong></div>
+      </div>
+      <div class="source-packet-grid">${usabilityRows}</div>
+    ` : ''}
+    ${registry ? `
+      <div class="evidence-check-grid">
+        ${!usability ? `<div class="evidence-check-stat"><span>Sources</span><strong>${registry.source_count}</strong></div>` : ''}
+        <div class="evidence-check-stat"><span>Chunks</span><strong>${registry.chunk_count}</strong></div>
+        <div class="evidence-check-stat"><span>DLP review chunks</span><strong>${registry.dlp_review_chunk_count}</strong></div>
+        <div class="evidence-check-stat"><span>DLP caution hits</span><strong>${registry.dlp_caution_hits}</strong></div>
+        <div class="evidence-check-stat"><span>DLP high-risk hits</span><strong>${registry.dlp_high_risk_hits}</strong></div>
+      </div>
+      <div class="source-packet-grid">${packetRows}</div>
+    ` : ''}
   </div>`;
 };
 
@@ -533,6 +560,7 @@ const generateSummaryReportHtml = (result: DiagnosticResult): string => {
     .source-packet span { display: block; color: #475569; font-size: 0.78rem; margin-top: 0.25rem; }
     .source-packet-covered { background: #ecfdf5; border-color: #a7f3d0; }
     .source-packet-weak { background: #fffbeb; border-color: #fde68a; }
+    .source-packet-neutral { background: #f8fafc; border-color: #e2e8f0; }
     .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .summary-sub h3 { color: #047857; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.72rem; margin-bottom: 0.5rem; }
     .summary-sub li { color: #334155; }
@@ -790,6 +818,7 @@ const generateReportHtml = (result: DiagnosticResult): string => {
     .source-packet span { display: block; color: #475569; font-size: 0.78rem; margin-top: 0.25rem; }
     .source-packet-covered { background: #ecfdf5; border-color: #a7f3d0; }
     .source-packet-weak { background: #fffbeb; border-color: #fde68a; }
+    .source-packet-neutral { background: #f8fafc; border-color: #e2e8f0; }
     .qg-status { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-radius: 0.75rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid; }
     .qg-status p { margin: 0.2rem 0 0 0; font-size: 0.85rem; }
     .qg-status-label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }

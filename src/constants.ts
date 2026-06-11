@@ -289,7 +289,8 @@ ${STRATEGY_PERSONAS_BLOCK}
 7. **SOURCE-TYPE SAFETY:** If the source appears to describe best practices, case studies, or methodology rather than the audited organization's operations, say the audit can assess document coverage but cannot prove operational adoption.
 8. **PRIVACY LANGUAGE:** Write fluent anonymized prose from the start. Do not name individuals. Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, source-origin organization labels, or placeholder tokens such as [ORGANIZATION_REDACTED]. Use neutral labels such as "the assessed organization", "the service area", "the business team", "the technology team", "the data team", "the AI governance process", "the operating model", or "the AI Transformation team". Focus on what the evidence shows, not on the named owner of the evidence.
 9. **GENERAL PROCESS BOUNDARY:** General IT governance, process governance, project delivery, capacity management, sales/service operating model, role/accountability, or finance-steering evidence is adjacent source context only. It is not AI Transformation readiness proof unless it explicitly shows AI-specific operating rhythm, AI platform/architecture, AI governance/value realization, AI data foundations, or AI service-capability ownership.
-10. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
+10. **SOURCE USABILITY LANGUAGE:** If a PDF has zero extractable text but rendered page images are present, call it *visual-only* or *image-heavy* source material. Do not write that it contributed no assessable evidence, was fully ignored, or was entirely unknown. Say confidence depends on visual interpretation. Only call a source not usable when both text extraction and visual rendering are unavailable.
+11. **JSON STRING SAFETY:** No double quotes inside JSON values. Use single quotes or asterisks.
 </strict_constraints>
 
 <task>
@@ -486,8 +487,9 @@ ${STRATEGY_PERSONAS_BLOCK}
 6. **CONFIDENTIAL REFERENCE USE.** Do not cite, quote, name, summarize, or disclose internal Knowledge Base documents, filenames, source labels, companies, organizations, or provenance. If reference material influenced wording, express it only as generic assessment method.
 7. **INPUT NAME PRIVACY.** Write fluent anonymized prose from the start. Do not output company names, organization names, legal-entity names, customer names, vendor names, brand names, source-origin organization labels, or placeholder tokens such as [ORGANIZATION_REDACTED]. Use neutral functional language only and focus on what the evidence shows, not on the named owner of the evidence.
 8. **GENERAL PROCESS BOUNDARY.** General IT governance, process governance, project delivery, capacity management, sales/service operating model, role/accountability, or finance-steering evidence is adjacent source context only. It is not AI Transformation readiness proof unless it explicitly shows AI-specific operating rhythm, AI platform/architecture, AI governance/value realization, AI data foundations, or AI service-capability ownership.
-9. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
-10. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
+9. **SOURCE USABILITY LANGUAGE.** If a PDF has zero extractable text but rendered page images are present, call it *visual-only* or *image-heavy* source material. Do not write that it contributed no assessable evidence, was fully ignored, or was entirely unknown. Say confidence depends on visual interpretation. Only call a source not usable when both text extraction and visual rendering are unavailable.
+10. **JSON STRING SAFETY.** No double quotes inside string values. Use asterisks for emphasis.
+11. **BREVITY.** Each persona summary: 150-250 words (shorter than directive mode — there is less to say).
 </strict_constraints>
 
 <task>

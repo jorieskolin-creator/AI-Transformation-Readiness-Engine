@@ -258,6 +258,7 @@ export interface AnalysisMeta {
   timestamp: string;
   engine_version: string;
   source_parse_warnings?: string[];
+  source_usability?: SourceUsabilitySummary;
   source_registry?: SourceRegistryRuntimeStatus;
   knowledge_base?: KnowledgeBaseRuntimeStatus;
   model_config: {
@@ -272,6 +273,28 @@ export interface AnalysisMeta {
     fact_check_high?: string;
     validators: string;
   };
+}
+
+export type SourceUsabilityStatus = 'text_extracted' | 'mixed_text_visual' | 'visual_only' | 'not_usable';
+
+export interface SourceUsabilityItem {
+  source_label: string;
+  kind?: string;
+  status: SourceUsabilityStatus;
+  total_pages?: number;
+  parsed_text_pages?: number;
+  visual_pages_included?: number;
+  text_coverage_percent?: number;
+  note: string;
+}
+
+export interface SourceUsabilitySummary {
+  source_count: number;
+  text_extracted_count: number;
+  mixed_text_visual_count: number;
+  visual_only_count: number;
+  not_usable_count: number;
+  items: SourceUsabilityItem[];
 }
 
 export type SourceChunkType =
