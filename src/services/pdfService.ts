@@ -1,6 +1,13 @@
 
 import * as pdfjsLib from 'pdfjs-dist';
-import { ImageInput } from '../types';
+import type { ImageInput } from '../types';
+import {
+  constrainImageDimensions,
+  DEFAULT_IMAGE_JPEG_QUALITY,
+  DEFAULT_IMAGE_MAX_LONG_EDGE,
+  fileToDataUrl,
+  normalizeImageInput
+} from './imageNormalizationService';
 import { assessPdfParseQuality, isSparsePdfPage } from './parseQualityService';
 import type { PdfPageParseStats, PdfParseQuality } from './parseQualityService';
 
@@ -22,7 +29,7 @@ export const extractTextFromPdf = async (file: File): Promise<string> => {
 };
 
 const DEFAULT_RENDER_SCALE = 1.6;
-const DEFAULT_JPEG_QUALITY = 0.78;
+const DEFAULT_JPEG_QUALITY = DEFAULT_IMAGE_JPEG_QUALITY;
 const DEFAULT_MAX_TEXT_PAGES = 100;
 const DEFAULT_MAX_IMAGE_PAGES = 100;
 const DEFAULT_MAX_IMAGE_BYTES = 18 * 1024 * 1024;
@@ -108,7 +115,14 @@ export const extractPagesFromPdf = async (
     }
 
     try {
-      const viewport = page.getViewport({ scale });
+      const initialViewport = page.getViewport({ scale });
+      const constrained = constrainImageDimensions(
+        initialViewport.width,
+        initialViewport.height,
+        DEFAULT_IMAGE_MAX_LONG_EDGE
+      );
+      const renderScale = scale * constrained.scale;
+      const viewport = page.getViewport({ scale: renderScale });
       const canvas = document.createElement('canvas');
       canvas.width = Math.ceil(viewport.width);
       canvas.height = Math.ceil(viewport.height);
@@ -139,7 +153,9 @@ export const extractPagesFromPdf = async (
         mimeType: 'image/jpeg',
         data: base64,
         source_name: file.name,
-        page_number: pageNumber
+        page_number: pageNumber,
+        width: canvas.width,
+        height: canvas.height
       });
     } catch (e) {
       skippedVisualCandidates++;
@@ -189,19 +205,12 @@ export const imageFileToInput = async (file: File): Promise<ImageInput> => {
   }
   const allowed: ImageInput['mimeType'][] = ['image/png', 'image/jpeg', 'image/webp'];
   const mimeType = (allowed.includes(file.type as any) ? file.type : 'image/jpeg') as ImageInput['mimeType'];
+  const dataUrl = await fileToDataUrl(file);
+  const base64 = dataUrl.split(',')[1] || '';
 
-  const arrayBuffer = await file.arrayBuffer();
-  let binary = '';
-  const bytes = new Uint8Array(arrayBuffer);
-  const chunk = 0x8000;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)));
-  }
-  const base64 = btoa(binary);
-
-  return {
+  return normalizeImageInput({
     mimeType,
     data: base64,
     source_name: file.name
-  };
+  });
 };

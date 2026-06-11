@@ -10,8 +10,9 @@
 // `stage` and `runId` ride along in the request body so the server endpoints
 // can emit correlated structured logs visible in Railway.
 
-import { ImageInput } from '../types';
+import type { ImageInput } from '../types';
 import { ModelProfile, StageId, modelsFor } from '../models';
+import { ANTHROPIC_IMAGE_MAX_LONG_EDGE, normalizeImageInputs } from './imageNormalizationService';
 
 export interface NormalizedPrompt {
   userText: string;
@@ -35,6 +36,7 @@ const INTERNAL_RESULT_POLL_BY_STAGE_MS: Partial<Record<StageId, number>> = {
 };
 const INTERNAL_RESULT_POLL_INTERVAL_MS = 2_000;
 const INTERNAL_RESULT_MISSING_GRACE_MS = 10_000;
+const OPENAI_RATE_LIMIT_MAX_RETRIES = 2;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -45,13 +47,16 @@ const newInternalCallId = (): string => {
 };
 
 async function callAnthropic(profile: ModelProfile, prompt: NormalizedPrompt, stage: StageId, ctx: RunContext): Promise<{ text: string }> {
+  const safeImages = prompt.images?.length
+    ? await normalizeImageInputs(prompt.images, { maxLongEdge: ANTHROPIC_IMAGE_MAX_LONG_EDGE })
+    : [];
   const content: any[] = [{ type: 'text', text: prompt.userText }];
-  if (prompt.images?.length) {
+  if (safeImages.length) {
     content.push({
       type: 'text',
-      text: `\n\nThe following ${prompt.images.length} image(s) are part of the source material. Treat their visible content as evidence on equal footing with text. Each image is identified by its source filename and (for PDF-derived images) page number; for those, set evidence_source: "image" and include page_number when citing.`,
+      text: `\n\nThe following ${safeImages.length} image(s) are part of the source material. Treat their visible content as evidence on equal footing with text. Each image is identified by its source filename and (for PDF-derived images) page number; for those, set evidence_source: "image" and include page_number when citing.`,
     });
-    for (const img of prompt.images) {
+    for (const img of safeImages) {
       const label = img.page_number !== undefined
         ? `[Image: ${img.source_name} — page ${img.page_number}]`
         : `[Image: ${img.source_name}]`;
@@ -79,6 +84,17 @@ async function callAnthropic(profile: ModelProfile, prompt: NormalizedPrompt, st
   return postWithTimeout('/api/anthropic-generate', body);
 }
 
+const isOpenAIRateLimitError = (message: string): boolean => (
+  /OpenAI API Error \(429\)|rate_limit_exceeded|tokens per min|TPM/i.test(message)
+);
+
+const retryDelayFromOpenAIError = (message: string): number => {
+  const match = message.match(/try again in\s+([\d.]+)s/i);
+  const seconds = match ? Number(match[1]) : 4;
+  const boundedSeconds = Number.isFinite(seconds) ? Math.min(Math.max(seconds + 1, 2), 30) : 5;
+  return Math.round(boundedSeconds * 1000);
+};
+
 async function callOpenAI(profile: ModelProfile, prompt: NormalizedPrompt, stage: StageId, ctx: RunContext): Promise<{ text: string }> {
   const content: any[] = [{ type: 'input_text', text: prompt.userText }];
   if (prompt.images?.length) {
@@ -98,7 +114,7 @@ async function callOpenAI(profile: ModelProfile, prompt: NormalizedPrompt, stage
     }
   }
 
-  return postWithTimeout('/api/openai-generate', {
+  const buildBody = () => ({
     model: profile.id,
     input: [{ role: 'user', content }],
     instructions: prompt.systemInstruction,
@@ -108,6 +124,26 @@ async function callOpenAI(profile: ModelProfile, prompt: NormalizedPrompt, stage
     runId: ctx.runId,
     internalPipelineCall: true,
   });
+
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt <= OPENAI_RATE_LIMIT_MAX_RETRIES; attempt++) {
+    try {
+      return await postWithTimeout('/api/openai-generate', buildBody());
+    } catch (err: any) {
+      lastError = err;
+      const message = err?.message || String(err);
+      if (!isOpenAIRateLimitError(message) || attempt >= OPENAI_RATE_LIMIT_MAX_RETRIES) break;
+      const delayMs = retryDelayFromOpenAIError(message);
+      await serverLog(ctx.runId, 'warn', 'openai_rate_limit_retry', {
+        stage,
+        model: profile.id,
+        attempt: attempt + 1,
+        retry_in_ms: delayMs,
+      });
+      await sleep(delayMs);
+    }
+  }
+  throw lastError;
 }
 
 // Reads the NDJSON stream emitted by api/anthropic-generate.js and

@@ -16,6 +16,7 @@ const TARGET_PACKET_CHARS = 35000;
 const HARD_PACKET_CHARS = 45000;
 const CHUNK_TARGET_CHARS = 2200;
 const CHUNK_OVERLAP_CHARS = 200;
+const DLP_REVIEW_IMAGE_LIMIT = 10;
 
 const DOMAIN_TERMS: Record<string, string[]> = {
   A: [
@@ -438,7 +439,7 @@ export const buildDlpReviewPacket = (registry: SourceRegistry): { text: string; 
     chars += renderedChunk.length;
   }
 
-  const imageChunks = registry.chunks.filter(chunk => chunk.image).slice(0, 24);
+  const imageChunks = registry.chunks.filter(chunk => chunk.image).slice(0, DLP_REVIEW_IMAGE_LIMIT);
   const text = `<DLP_REVIEW_PACKET>
 <DLP_PACKET_SCOPE>
 Distributed safety review packet built from the full source registry: first/last chunks, high-risk regex-hit chunks, table headers/profile chunks, parse-warning chunks, and representative later-page chunks.

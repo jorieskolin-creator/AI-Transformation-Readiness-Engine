@@ -45,6 +45,8 @@ export interface ImageInput {
   data: string;
   source_name: string;
   page_number?: number;
+  width?: number;
+  height?: number;
   source_id?: string;
   page_id?: string;
   chunk_id?: string;

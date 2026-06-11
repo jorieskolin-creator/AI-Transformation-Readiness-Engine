@@ -149,7 +149,7 @@ ${packet.coverage_notes.join('\n')}
 </SOURCE_PACKET_WEAK_COVERAGE>
 
 ${sourcePackets.fullText}`,
-      images: sourcePackets.fullImages,
+      images: packet.images,
       usedPacket: true,
       usedFallback: true,
       packet,
@@ -204,17 +204,18 @@ export const runPhase1Audit = async (
         candidate_chunks: packetInput.packet?.total_candidate_chunks ?? 0,
       });
     }
+    const batchImages = packetInput.usedPacket ? packetInput.images : images;
     let lastError: unknown = null;
     for (let attempt = 1; attempt <= 2; attempt++) {
       try {
-        let batchResult = await runSingleBatch(batchId, packetInput.text || text, packetInput.images.length ? packetInput.images : images, ctx);
+        let batchResult = await runSingleBatch(batchId, packetInput.text || text, batchImages, ctx);
         if (!batchResult.maturity && !batchResult.antipattern) {
           throw new Error('Batch returned empty result (no maturity or antipattern keys).');
         }
         if (batchResult.model_used) modelsSeen.add(batchResult.model_used);
 
         const verifierFallbackText = packetInput.usedFallback ? undefined : sourcePackets?.fullText;
-        let evidenceCheck = await runEvidenceCheck(batchId, batchResult, packetInput.text || text, packetInput.images.length ? packetInput.images : images, ctx, verifierFallbackText);
+        let evidenceCheck = await runEvidenceCheck(batchId, batchResult, packetInput.text || text, batchImages, ctx, verifierFallbackText);
         if (evidenceCheck.model_used) evidenceModelsSeen.add(evidenceCheck.model_used);
         if (evidenceCheck.adjudication_model_used) evidenceAdjudicationModelsSeen.add(evidenceCheck.adjudication_model_used);
         const needsRescan = evidenceItemsNeedingRescan(evidenceCheck);
@@ -238,7 +239,7 @@ export const runPhase1Audit = async (
             criteria: rescanItems.map(i => `${i.stream}.${i.id}`).join(','),
             skipped_by_budget: skippedRescanItems.length,
           });
-          const rescanResult = await runTargetedRescan(batchId, packetInput.text || text, packetInput.images.length ? packetInput.images : images, ctx, rescanItems);
+          const rescanResult = await runTargetedRescan(batchId, packetInput.text || text, batchImages, ctx, rescanItems);
           if (rescanResult.model_used) {
             targetedRescanModelsSeen.add(rescanResult.model_used);
             serverLog(ctx.runId, 'info', 'targeted_rescan_model_used', {
@@ -254,7 +255,7 @@ export const runPhase1Audit = async (
             preRescanCounts.set(key, i.original_count);
           });
 
-          evidenceCheck = await runEvidenceCheck(batchId, batchResult, packetInput.text || text, packetInput.images.length ? packetInput.images : images, ctx, verifierFallbackText);
+          evidenceCheck = await runEvidenceCheck(batchId, batchResult, packetInput.text || text, batchImages, ctx, verifierFallbackText);
           if (evidenceCheck.model_used) evidenceModelsSeen.add(evidenceCheck.model_used);
           if (evidenceCheck.adjudication_model_used) evidenceAdjudicationModelsSeen.add(evidenceCheck.adjudication_model_used);
         }
