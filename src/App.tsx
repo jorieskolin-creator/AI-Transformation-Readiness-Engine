@@ -26,6 +26,7 @@ import tier1ValueRealizationReview from '../test/tier1-value-realization-review.
 const SAVED_ASSESSMENT_KEY = 'ai-transformation:last-assessment:v1';
 const SAVED_ASSESSMENT_META_KEY = 'ai-transformation:last-assessment-meta:v1';
 const LAST_CRASH_KEY = 'ai-transformation:last-crash:v1';
+const ARCHITECTURE_URL = 'https://appspresentations.staticrun.app/AITransformationAssessmentEngineArchitecture';
 
 interface SavedAssessmentMeta {
   savedAt: string;
@@ -482,6 +483,7 @@ const App: React.FC = () => {
   const [organizationRedactionTerm, setOrganizationRedactionTerm] = useState('');
   const pendingAnalyzeRef = useRef(false);
   const pendingTier1FixtureRef = useRef<string | null>(null);
+  const pendingArchitectureLinkRef = useRef(false);
   const nextRecoverySourceRef = useRef<SavedAssessmentMeta['source']>('completed_assessment');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const clearFileInput = () => {
@@ -954,6 +956,15 @@ const App: React.FC = () => {
     await runAnalyze();
   };
 
+  const openArchitecturePage = () => {
+    if (!authenticated) {
+      pendingArchitectureLinkRef.current = true;
+      setShowLogin(true);
+      return;
+    }
+    window.open(ARCHITECTURE_URL, '_blank', 'noopener,noreferrer');
+  };
+
   const reset = () => {
     setResult(null);
     setFiles([]);
@@ -1288,14 +1299,14 @@ const App: React.FC = () => {
                   <p className="text-lg md:text-xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
                     Your AI investment is either a strategic asset or a hidden liability. This <strong>forensic assessment tool</strong> interrogates your AI Transformation documentation against <strong>25 maturity vectors and 25 anti-pattern indicators</strong> to determine your Ready-and-Adapt classification.
                   </p>
-                  <a
-                    href="https://appspresentations.staticrun.app/AITransformationAssessmentEngineArchitecture"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={openArchitecturePage}
                     className="inline-flex items-center justify-center mt-8 px-6 py-3 rounded-full border border-emerald-400/40 bg-emerald-500/10 text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 hover:text-white hover:border-emerald-300 hover:bg-emerald-500/20 transition-all duration-300 shadow-lg shadow-emerald-950/20"
+                    title={authenticated ? 'Open the engine architecture page' : 'Unlock the app to open the engine architecture page'}
                   >
                     How the AI Transformation Readiness Engine Thinks
-                  </a>
+                  </button>
                 </div>
 
                 <div className={`glass-panel rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border relative overflow-hidden group transition-all duration-500 ${files.length >= MIN_FILES ? 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)]' : 'border-white/10'}`}>
@@ -1744,6 +1755,7 @@ const App: React.FC = () => {
           setShowLogin(false);
           pendingAnalyzeRef.current = false;
           pendingTier1FixtureRef.current = null;
+          pendingArchitectureLinkRef.current = false;
         }}
         onSuccess={() => {
           setShowLogin(false);
@@ -1756,6 +1768,9 @@ const App: React.FC = () => {
             pendingTier1FixtureRef.current = null;
             const fixture = TIER1_FIXTURES.find(f => f.pack_id === packId);
             if (fixture) startTier1FixtureAnalysis(fixture);
+          } else if (pendingArchitectureLinkRef.current) {
+            pendingArchitectureLinkRef.current = false;
+            window.open(ARCHITECTURE_URL, '_blank', 'noopener,noreferrer');
           }
         }}
       />
