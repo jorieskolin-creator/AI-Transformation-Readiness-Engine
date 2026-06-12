@@ -22,6 +22,7 @@ const {
   isInsufficientEvidenceReport,
   renderInlineMarkdownHtml,
   renderMarkdownSummaryHtml,
+  softenVisualOnlySourceWording,
   strengthsSectionTitle,
 } = await import(`file://${modulePath}`);
 
@@ -45,10 +46,15 @@ assert.ok(html.includes('class="summary-paragraph"'), 'summary should render as 
 assert.equal(html.includes('**'), false, 'raw bold markdown should not leak into exported HTML');
 assert.equal(html.includes('*project activity*'), false, 'raw italic markdown should not leak into exported HTML');
 
+const visualOnlyPhrase = softenVisualOnlySourceWording('Two submitted PDF documents returned zero extractable text, contributing no assessable evidence.');
+assert.equal(visualOnlyPhrase.includes('contributing no assessable evidence'), false, 'visual-only PDFs should not be described as no assessable evidence');
+assert.match(visualOnlyPhrase, /rendered page images were used where available/, 'visual-only PDFs should be described as visually assessed when images exist');
+
 const reportViewSource = await readFile(new URL('../src/components/ReportView.tsx', import.meta.url), 'utf8');
 assert.match(reportViewSource, />Why</, 'React report should render roadmap WHY context');
 assert.match(reportViewSource, />What</, 'React report should render roadmap WHAT context');
 assert.match(reportViewSource, />How</, 'React report should preserve action bullets as HOW');
+assert.match(reportViewSource, /Source Registry, Usability &amp; Domain Packets/, 'React report should render source usability diagnostics');
 
 const dashboardSource = await readFile(new URL('../src/components/DashboardComponents.tsx', import.meta.url), 'utf8');
 assert.match(dashboardSource, />Why</, 'Dashboard roadmap should render WHY context');
@@ -59,5 +65,6 @@ const exportSource = await readFile(new URL('../src/services/exportService.ts', 
 assert.match(exportSource, /roadmap-context-label">Why/, 'HTML export should render roadmap WHY context');
 assert.match(exportSource, /roadmap-context-label">What/, 'HTML export should render roadmap WHAT context');
 assert.match(exportSource, /roadmap-how-label">How/, 'HTML export should label action bullets as HOW');
+assert.match(exportSource, /Source Registry, Usability &amp; Domain Packets/, 'HTML export should include source usability diagnostics');
 
 console.log('report rendering unit tests passed');

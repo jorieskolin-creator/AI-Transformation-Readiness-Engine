@@ -9,7 +9,7 @@ import { forensicSanitizeImport } from './services/securityService';
 import { extractDiagnosticResultFromHtmlReport, isDiagnosticResultPayload, parseDiagnosticResultJson, serializeDiagnosticResultForHtml } from './services/reportImportService';
 import { findGeneratedReportPrivacyFindings, scrubDiagnosticResultForPrivacy } from './services/privacyService';
 import { PerformanceMonitor } from './services/debugService';
-import { DiagnosticResult, ScanResult, PersonaId, PERSONA_IDS, PERSONA_LABELS, ImageInput } from './types';
+import { DiagnosticResult, ScanResult, PersonaId, PERSONA_IDS, PERSONA_LABELS, ImageInput, SourceUsabilitySummary, SourceUsabilityStatus } from './types';
 import { METRIC_DESCRIPTIONS } from './constants';
 import { GaugeCard, AuditGrid, StrategicRoadmap, ComparisonChart, ReferenceLibrary, QualityGateBanner, BenchmarkingChart, TransferProtocol, MarkdownRenderer, NeuralLoadingGrid } from './components/DashboardComponents';
 import { ReportView } from './components/ReportView';
@@ -608,6 +608,12 @@ const App: React.FC = () => {
   const buildParseQualitySourceNote = (file: UploadedFile): string => {
     const parseQuality = file.parseMetadata?.parseQuality;
     if (!parseQuality || parseQuality.quality === 'good') return '';
+    const visualAvailability = parseQuality.visualPagesIncluded > 0
+      ? 'Rendered page images are available and may be used as visual evidence.'
+      : 'No rendered page images are available for this source.';
+    const zeroTextBoundary = parseQuality.textCoverageRatio === 0
+      ? 'The source has no extractable text layer; do not describe it as ignored or as contributing no assessable evidence if rendered page images are available.'
+      : 'Text extraction is partial; combine text evidence with rendered visual evidence where available.';
     const warnings = parseQuality.warnings.length > 0
       ? parseQuality.warnings.join(' ')
       : 'PDF text extraction may be incomplete.';
@@ -618,22 +624,75 @@ const App: React.FC = () => {
       `Sparse text pages: ${parseQuality.sparseTextPages}.`,
       `Visual pages included: ${parseQuality.visualPagesIncluded}; visual candidates skipped: ${parseQuality.visualPagesSkipped}.`,
       `Likely scanned PDF: ${parseQuality.likelyScannedPdf ? 'yes' : 'no'}.`,
+      `Visual evidence status: ${visualAvailability}`,
       `Warning: ${warnings}`,
-      'Use source evidence cautiously where PDF text extraction may be incomplete; do not treat this parse-quality note as an AI Transformation maturity finding.',
+      zeroTextBoundary,
+      'Use source evidence cautiously where PDF text extraction may be incomplete. Treat visual-only sources as lower-confidence visual evidence, not as text evidence and not as proof of absence. Do not treat this parse-quality note as an AI Transformation maturity finding.',
       '[/SOURCE_PARSE_QUALITY]'
     ].join('\n');
   };
 
   const sourceParseWarningsForFiles = (sourceFiles: UploadedFile[]): string[] => {
     return sourceFiles
-      .filter(file => file.parseMetadata?.parseQuality && file.parseMetadata.parseQuality.quality !== 'good')
-      .flatMap(file => {
+      .flatMap((file, index) => {
+        if (!file.parseMetadata?.parseQuality || file.parseMetadata.parseQuality.quality === 'good') return [];
         const parseQuality = file.parseMetadata!.parseQuality!;
         const warnings = parseQuality.warnings.length > 0
           ? parseQuality.warnings
           : ['PDF text extraction may be incomplete.'];
-        return warnings.map(warning => `${file.name}: ${warning}`);
+        const sourceLabel = `Source ${index + 1}`;
+        return warnings.map(warning => `${sourceLabel}: ${warning}`);
       });
+  };
+
+  const sourceUsabilityForFiles = (sourceFiles: UploadedFile[]): SourceUsabilitySummary => {
+    const items = sourceFiles.map((file, index) => {
+      const source_label = `Source ${index + 1}`;
+      let status: SourceUsabilityStatus = 'text_extracted';
+      let note = 'Text was extracted and can support evidence checks when content is relevant.';
+
+      if (file.kind === 'image') {
+        status = 'visual_only';
+        note = 'Image-only source; evidence depends on visual interpretation.';
+      } else if (file.kind === 'pdf') {
+        const parseQuality = file.parseMetadata?.parseQuality;
+        const visualPages = file.parseMetadata?.renderedImagePages ?? parseQuality?.visualPagesIncluded ?? 0;
+        const coverage = parseQuality?.textCoverageRatio ?? 1;
+        if (coverage === 0 && visualPages > 0) {
+          status = 'visual_only';
+          note = 'No extractable text layer; rendered page images were included and may support lower-confidence visual evidence.';
+        } else if (coverage === 0 && visualPages === 0) {
+          status = 'not_usable';
+          note = 'No extractable text layer and no rendered visual pages were available.';
+        } else if ((parseQuality?.quality === 'mixed' || parseQuality?.quality === 'poor') && visualPages > 0) {
+          status = 'mixed_text_visual';
+          note = 'Partial/sparse text plus rendered page images; source coverage depends on both text and visual interpretation.';
+        }
+      }
+
+      return {
+        source_label,
+        kind: file.kind,
+        status,
+        total_pages: file.parseMetadata?.totalPages,
+        parsed_text_pages: file.parseMetadata?.parsedTextPages,
+        visual_pages_included: file.parseMetadata?.renderedImagePages,
+        text_coverage_percent: file.parseMetadata?.parseQuality
+          ? Math.round(file.parseMetadata.parseQuality.textCoverageRatio * 100)
+          : undefined,
+        note
+      };
+    });
+
+    const count = (status: SourceUsabilityStatus) => items.filter(item => item.status === status).length;
+    return {
+      source_count: items.length,
+      text_extracted_count: count('text_extracted'),
+      mixed_text_visual_count: count('mixed_text_visual'),
+      visual_only_count: count('visual_only'),
+      not_usable_count: count('not_usable'),
+      items
+    };
   };
 
   useEffect(() => {
@@ -854,6 +913,7 @@ const App: React.FC = () => {
         data.meta = { ...data.meta, document_analyzed: opts.label };
       }
       const source_parse_warnings = sourceParseWarningsForFiles(files);
+      data.meta = { ...data.meta, source_usability: sourceUsabilityForFiles(files) };
       if (source_parse_warnings.length > 0) {
         data.meta = { ...data.meta, source_parse_warnings };
       }
@@ -1228,6 +1288,14 @@ const App: React.FC = () => {
                   <p className="text-lg md:text-xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
                     Your AI investment is either a strategic asset or a hidden liability. This <strong>forensic assessment tool</strong> interrogates your AI Transformation documentation against <strong>25 maturity vectors and 25 anti-pattern indicators</strong> to determine your Ready-and-Adapt classification.
                   </p>
+                  <a
+                    href="https://appspresentations.staticrun.app/AITransformationAssessmentEngineArchitecture"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center mt-8 px-6 py-3 rounded-full border border-emerald-400/40 bg-emerald-500/10 text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 hover:text-white hover:border-emerald-300 hover:bg-emerald-500/20 transition-all duration-300 shadow-lg shadow-emerald-950/20"
+                  >
+                    How the AI Transformation Readiness Engine Thinks
+                  </a>
                 </div>
 
                 <div className={`glass-panel rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border relative overflow-hidden group transition-all duration-500 ${files.length >= MIN_FILES ? 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)]' : 'border-white/10'}`}>
@@ -1286,7 +1354,7 @@ const App: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-display font-bold text-slate-200 mb-2 z-10 group-hover/drop:text-white transition-colors">Drop AI Transformation Artifacts</h3>
                         <p className="text-sm font-medium text-slate-400 z-10 group-hover/drop:text-emerald-200/70 transition-colors text-center max-w-md">
-                          DEMO - LOWERED THINKING - FULL FUNCTIONALITY -Upload AI strategies, governance policies, service blueprints, platform architecture, value reviews, and operating model artifacts.
+                          Upload AI strategies, governance policies, service blueprints, platform architecture, value reviews, and operating model artifacts.
                         </p>
                         <div className="z-10 mt-4 flex flex-wrap justify-center gap-1.5 max-w-md">
                           {['PDF', 'HTML', 'CSV', 'TSV', 'JSON', 'PNG', 'JPG'].map(fmt => (

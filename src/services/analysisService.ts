@@ -28,6 +28,7 @@ import { sanitizeRoadmapTacticGrounding } from "./tacticGroundingService";
 import { buildReferenceLeakTerms, sanitizeStrategyAfterFactCheck, sanitizeStrategyReferenceLeaks } from "./strategySanitationService";
 import { normalizeDomainDiagnosis } from "./domainDiagnosisService";
 import { collectSourceOrganizationNames, scrubDiagnosticResultForPrivacy } from "./privacyService";
+import { softenVisualOnlySourceWordingDeep } from "./reportTextService";
 import {
   buildDlpReviewPacket,
   buildDomainPackets,
@@ -815,7 +816,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
     const validIds = validTacticIdSet();
     let tacticGroundingWarnings: string[] = [];
     const callPhase3Validated = async (correctionAppendix?: string): Promise<any> => {
-      let data = normalizeStrategy(await callPhase3(correctionAppendix));
+      let data = softenVisualOnlySourceWordingDeep(normalizeStrategy(await callPhase3(correctionAppendix)));
       let invalid = findInvalidTacticIds(data, validIds);
       let regen = 0;
       const maxIdRegens = lowConfidenceFastPath ? 0 : ID_VALIDATION_MAX_REGENS;
@@ -828,7 +829,7 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
         });
         const idAppendix = buildInvalidIdAppendix(invalid, validIds);
         const combined = correctionAppendix ? `${correctionAppendix}\n\n${idAppendix}` : idAppendix;
-        data = normalizeStrategy(await callPhase3(combined));
+        data = softenVisualOnlySourceWordingDeep(normalizeStrategy(await callPhase3(combined)));
         invalid = findInvalidTacticIds(data, validIds);
       }
       if (invalid.length > 0) {
@@ -1056,7 +1057,18 @@ ${Object.entries(validationData.category_scores).map(([cat, score]) => `  ${cat}
     };
 
     const organizationNames = collectSourceOrganizationNames(text);
-    const privacyScrub = scrubDiagnosticResultForPrivacy(rawResult, {
+    const wordingNormalizedResult = {
+      ...rawResult,
+      meta: {
+        ...rawResult.meta,
+        source_parse_warnings: rawResult.meta.source_parse_warnings
+          ? softenVisualOnlySourceWordingDeep(rawResult.meta.source_parse_warnings)
+          : rawResult.meta.source_parse_warnings,
+      },
+      phase_3_strategy: softenVisualOnlySourceWordingDeep(rawResult.phase_3_strategy),
+      quality_gate: softenVisualOnlySourceWordingDeep(rawResult.quality_gate),
+    };
+    const privacyScrub = scrubDiagnosticResultForPrivacy(wordingNormalizedResult, {
       redactPersonNames: true,
       redactOrganizationNames: organizationNames,
     });

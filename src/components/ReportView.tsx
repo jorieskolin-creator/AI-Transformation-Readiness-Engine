@@ -507,38 +507,79 @@ const EvidenceCheckSummaryBlock: React.FC<{ result: DiagnosticResult }> = ({ res
 
 const SourceRegistrySummaryBlock: React.FC<{ result: DiagnosticResult }> = ({ result }) => {
   const registry = result.meta.source_registry;
-  if (!registry) return null;
-  const packetEntries = Object.entries(registry.packets || {}).sort(([a], [b]) => a.localeCompare(b));
+  const usability = result.meta.source_usability;
+  if (!registry && !usability) return null;
+  const packetEntries = Object.entries(registry?.packets || {}).sort(([a], [b]) => a.localeCompare(b));
+  const usabilityLabel: Record<string, string> = {
+    text_extracted: 'Text extracted',
+    mixed_text_visual: 'Mixed text + visual',
+    visual_only: 'Visual-only',
+    not_usable: 'Not usable'
+  };
   return (
     <div className="mb-8 p-6 rounded-xl border border-slate-200 bg-white">
-      <h2 className="text-xl font-display font-bold text-slate-900 mb-2">Source Registry &amp; Domain Packets</h2>
+      <h2 className="text-xl font-display font-bold text-slate-900 mb-2">Source Registry, Usability &amp; Domain Packets</h2>
       <p className="text-sm text-slate-600 mb-4">
-        Parsed source material was split into deterministic chunks and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.
+        Parsed source material was classified by usability, split into deterministic chunks, and routed into A-E context packets. Packets guide model attention; they are not proof by themselves.
       </p>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-        {[
-          ['Sources', registry.source_count],
-          ['Chunks', registry.chunk_count],
-          ['DLP review chunks', registry.dlp_review_chunk_count],
-          ['DLP caution hits', registry.dlp_caution_hits],
-          ['DLP high-risk hits', registry.dlp_high_risk_hits],
-        ].map(([label, value]) => (
-          <div key={label} className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
-            <p className="text-2xl font-bold text-slate-800">{value}</p>
+      {usability && (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            {[
+              ['Sources', usability.source_count],
+              ['Text extracted', usability.text_extracted_count],
+              ['Mixed', usability.mixed_text_visual_count],
+              ['Visual-only', usability.visual_only_count],
+              ['Not usable', usability.not_usable_count],
+            ].map(([label, value]) => (
+              <div key={label} className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
+                <p className="text-2xl font-bold text-slate-800">{value}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-        {packetEntries.map(([domain, packet]) => (
-          <div key={domain} className={`p-3 rounded-lg border ${packet.weak_coverage ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
-            <p className="text-xs font-bold text-slate-800">{domain} — {BATCH_TITLES[domain]}</p>
-            <p className="text-xs text-slate-600 mt-1">
-              {packet.included_chunk_count}/{packet.total_candidate_chunks} chunks · {packet.weak_coverage ? 'weak coverage' : 'packet coverage'}
-            </p>
+          <div className="space-y-2 mb-5">
+            {usability.items.slice(0, 8).map(item => (
+              <div key={item.source_label} className="p-3 rounded-lg border border-slate-200 bg-slate-50">
+                <p className="text-xs font-bold text-slate-800">
+                  {item.source_label} · {usabilityLabel[item.status] || item.status}
+                  {typeof item.text_coverage_percent === 'number' ? ` · ${item.text_coverage_percent}% text coverage` : ''}
+                  {typeof item.visual_pages_included === 'number' ? ` · ${item.visual_pages_included} visual pages` : ''}
+                </p>
+                <p className="text-xs text-slate-600 mt-1">{item.note}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
+      {registry && (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            {[
+              ...(!usability ? [['Sources', registry.source_count] as [string, number]] : []),
+              ['Chunks', registry.chunk_count],
+              ['DLP review chunks', registry.dlp_review_chunk_count],
+              ['DLP caution hits', registry.dlp_caution_hits],
+              ['DLP high-risk hits', registry.dlp_high_risk_hits],
+            ].map(([label, value]) => (
+              <div key={label} className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
+                <p className="text-2xl font-bold text-slate-800">{value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+            {packetEntries.map(([domain, packet]) => (
+              <div key={domain} className={`p-3 rounded-lg border ${packet.weak_coverage ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <p className="text-xs font-bold text-slate-800">{domain} — {BATCH_TITLES[domain]}</p>
+                <p className="text-xs text-slate-600 mt-1">
+                  {packet.included_chunk_count}/{packet.total_candidate_chunks} chunks · {packet.weak_coverage ? 'weak coverage' : 'packet coverage'}
+                </p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
