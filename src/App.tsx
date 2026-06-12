@@ -1288,6 +1288,14 @@ const App: React.FC = () => {
                   <p className="text-lg md:text-xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
                     Your AI investment is either a strategic asset or a hidden liability. This <strong>forensic assessment tool</strong> interrogates your AI Transformation documentation against <strong>25 maturity vectors and 25 anti-pattern indicators</strong> to determine your Ready-and-Adapt classification.
                   </p>
+                  <a
+                    href="https://appspresentations.staticrun.app/AITransformationAssessmentEngineArchitecture"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center mt-8 px-6 py-3 rounded-full border border-emerald-400/40 bg-emerald-500/10 text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 hover:text-white hover:border-emerald-300 hover:bg-emerald-500/20 transition-all duration-300 shadow-lg shadow-emerald-950/20"
+                  >
+                    How the AI Transformation Readiness Engine Thinks
+                  </a>
                 </div>
 
                 <div className={`glass-panel rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border relative overflow-hidden group transition-all duration-500 ${files.length >= MIN_FILES ? 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.1)]' : 'border-white/10'}`}>
@@ -1346,7 +1354,7 @@ const App: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-display font-bold text-slate-200 mb-2 z-10 group-hover/drop:text-white transition-colors">Drop AI Transformation Artifacts</h3>
                         <p className="text-sm font-medium text-slate-400 z-10 group-hover/drop:text-emerald-200/70 transition-colors text-center max-w-md">
-                          DEMO - LOWERED THINKING - FULL FUNCTIONALITY -Upload AI strategies, governance policies, service blueprints, platform architecture, value reviews, and operating model artifacts.
+                          Upload AI strategies, governance policies, service blueprints, platform architecture, value reviews, and operating model artifacts.
                         </p>
                         <div className="z-10 mt-4 flex flex-wrap justify-center gap-1.5 max-w-md">
                           {['PDF', 'HTML', 'CSV', 'TSV', 'JSON', 'PNG', 'JPG'].map(fmt => (
