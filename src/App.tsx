@@ -1305,7 +1305,7 @@ const App: React.FC = () => {
                     className="inline-flex items-center justify-center mt-8 px-6 py-3 rounded-full border border-emerald-400/40 bg-emerald-500/10 text-sm font-bold uppercase tracking-[0.18em] text-emerald-200 hover:text-white hover:border-emerald-300 hover:bg-emerald-500/20 transition-all duration-300 shadow-lg shadow-emerald-950/20"
                     title={authenticated ? 'Open the engine architecture page' : 'Unlock the app to open the engine architecture page'}
                   >
-                    How the AI Transformation Assessment Engine Thinks
+                    How the AI Transformation Assessment Engine Thinks - Click & Read
                   </button>
                 </div>
 
